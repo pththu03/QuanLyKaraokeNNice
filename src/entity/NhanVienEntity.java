@@ -122,6 +122,10 @@ public class NhanVienEntity {
 		return maNV;
 	}
 
+	public void setMaNV(String maNV) {
+		this.maNV = maNV;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(maNV);

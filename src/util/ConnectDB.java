@@ -8,15 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConnectDB {
+	
 	public static Connection getConnect() {
 		Connection connect = null;
-		
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			String url = "jdbc:sqlserver://localhost;database=QuanLyKaraokeNNice;";
 			String user = "sa";
 			String password = "130613";
-			DriverManager.getConnection(url, user, password);
+			connect = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -24,7 +24,6 @@ public class ConnectDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return connect;
 	}
 	

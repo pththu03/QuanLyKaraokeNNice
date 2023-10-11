@@ -7,29 +7,26 @@ public class PhongEntity {
 	private int soPhong;
 	private int loaiPhong;
 	private int trangThai;
-	private double gia;
 	private int sucChua;
 
 	public PhongEntity() {
 		super();
 	}
 
-	public PhongEntity(String maPhong, int soPhong, int loaiPhong, int trangThai, double gia, int sucChua) {
+	public PhongEntity(String maPhong, int soPhong, int loaiPhong, int trangThai, int sucChua) {
 		super();
 		this.maPhong = maPhong;
 		this.soPhong = soPhong;
 		this.loaiPhong = loaiPhong;
 		this.trangThai = trangThai;
-		this.gia = gia;
 		this.sucChua = sucChua;
 	}
 
-	public PhongEntity(int soPhong, int loaiPhong, int trangThai, double gia, int sucChua) {
+	public PhongEntity(int soPhong, int loaiPhong, int trangThai, int sucChua) {
 		super();
 		this.soPhong = soPhong;
 		this.loaiPhong = loaiPhong;
 		this.trangThai = trangThai;
-		this.gia = gia;
 		this.sucChua = sucChua;
 	}
 
@@ -65,23 +62,13 @@ public class PhongEntity {
 		this.trangThai = trangThai;
 	}
 
-	public double getGia() {
-		return gia;
-	}
-
-	public void setGia(double gia) {
-		this.gia = gia;
-	}
-
 	public int getSucChua() {
 		return sucChua;
 	}
 
 	/**
-	 * 3 mức:
-	 * 5 người
-	 * 10 người
-	 * 20 người
+	 * 3 mức: 5 người 10 người 20 người
+	 * 
 	 * @param sucChua
 	 */
 	public void setSucChua(int sucChua) {
@@ -110,7 +97,7 @@ public class PhongEntity {
 	@Override
 	public String toString() {
 		return "PhongEntity [maPhong=" + maPhong + ", soPhong=" + soPhong + ", loaiPhong=" + loaiPhong + ", trangThai="
-				+ trangThai + ", gia=" + gia + ", sucChua=" + sucChua + "]";
+				+ trangThai + ", sucChua=" + sucChua + "]";
 	}
 
 }

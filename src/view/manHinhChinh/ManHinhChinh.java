@@ -5,18 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.FlowLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import java.awt.Font;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
 
 import controller.ManHinhChinhController;
 import view.datPhong.ManHinhDatPhong;
@@ -39,32 +34,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.Toolkit;
 import java.awt.Dimension;
-import java.awt.Insets;
 
 public class ManHinhChinh extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ManHinhChinh frame = new ManHinhChinh();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -99,13 +75,10 @@ public class ManHinhChinh extends JFrame {
 		setTitle("Quản lý hệ thống karaoke NNice");
 		setBackground(new Color(255, 51, 51));
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1100, 685);
 		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(204, 51, 0));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
 				if(JOptionPane.showConfirmDialog(null, "Xác nhận đóng ứng dụng?", "Cảnh báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -114,7 +87,9 @@ public class ManHinhChinh extends JFrame {
 			}
 		});
 
-		
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(204, 51, 0));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -299,10 +274,6 @@ public class ManHinhChinh extends JFrame {
 		btn_NguoiDung.addActionListener(controller);
 	}
 	
-//	private void loadDatabase() {
-//		
-//	}
-	
 	private void clearSelectedMenu() {
 		mn_TrangChu.setSelected(false);
 		mn_DatPhong.setSelected(false);
@@ -379,6 +350,4 @@ public class ManHinhChinh extends JFrame {
 	public void chonBtnNguoiDung() {
 		this.thayDoiPanelChinh(new ManHinhTaiKhoanNguoiDung(), new JMenuItem());
 	}
-
-
 }

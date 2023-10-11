@@ -144,6 +144,26 @@ BEGIN
 END
 GO 
 
+
+-- tao ma tu tang bang chi tiet dat phong
+CREATE FUNCTION AUTO_ID_ChiTietDatPhong()
+RETURNS VARCHAR(7)
+AS
+BEGIN
+	DECLARE @ID INT
+	IF (SELECT COUNT(MaCTDP) FROM ChiTietDatPhong) = 0
+		SET @ID = 0
+	ELSE
+		SELECT @ID = MAX(CAST(RIGHT(MaCTDP, 3) AS INT)) FROM ChiTietDatPhong
+	SET @ID = @ID + 1
+
+	DECLARE @MaCTDP VARCHAR(7)
+	SET @MaCTDP = 'CTDP' + RIGHT('00' + CAST(@ID AS VARCHAR(3)), 3)
+
+	RETURN @MaCTDP
+END
+GO 
+
 -- tao ma tu tang bang ca truc
 CREATE FUNCTION AUTO_ID_CaTruc()
 RETURNS VARCHAR(7)
@@ -208,9 +228,8 @@ CREATE TABLE KhachHang(
 	MaKH VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_KhachHang() NOT NULL,
 	HoTen NVARCHAR(30) NOT NULL,
 	SDT VARCHAR(10) NOT NULL,
-	Email VARCHAR(30),
+	Email VARCHAR(100),
 	NamSinh INT NOT NULL,
-	GioiTinh NVARCHAR(3) NOT NULL, -- NAM OR NU
 	SLDatPhong INT DEFAULT 0 NOT NULL
 )
 GO
@@ -219,7 +238,7 @@ CREATE TABLE NhanVien(
 	MaNV VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_NhanVien() NOT NULL,
 	HoTen NVARCHAR(30) NOT NULL,
 	SDT VARCHAR(10) NOT NULL,
-	Email VARCHAR(30),
+	Email VARCHAR(100),
 	CCCD VARCHAR(12) NOT NULL,
 	Password VARCHAR(12) NOT NULL,
 	NamSinh INT NOT NULL,
@@ -249,26 +268,23 @@ CREATE TABLE PhieuChamCong(
 	MaPCC VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_PhieuChamCong() NOT NULL,
 	MaPPC VARCHAR(7) NOT NULL,
 	Luong MONEY,
-	Ngay DATE,
 	TrangThai NVARCHAR(10) -- VANG OR KHONG VANG
 )
 GO
 
 CREATE TABLE DichVu(
 	MaDV VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_DichVu() NOT NULL,
-	TenDV NVARCHAR(20) NOT NULL,
+	TenDV NVARCHAR(50) NOT NULL,
 	LoaiDV NVARCHAR(20) NOT NULL, -- Đồ uống, Món ăn, Tiệc
 	Gia MONEY NOT NULL
 )
 GO
-
 
 CREATE TABLE Phong(
 	MaPhong	VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_Phong() NOT NULL,
 	SoPhong INT NOT NULL,
 	LoaiPhong NVARCHAR(10) NOT NULL, -- VIP hoặc thường
 	TrangThai NVARCHAR(15) NOT NULL, -- Trống, đang sử dụng, phòng chờ
-	Gia MONEY NOT NULL,
 	SucChua int NOT NULL
 )
 GO
@@ -279,27 +295,30 @@ CREATE TABLE HoaDon(
 	MaNV VARCHAR(7) NOT NULL,
 	NgayLapHD DATE,
 	GioLapHD TIME,
-	TrangThai NVARCHAR(20) NOT NULL,
-	TongTien MONEY DEFAULT 0
+	TrangThai NVARCHAR(20) NOT NULL
 )
 GO
 
 CREATE TABLE ChiTietHoaDon(
 	MaCTHD VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietHoaDon() NOT NULL,
 	MaHD VARCHAR(7) NOT NULL, 
+)
+GO
+
+CREATE TABLE ChiTietDatPhong(
+	MaCTDP VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietDatPhong() NOT NULL,
+	MaCTHD  VARCHAR(7) NOT NULL,
 	MaPhong VARCHAR(7) NOT NULL,
 	GioBD TIME,
-	GioKT TIME,
-	TongTien MONEY DEFAULT 0
+	GioKT TIME
 )
 GO
 
 CREATE TABLE ChiTietDichVu(
 	MaCTDV VARCHAR(7) PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietDichVu() NOT NULL,
-	MaHD VARCHAR(7) NOT NULL,
+	MaCTHD VARCHAR(7) NOT NULL,
 	MaDV VARCHAR(7) NOT NULL,
-	SoLuong INT NOT NULL,
-	TongTien MONEY DEFAULT 0
+	SoLuong INT NOT NULL
 )
 GO
 
@@ -321,69 +340,69 @@ GO
 
 ALTER TABLE ChiTietHoaDon
 ADD
-FOREIGN KEY(MaHD) REFERENCES HoaDon(MaHD),
-FOREIGN KEY(MaPhong) REFERENCES Phong(MaPhong)
+FOREIGN KEY(MaHD) REFERENCES HoaDon(MaHD)
 GO
 
 ALTER TABLE ChiTietDichVu
 ADD
-FOREIGN KEY(MaHD) REFERENCES HoaDon(MaHD),
+FOREIGN KEY(MaCTHD) REFERENCES ChiTietHoaDon(MaCTHD),
 FOREIGN KEY(MaDV) REFERENCES DichVu(MaDV)
 GO
 
+ALTER TABLE ChiTietDatPhong
+ADD
+FOREIGN KEY(MaCTHD) REFERENCES ChiTietHoaDon(MaCTHD),
+FOREIGN KEY(MaPhong) REFERENCES Phong(MaPhong)
+GO
 
 -- KHÁCH HÀNG
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999, N'Nữ', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Nguyễn Tống Anh Quân', '0388973214', 'nguyenanhquan@gmail.com', 1999, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Tống Anh Quân', '0388973214', 'nguyenanhquan@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Trần Đức Vũ', '0385732141', 'tranducvu@gmail.com', 1979, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Trần Đức Vũ', '0385732141', 'tranducvu@gmail.com', 1979, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thành Nghiêm', '0384532564', 'thanhnghiem@gmail.com', 2000, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Thành Nghiêm', '0384532564', 'thanhnghiem@gmail.com', 2000, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Vòng Vĩnh Lợi', '038458653', 'vvloi@gmail.com', 1985, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Vòng Vĩnh Lợi', '038458653', 'vvloi@gmail.com', 1985, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Nguyễn Tiến Hoàng', '0384892314', 'nthoang@gmail.com', 1994, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Tiến Hoàng', '0384892314', 'nthoang@gmail.com', 1994, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Lê Bá Hậu', '0384598371', 'lebahau@gmail.com', 1992, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Bá Hậu', '0384598371', 'lebahau@gmail.com', 1992, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thanh Hiền', '0381242314', 'thanhhien@gmail.com', 2000, N'Nữ', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Thanh Hiền', '0381242314', 'thanhhien@gmail.com', 2000, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Lê Hữu Duy', '0373127573', 'lehuuduy@gmail.com', 1991, N'Nam', 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Hữu Duy', '0373127573', 'lehuuduy@gmail.com', 1991, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [GioiTinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thanh Tuyền', '0309650214', 'nguyenthanhtien@gmail.com', 1995, N'Nữ', 0)
-GO
-
--- Xem bảng KhachHang
-SELECT *FROM [dbo].[KhachHang]
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Thanh Tuyền', '0309650214', 'nguyenthanhtien@gmail.com', 1995, 0)
 GO
 
 -- NHÂN VIÊN
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', '12345678', 1891, 35000, N'Quản lí', N'Đang làm việc')
+	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', '12345678', 1980, 35000, N'Quản lí', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
@@ -406,71 +425,58 @@ INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamS
 	VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', '12345678', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
--- Xem bảng NhanVien
-SELECT *FROM [dbo].[NhanVien]
-GO
-
-
 -- PHÒNG
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (101, N'Thường', N'Trống', 180000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (101, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (102, N'Thường', N'Trống', 200000, 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (102, N'Thường', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (103, N'Thường', N'Trống', 180000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (103, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (104, N'Thường', N'Trống', 180000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (104, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (105, N'Thường', N'Trống', 200000, 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (105, N'Thường', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (201, 'VIP', N'Trống', 220000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (201, 'VIP', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (202, 'VIP', N'Trống', 220000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (202, 'VIP', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (203, 'VIP', N'Trống', 250000, 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (203, 'VIP', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (204, 'VIP', N'Trống', 220000, 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (204, 'VIP', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [Gia], [SucChua])
-	VALUES (205, 'VIP', N'Trống', 250000, 20)
-GO
-
--- Xem bảng Phòng
-SELECT *FROM [dbo].[Phong]
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (205, 'VIP', N'Trống', 20)
 GO
 
 -- CA TRỰC
 INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 1', 8, 13)
+	VALUES (N'Ca 1', '08:00:00', '13:00:00')
 GO
 
 INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 2', 13, 18)
+	VALUES (N'Ca 2', '13:00:00', '18:00:00')
 GO
 
 INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 3', 18, 24)
-GO
-
--- Xem bảng CaTruc
-SELECT *FROM CaTruc
+	VALUES (N'Ca 3', '18:00:00', '00:00:00')
 GO
 
 -- DỊCH VỤ
@@ -534,10 +540,6 @@ INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
 	VALUES (N'Bánh tráng nướng', N'Món ăn', 50000)
 GO
 
--- Xem bảng DichVu
-SELECT * FROM DichVu
-GO
-
 -- PHÂN CÔNG
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
 	VALUES ('NV001', 'CT001', '2023-09-22')
@@ -577,10 +579,6 @@ GO
 
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
 	VALUES ('NV005', 'CT003', '2023-09-22')
-GO
-
--- xem bảng PhanCong
-SELECT *FROM [dbo].[PhieuPhanCong]
 GO
 
 -- CHẤM CÔNG
@@ -624,6 +622,11 @@ INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
 	VALUES ('PC010', '2023-09-22', N'Không vắng')
 GO
 
--- Xem bảng ChamCong
-SELECT *FROM PhieuChamCong
+
+SELECT *FROM CaTruc
+SELECT *FROM DichVu
+SELECT *FROM Phong
+SELECT *FROM KhachHang
+SELECT *FROM NhanVien
+
 GO

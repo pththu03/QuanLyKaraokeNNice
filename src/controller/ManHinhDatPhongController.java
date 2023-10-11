@@ -33,5 +33,4 @@ public class ManHinhDatPhongController implements ActionListener{
 			manHinhDatPhong.chonChucNangHuyPhong();
 		}
 	}
-
 }

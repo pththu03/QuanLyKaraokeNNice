@@ -23,6 +23,8 @@ import javax.swing.border.MatteBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 
 public class ManHinhDangNhap extends JFrame {
@@ -55,23 +57,26 @@ public class ManHinhDangNhap extends JFrame {
 	public JButton btnDanhChoKhachHang;
 	private JLabel lblSĐT;
 	private JLabel lblMatKhau;
+	private JLabel lblDangNhap;
+
 	
 	public ManHinhDangNhap() {
+		setResizable(false);
 		setTitle("Đăng Nhập");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ManHinhDangNhap.class.getResource("/images/iconLogo1.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(300, 100, 542, 648);
 		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.inactiveCaption);
+		contentPane.setBackground(new Color(204, 204, 255));
 		contentPane.setForeground(new Color(70, 130, 180));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblDangNhap = new JLabel("Đăng Nhập Hệ Thống");
+		lblDangNhap = new JLabel("Đăng Nhập ");
 		lblDangNhap.setForeground(SystemColor.desktop);
 		lblDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 43));
-		lblDangNhap.setBounds(58, 95, 419, 65);
+		lblDangNhap.setBounds(145, 86, 237, 65);
 		contentPane.add(lblDangNhap);
 		
 		txtSoDienThoai = new JTextField();
@@ -90,10 +95,18 @@ public class ManHinhDangNhap extends JFrame {
 		txtMatKhau.setColumns(10);
 		
 		btnDangNhap = new JButton("Đăng Nhập\r\n");
+		btnDangNhap.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		btnDangNhap.setFocusable(false);
-		btnDangNhap.setBorder(null);
+		btnDangNhap.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDangNhap.setIcon(new ImageIcon("E:\\QuanLyKaraokeN\\src\\images\\iconDangNhap.png"));
-		btnDangNhap.setBackground(new Color(30, 144, 255));
+		btnDangNhap.setBackground(new Color(144, 238, 144));
 		btnDangNhap.setForeground(new Color(0, 0, 0));
 		btnDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDangNhap.setBounds(58, 370, 181, 34);
@@ -101,20 +114,20 @@ public class ManHinhDangNhap extends JFrame {
 		
 		btnThoat = new JButton("Thoát\r\n");
 		btnThoat.setFocusable(false);
-		btnThoat.setBorder(null);
+		btnThoat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnThoat.setBackground(new Color(255, 69, 0));
+		btnThoat.setBackground(new Color(144, 238, 144));
 		btnThoat.setIcon(new ImageIcon(ManHinhDangNhap.class.getResource("/images/iconDangXuat.png")));
 		btnThoat.setBounds(296, 370, 181, 34);
 		contentPane.add(btnThoat);
 		
 		btnDanhChoKhachHang = new JButton("Dành cho Khách Hàng");
 		btnDanhChoKhachHang.setFocusable(false);
-		btnDanhChoKhachHang.setBorder(null);
+		btnDanhChoKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDanhChoKhachHang.setIcon(new ImageIcon("C:\\Users\\DELL\\Downloads\\icons8-account-27.png"));
-		btnDanhChoKhachHang.setBackground(new Color(0, 206, 209));
+		btnDanhChoKhachHang.setBackground(new Color(144, 238, 144));
 		btnDanhChoKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDanhChoKhachHang.setBounds(296, 430, 181, 27);
+		btnDanhChoKhachHang.setBounds(182, 431, 181, 27);
 		contentPane.add(btnDanhChoKhachHang);
 		
 		lblSĐT = new JLabel("Số điện thoại:\r\n");
@@ -131,7 +144,10 @@ public class ManHinhDangNhap extends JFrame {
 		btnDangNhap.addActionListener(controller);
 		btnDanhChoKhachHang.addActionListener(controller);
 		btnThoat.addActionListener(controller);
+		
 	}
+	
+	
 	
 	public void chonChucNangThoat() {
 		if(JOptionPane.showConfirmDialog(null, "Thông báo", "Xác nhận tắt màn hình?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {

@@ -23,6 +23,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.border.SoftBevelBorder;
+import com.toedter.calendar.JYearChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ManHinhThongKe extends JPanel {
 
@@ -52,8 +56,6 @@ public class ManHinhThongKe extends JPanel {
 	private JLabel lbl_tienTongDoanhThu;
 	private JLabel lbl_tongSoLuongHD;
 	private JLabel lbl_TongSoHD;
-	private JLabel lbl_TongDoanhThuPhongThuong;
-	private JLabel lbl_tienDoanhThuPhongThuong;
 	private JLabel lbl_tongDoanhThuPhongVIP;
 	private JLabel lbl_tienDoanhThuPhongVIP;
 	private JLabel lbl_tienTongDoanhThuPhong;
@@ -69,14 +71,16 @@ public class ManHinhThongKe extends JPanel {
 	private JComboBox<String> combo_thangDoanhThu;
 	private DefaultComboBoxModel<String> model_comboThangDoanhThu;
 	private JLabel lbl_chonNamDoanhThu_Thang;
-	private JComboBox<String> combo_namDoanhThu_Thang;
-	private DefaultComboBoxModel<String> model_comboNamDoanhThu_Thang;
 	private JLabel lbl_chonNamDoanhThu_Nam;
-	private JComboBox<String> combo_namDoanhThu_Nam;
-	private DefaultComboBoxModel<String> model_comboNamDoanhThu_Nam;
+	private JYearChooser combo_namDoanhThu_Thang;
+	private JYearChooser combo_namDoanhThu_Nam;
 	private JLabel lbl_doanhThuTB;
 	private JLabel lbl_tienDoanhThuTB;
 	private JLabel lbl_chuThich1;
+	public JButton btn_timKiemDT_ngay;
+	public JButton btn_timKiemDT_thang;
+	public JButton btn_timKiemDT_nam;
+	public JButton btn_XemChiTietHoaDon_HD;
 	
 	/**
 	 * Luong nhan vien
@@ -95,8 +99,6 @@ public class ManHinhThongKe extends JPanel {
 	private JComboBox<String> combo_thangLuong;
 	private DefaultComboBoxModel<String> model_comboThangLuong;
 	private JLabel lbl_chonNamLuong;
-	private JComboBox<String> combo_namLuong;
-	private DefaultComboBoxModel<String> model_comboNamLuong;
 	private JTable table_DSNhanVien;
 	private DefaultTableModel model_tableDSNhanVien;
 	private JScrollPane scrollPane_NhanVien;
@@ -104,7 +106,10 @@ public class ManHinhThongKe extends JPanel {
 	private JLabel lbl_soGioLamViec;
 	private JLabel lbl_tongCaVang;
 	private JLabel lbl_soCaVang;
-
+	private JYearChooser combo_chonNamLNV;
+	public JButton btn_timKiemLNV;
+	public JButton btn_XemChiTietHoaDon_LuongNV;
+	
 	/**
 	 * Khach hang
 	 */
@@ -117,8 +122,6 @@ public class ManHinhThongKe extends JPanel {
 	private JComboBox<String> combo_thangKH;
 	private DefaultComboBoxModel<String> model_comboThangKH;
 	private JLabel lbl_chonNamKH;
-	private JComboBox<String> combo_namKH;
-	private DefaultComboBoxModel<String> model_comboNamKH;
 	private JPanel panel_DSKhachHang;
 	private JLabel lbl_tongSoLanDatPhong;
 	private JLabel lbl_tongSoKH;
@@ -129,7 +132,10 @@ public class ManHinhThongKe extends JPanel {
 	private JTable table_DSKhachHang;
 	private DefaultTableModel model_tableDSKhachHang;
 	private JScrollPane scrollPane_KhachHang;
-
+	private JYearChooser combo_chonNamKH;
+	public JButton btn_timKiemKH;
+	public JButton btn_XemChiTietHoaDon_KH;
+	
 	public ManHinhThongKe() {
 		setLayout(null);
 		setBounds(0, 0, 1084, 602);
@@ -147,7 +153,7 @@ public class ManHinhThongKe extends JPanel {
 		panel_ThongKe.add(tabbedPane_ThongKeLon);
 		
 		panel_ThongKeDoanhThu = new JPanel();
-		panel_ThongKeDoanhThu.setBackground(SystemColor.activeCaption);
+		panel_ThongKeDoanhThu.setBackground(new Color(255, 192, 203));
 		panel_ThongKeDoanhThu.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tabbedPane_ThongKeLon.addTab("Doanh Thu", null, panel_ThongKeDoanhThu, null);
 		tabbedPane_ThongKeLon.setForegroundAt(0, SystemColor.desktop);
@@ -215,42 +221,58 @@ public class ManHinhThongKe extends JPanel {
 		 */
 		lbl_chonNgayDoanhThu = new JLabel("Chọn ngày");
 		lbl_chonNgayDoanhThu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonNgayDoanhThu.setBounds(57, 11, 88, 30);
+		lbl_chonNgayDoanhThu.setBounds(20, 11, 88, 30);
 		panel_TimKiemDoanhThu.add(lbl_chonNgayDoanhThu);
 		
 		combo_Ngay = new JDateChooser();
-		combo_Ngay.setBounds(155, 11, 133, 30);
+		combo_Ngay.setBounds(118, 11, 133, 30);
 		panel_TimKiemDoanhThu.add(combo_Ngay);
+		
+		btn_timKiemDT_ngay = new JButton("");
+		btn_timKiemDT_ngay.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_timKiemDT_ngay.setFocusable(false);
+		btn_timKiemDT_ngay.setBackground(new Color(144, 238, 144));
+		btn_timKiemDT_ngay.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconTimKiem1.png")));
+		btn_timKiemDT_ngay.setBounds(446, 11, 53, 30);
+		panel_TimKiemDoanhThu.add(btn_timKiemDT_ngay);
+		
+		btn_timKiemDT_thang = new JButton("");
+		btn_timKiemDT_thang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_timKiemDT_thang.setFocusable(false);
+		btn_timKiemDT_thang.setBackground(new Color(144, 238, 144));
+		btn_timKiemDT_thang.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconTimKiem1.png")));
+		btn_timKiemDT_thang.setBounds(446, 11, 53, 30);
+		
+		btn_timKiemDT_nam = new JButton("");
+		btn_timKiemDT_nam.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_timKiemDT_nam.setFocusable(false);
+		btn_timKiemDT_nam.setBackground(new Color(144, 238, 144));
+		btn_timKiemDT_nam.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconTimKiem1.png")));
+		btn_timKiemDT_nam.setBounds(446, 11, 53, 30);
 		
 		lbl_chonThangDoanhThu = new JLabel("Chọn tháng:");
 		lbl_chonThangDoanhThu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonThangDoanhThu.setBounds(57, 11, 110, 30);
+		lbl_chonThangDoanhThu.setBounds(20, 11, 110, 30);
 		
 		String[] cols_Thang = {"Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", 
 				"Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"};
 		model_comboThangDoanhThu = new DefaultComboBoxModel<>(cols_Thang);
 		combo_thangDoanhThu = new JComboBox<String>(model_comboThangDoanhThu);
-		combo_thangDoanhThu.setBounds(155, 11, 100, 30);
+		combo_thangDoanhThu.setBounds(118, 11, 100, 30);
 		
 		lbl_chonNamDoanhThu_Thang = new JLabel("Chọn năm:");
 		lbl_chonNamDoanhThu_Thang.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonNamDoanhThu_Thang.setBounds(284, 11, 88, 30);
+		lbl_chonNamDoanhThu_Thang.setBounds(254, 11, 88, 30);
 		
-		String[] cols_Nam = new String[25];
-		for(int i = 0; i <= 24; i++) {
-			cols_Nam[i] = String.valueOf(i + 1999);
-		}
-		model_comboNamDoanhThu_Thang = new DefaultComboBoxModel<>(cols_Nam);
-		combo_namDoanhThu_Thang = new JComboBox<>(model_comboNamDoanhThu_Thang);
-		combo_namDoanhThu_Thang.setBounds(370, 11, 100, 30);
+		combo_namDoanhThu_Thang = new JYearChooser();
+		combo_namDoanhThu_Thang.setBounds(333, 11, 100, 30);
 		
 		lbl_chonNamDoanhThu_Nam = new JLabel("Chọn năm:");
 		lbl_chonNamDoanhThu_Nam.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonNamDoanhThu_Nam.setBounds(57, 11, 88, 30);
+		lbl_chonNamDoanhThu_Nam.setBounds(20, 11, 110, 30);
 		
-		model_comboNamDoanhThu_Nam = new DefaultComboBoxModel<>(cols_Nam);
-		combo_namDoanhThu_Nam = new JComboBox<>(model_comboNamDoanhThu_Nam);
-		combo_namDoanhThu_Nam.setBounds(155, 11, 100, 30);
+		combo_namDoanhThu_Nam = new JYearChooser();
+		combo_namDoanhThu_Nam.setBounds(118, 11, 100, 30);
 		
 		lbl_tongDoanhThu = new JLabel("Tổng Doanh thu hóa đơn:");
 		lbl_tongDoanhThu.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -267,61 +289,49 @@ public class ManHinhThongKe extends JPanel {
 		lbl_tongSoLuongHD = new JLabel("0");
 		lbl_tongSoLuongHD.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_tongSoLuongHD.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lbl_tongSoLuongHD.setBounds(283, 141, 200, 25);
+		lbl_tongSoLuongHD.setBounds(283, 151, 200, 25);
 		panel_ChiTietDoanhThu.add(lbl_tongSoLuongHD);
 		
 		lbl_TongSoHD = new JLabel("Tổng số hóa đơn:");
 		lbl_TongSoHD.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lbl_TongSoHD.setBackground(SystemColor.menu);
-		lbl_TongSoHD.setBounds(23, 141, 150, 25);
+		lbl_TongSoHD.setBounds(23, 153, 150, 25);
 		panel_ChiTietDoanhThu.add(lbl_TongSoHD);
-		
-		lbl_TongDoanhThuPhongThuong = new JLabel("Tổng doanh thu phòng thường:");
-		lbl_TongDoanhThuPhongThuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_TongDoanhThuPhongThuong.setBackground(SystemColor.menu);
-		lbl_TongDoanhThuPhongThuong.setBounds(23, 192, 250, 25);
-		panel_ChiTietDoanhThu.add(lbl_TongDoanhThuPhongThuong);
-		
-		lbl_tienDoanhThuPhongThuong = new JLabel("0 VNĐ");
-		lbl_tienDoanhThuPhongThuong.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_tienDoanhThuPhongThuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_tienDoanhThuPhongThuong.setBounds(283, 192, 200, 25);
-		panel_ChiTietDoanhThu.add(lbl_tienDoanhThuPhongThuong);
 		
 		lbl_tongDoanhThuPhongVIP = new JLabel("Tổng doanh thu phòng VIP:");
 		lbl_tongDoanhThuPhongVIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lbl_tongDoanhThuPhongVIP.setBackground(SystemColor.menu);
-		lbl_tongDoanhThuPhongVIP.setBounds(23, 243, 250, 25);
+		lbl_tongDoanhThuPhongVIP.setBounds(23, 216, 250, 25);
 		panel_ChiTietDoanhThu.add(lbl_tongDoanhThuPhongVIP);
 		
 		lbl_tienDoanhThuPhongVIP = new JLabel("0 VNĐ");
 		lbl_tienDoanhThuPhongVIP.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_tienDoanhThuPhongVIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_tienDoanhThuPhongVIP.setBounds(283, 243, 200, 25);
+		lbl_tienDoanhThuPhongVIP.setBounds(283, 212, 200, 25);
 		panel_ChiTietDoanhThu.add(lbl_tienDoanhThuPhongVIP);
 		
 		lbl_tienTongDoanhThuPhong = new JLabel("0 VNĐ");
 		lbl_tienTongDoanhThuPhong.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_tienTongDoanhThuPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_tienTongDoanhThuPhong.setBounds(283, 294, 200, 25);
+		lbl_tienTongDoanhThuPhong.setBounds(283, 273, 200, 25);
 		panel_ChiTietDoanhThu.add(lbl_tienTongDoanhThuPhong);
 		
 		lbl_tongDoanhThuPhong = new JLabel("Tổng doanh thu phòng thường:");
 		lbl_tongDoanhThuPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lbl_tongDoanhThuPhong.setBackground(SystemColor.menu);
-		lbl_tongDoanhThuPhong.setBounds(23, 294, 250, 25);
+		lbl_tongDoanhThuPhong.setBounds(23, 279, 250, 25);
 		panel_ChiTietDoanhThu.add(lbl_tongDoanhThuPhong);
 		
 		lbl_tongDoanhThuDV = new JLabel("Tổng doanh thu dịch vụ:");
 		lbl_tongDoanhThuDV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lbl_tongDoanhThuDV.setBackground(SystemColor.menu);
-		lbl_tongDoanhThuDV.setBounds(23, 345, 250, 25);
+		lbl_tongDoanhThuDV.setBounds(23, 342, 250, 25);
 		panel_ChiTietDoanhThu.add(lbl_tongDoanhThuDV);
 		
 		lbl_tienDoanhThuDV = new JLabel("0 VNĐ");
 		lbl_tienDoanhThuDV.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_tienDoanhThuDV.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_tienDoanhThuDV.setBounds(283, 345, 200, 25);
+		lbl_tienDoanhThuDV.setBounds(283, 334, 200, 25);
 		panel_ChiTietDoanhThu.add(lbl_tienDoanhThuDV);
 		
 		lbl_doanhThuTB = new JLabel("Doanh thu trung bình:");
@@ -333,7 +343,7 @@ public class ManHinhThongKe extends JPanel {
 		lbl_tienDoanhThuTB = new JLabel("0 VNĐ");
 		lbl_tienDoanhThuTB.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_tienDoanhThuTB.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_tienDoanhThuTB.setBounds(283, 396, 200, 25);
+		lbl_tienDoanhThuTB.setBounds(283, 395, 200, 25);
 		panel_ChiTietDoanhThu.add(lbl_tienDoanhThuTB);
 		
 		lbl_chuThich1 = new JLabel("(Tổng doanh thu hóa đơn/Tổng số hóa đơn");
@@ -348,9 +358,6 @@ public class ManHinhThongKe extends JPanel {
 		panel_ThongTinDoanhThu.add(panel_DSDoanhThu);
 		panel_DSDoanhThu.setLayout(null);
 		
-		/**
-		 * table Hoa don
-		 */
 		String[] cols_HoaDon = {"STT", "Mã hóa đơn", "Tên khách hàng", "Tên nhân viên", "Ngày lập", "Tổng tiền"};
 		model_table_DSHoaDon = new DefaultTableModel(cols_HoaDon, 0);
 		table_DSHoaDon = new JTable(model_table_DSHoaDon);
@@ -358,9 +365,10 @@ public class ManHinhThongKe extends JPanel {
 		scrollPane_HoaDon.setBounds(10, 11, 539, 395);
 		panel_DSDoanhThu.add(scrollPane_HoaDon);
 		
-		JButton btn_XemChiTietHoaDon_HD = new JButton("Xem chi tiết hóa đơn");
+		btn_XemChiTietHoaDon_HD = new JButton("Xem chi tiết hóa đơn");
+		btn_XemChiTietHoaDon_HD.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_XemChiTietHoaDon_HD.setForeground(new Color(0, 0, 0));
-		btn_XemChiTietHoaDon_HD.setBackground(new Color(50, 205, 50));
+		btn_XemChiTietHoaDon_HD.setBackground(new Color(144, 238, 144));
 		btn_XemChiTietHoaDon_HD.setFocusable(false);
 		btn_XemChiTietHoaDon_HD.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconNhinMK.png")));
 		btn_XemChiTietHoaDon_HD.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -369,12 +377,11 @@ public class ManHinhThongKe extends JPanel {
 		
 		
 		
-		
 		/**
 		 * Thong ke luong nhan vien
 		 */
 		panel_ThongKeLuongNhanVien = new JPanel();
-		panel_ThongKeLuongNhanVien.setBackground(SystemColor.activeCaption);
+		panel_ThongKeLuongNhanVien.setBackground(new Color(255, 192, 203));
 		panel_ThongKeLuongNhanVien.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tabbedPane_ThongKeLon.addTab("Lương nhân viên", null, panel_ThongKeLuongNhanVien, null);
 		panel_ThongKeLuongNhanVien.setLayout(null);
@@ -412,23 +419,30 @@ public class ManHinhThongKe extends JPanel {
 		 */
 		lbl_chonThangLuong = new JLabel("Chọn tháng:");
 		lbl_chonThangLuong.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonThangLuong.setBounds(57, 11, 110, 30);
+		lbl_chonThangLuong.setBounds(20, 11, 110, 30);
 		panel_TimKiemLuong.add(lbl_chonThangLuong);
 		
 		model_comboThangLuong = new DefaultComboBoxModel<>(cols_Thang);
 		combo_thangLuong = new JComboBox<>(model_comboThangLuong);
-		combo_thangLuong.setBounds(155, 11, 100, 30);
+		combo_thangLuong.setBounds(118, 11, 100, 30);
 		panel_TimKiemLuong.add(combo_thangLuong);
 		
 		lbl_chonNamLuong = new JLabel("Chọn năm:");
 		lbl_chonNamLuong.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonNamLuong.setBounds(284, 11, 88, 30);
+		lbl_chonNamLuong.setBounds(247, 11, 88, 30);
 		panel_TimKiemLuong.add(lbl_chonNamLuong);
 		
-		model_comboNamLuong = new DefaultComboBoxModel<>(cols_Nam);
-		combo_namLuong = new JComboBox<>(model_comboNamLuong);
-		combo_namLuong.setBounds(370, 11, 100, 30);
-		panel_TimKiemLuong.add(combo_namLuong);
+		combo_chonNamLNV = new JYearChooser();
+		combo_chonNamLNV.setBounds(333, 11, 100, 30);
+		panel_TimKiemLuong.add(combo_chonNamLNV);
+		
+		btn_timKiemLNV = new JButton("");
+		btn_timKiemLNV.setBackground(new Color(144, 238, 144));
+		btn_timKiemLNV.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_timKiemLNV.setFocusable(false);
+		btn_timKiemLNV.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconTimKiem1.png")));
+		btn_timKiemLNV.setBounds(443, 11, 53, 30);
+		panel_TimKiemLuong.add(btn_timKiemLNV);
 		
 		lbl_tongTienLuong = new JLabel("Tổng tiền lương:");
 		lbl_tongTienLuong.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -486,9 +500,6 @@ public class ManHinhThongKe extends JPanel {
 		panel_ThongKeLuongNhanVienNho.add(panel_DSLuongNhanVien);
 		panel_DSLuongNhanVien.setLayout(null);
 		
-		/**
-		 * table Nhan Vien
-		 */
 		String[] cols_NhanVien = {"STT", "Mã nhân viên", "Họ tên", "Số diện thoại", "Số giờ làm việc", "Số ca vắng", "Tiền lương"};
 		model_tableDSNhanVien = new DefaultTableModel(cols_NhanVien, 0);
 		table_DSNhanVien = new JTable(model_tableDSNhanVien);
@@ -496,12 +507,13 @@ public class ManHinhThongKe extends JPanel {
 		scrollPane_NhanVien.setBounds(10, 11, 539, 432);
 		panel_DSLuongNhanVien.add(scrollPane_NhanVien);
 		
-		JButton btn_XemChiTietHoaDon_LuongNV = new JButton("Xem chi tiết hóa đơn");
+		btn_XemChiTietHoaDon_LuongNV = new JButton("Xem chi tiết chấm công");
+		btn_XemChiTietHoaDon_LuongNV.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_XemChiTietHoaDon_LuongNV.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconNhinMK.png")));
 		btn_XemChiTietHoaDon_LuongNV.setForeground(Color.BLACK);
 		btn_XemChiTietHoaDon_LuongNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_XemChiTietHoaDon_LuongNV.setFocusable(false);
-		btn_XemChiTietHoaDon_LuongNV.setBackground(new Color(50, 205, 50));
+		btn_XemChiTietHoaDon_LuongNV.setBackground(new Color(144, 238, 144));
 		btn_XemChiTietHoaDon_LuongNV.setBounds(333, 454, 216, 35);
 		panel_DSLuongNhanVien.add(btn_XemChiTietHoaDon_LuongNV);
 		
@@ -510,7 +522,7 @@ public class ManHinhThongKe extends JPanel {
 		 */
 		
 		panel_ThongKeKhachHang = new JPanel();
-		panel_ThongKeKhachHang.setBackground(SystemColor.activeCaption);
+		panel_ThongKeKhachHang.setBackground(new Color(255, 192, 203));
 		panel_ThongKeKhachHang.setToolTipText("");
 		panel_ThongKeKhachHang.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tabbedPane_ThongKeLon.addTab("Số lần đặt phòng của khách hàng", null, panel_ThongKeKhachHang, null);
@@ -549,23 +561,34 @@ public class ManHinhThongKe extends JPanel {
 		 */
 		lbl_chonThangKH = new JLabel("Chọn tháng:");
 		lbl_chonThangKH.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonThangKH.setBounds(57, 11, 110, 30);
+		lbl_chonThangKH.setBounds(20, 11, 110, 30);
 		panel_TimKiemKhachHang.add(lbl_chonThangKH);
 		
 		model_comboThangKH = new DefaultComboBoxModel<>(cols_Thang);
 		combo_thangKH = new JComboBox<>(model_comboThangKH);
-		combo_thangKH.setBounds(155, 11, 100, 30);
+		combo_thangKH.setBounds(118, 11, 100, 30);
 		panel_TimKiemKhachHang.add(combo_thangKH);
 		
 		lbl_chonNamKH = new JLabel("Chọn năm:");
 		lbl_chonNamKH.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lbl_chonNamKH.setBounds(284, 11, 88, 30);
+		lbl_chonNamKH.setBounds(247, 11, 88, 30);
 		panel_TimKiemKhachHang.add(lbl_chonNamKH);
 		
-		model_comboNamKH = new DefaultComboBoxModel<>(cols_Nam);
-		combo_namKH = new JComboBox<>(model_comboNamKH);
-		combo_namKH.setBounds(370, 11, 100, 30);
-		panel_TimKiemKhachHang.add(combo_namKH);
+		btn_timKiemKH = new JButton("");
+		btn_timKiemKH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_timKiemKH.setFocusable(false);
+		btn_timKiemKH.setBackground(new Color(144, 238, 144));
+		btn_timKiemKH.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_timKiemKH.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconTimKiem1.png")));
+		btn_timKiemKH.setBounds(446, 11, 53, 30);
+		panel_TimKiemKhachHang.add(btn_timKiemKH);
+		
+		combo_chonNamKH = new JYearChooser();
+		combo_chonNamKH.setBounds(333, 11, 100, 30);
+		panel_TimKiemKhachHang.add(combo_chonNamKH);
 		
 		lbl_tongSoLanDatPhong = new JLabel("Tổng số lần đặt phòng:");
 		lbl_tongSoLanDatPhong.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -621,12 +644,13 @@ public class ManHinhThongKe extends JPanel {
 		scrollPane_KhachHang.setBounds(10, 11, 539, 432);
 		panel_DSKhachHang.add(scrollPane_KhachHang);
 		
-		JButton btn_XemChiTietHoaDon_KH = new JButton("Xem chi tiết hóa đơn");
+		btn_XemChiTietHoaDon_KH = new JButton("Xem chi tiết hóa đơn");
+		btn_XemChiTietHoaDon_KH.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_XemChiTietHoaDon_KH.setIcon(new ImageIcon(ManHinhThongKe.class.getResource("/images/iconNhinMK.png")));
 		btn_XemChiTietHoaDon_KH.setForeground(Color.BLACK);
 		btn_XemChiTietHoaDon_KH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_XemChiTietHoaDon_KH.setFocusable(false);
-		btn_XemChiTietHoaDon_KH.setBackground(new Color(50, 205, 50));
+		btn_XemChiTietHoaDon_KH.setBackground(new Color(144, 238, 144));
 		btn_XemChiTietHoaDon_KH.setBounds(333, 454, 216, 35);
 		panel_DSKhachHang.add(btn_XemChiTietHoaDon_KH);
 
@@ -644,6 +668,7 @@ public class ManHinhThongKe extends JPanel {
 		
 		this.panel_TimKiemDoanhThu.add(lbl_chonNgayDoanhThu);
 		this.panel_TimKiemDoanhThu.add(combo_Ngay);
+		this.panel_TimKiemDoanhThu.add(btn_timKiemDT_ngay);
 		this.panel_TimKiemDoanhThu.repaint();
 		this.panel_TimKiemDoanhThu.revalidate();
 	}
@@ -657,6 +682,7 @@ public class ManHinhThongKe extends JPanel {
 		this.panel_TimKiemDoanhThu.add(combo_thangDoanhThu);
 		this.panel_TimKiemDoanhThu.add(lbl_chonNamDoanhThu_Thang);
 		this.panel_TimKiemDoanhThu.add(combo_namDoanhThu_Thang);
+		this.panel_TimKiemDoanhThu.add(btn_timKiemDT_thang);
 		this.panel_TimKiemDoanhThu.repaint();
 		this.panel_TimKiemDoanhThu.revalidate();
 	}
@@ -668,6 +694,7 @@ public class ManHinhThongKe extends JPanel {
 		
 		this.panel_TimKiemDoanhThu.add(lbl_chonNamDoanhThu_Nam);
 		this.panel_TimKiemDoanhThu.add(combo_namDoanhThu_Nam);
+		this.panel_TimKiemDoanhThu.add(btn_timKiemDT_nam);
 		this.panel_TimKiemDoanhThu.repaint();
 		this.panel_TimKiemDoanhThu.revalidate();
 	}

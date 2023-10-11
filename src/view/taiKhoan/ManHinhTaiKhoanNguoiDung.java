@@ -13,10 +13,11 @@ import javax.swing.SwingConstants;
 import controller.ManHinhTaiKhoanController;
 import view.dangNhap.ManHinhDangNhap;
 import view.dangNhap.ManHinhDoiMatKhau;
-import view.manHinhChinh.ManHinhChinh;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class ManHinhTaiKhoanNguoiDung extends JPanel {
 
@@ -61,6 +62,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		panel_taiKhoan.add(lbl_maNV);
 		
 		txt_maNV = new JTextField();
+		txt_maNV.setBorder(null);
 		txt_maNV.setEnabled(false);
 		txt_maNV.setBounds(670, 185, 300, 30);
 		txt_maNV.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -73,6 +75,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		panel_taiKhoan.add(lbl_hoVaTen);
 		
 		txt_hoVaTen = new JTextField();
+		txt_hoVaTen.setBorder(null);
 		txt_hoVaTen.setEnabled(false);
 		txt_hoVaTen.setBounds(670, 235, 300, 30);
 		txt_hoVaTen.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -85,6 +88,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		panel_taiKhoan.add(lbl_chucVu);
 		
 		txt_chucVu = new JTextField();
+		txt_chucVu.setBorder(null);
 		txt_chucVu.setEnabled(false);
 		txt_chucVu.setBounds(670, 285, 110, 30);
 		txt_chucVu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -108,6 +112,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		panel_taiKhoan.add(lbl_cccd);
 		
 		txt_cccd = new JTextField();
+		txt_cccd.setBorder(null);
 		txt_cccd.setEnabled(false);
 		txt_cccd.setBounds(670, 385, 300, 30);
 		txt_cccd.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -146,7 +151,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		btn_dangXuat.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btn_dangXuat.setForeground(Color.WHITE);
 		btn_dangXuat.setBackground(Color.RED);
-		btn_dangXuat.setBorder(null);
+		btn_dangXuat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_dangXuat.setFocusPainted(false);
 		btn_dangXuat.setBounds(310, 420, 130, 35);
 		panel_taiKhoan.add(btn_dangXuat);
@@ -156,7 +161,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		btn_chinhSua.setForeground(Color.WHITE);
 		btn_chinhSua.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btn_chinhSua.setFocusPainted(false);
-		btn_chinhSua.setBorder(null);
+		btn_chinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_chinhSua.setBackground(new Color(0, 0, 205));
 		btn_chinhSua.setBounds(840, 495, 130, 35);
 		panel_taiKhoan.add(btn_chinhSua);
@@ -167,6 +172,7 @@ public class ManHinhTaiKhoanNguoiDung extends JPanel {
 		panel_taiKhoan.add(lblNewLabel);
 		
 		txt_namSinh = new JTextField();
+		txt_namSinh.setBorder(null);
 		txt_namSinh.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		txt_namSinh.setEnabled(false);
 		txt_namSinh.setColumns(10);

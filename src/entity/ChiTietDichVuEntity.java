@@ -4,38 +4,34 @@ import java.util.Objects;
 
 public class ChiTietDichVuEntity {
 	private String maCTDV;
-	private String maHD;
+	private String maCTHD;
 	private String maDV;
 	private int soLuong;
-	private double tongTien;
 
 	public ChiTietDichVuEntity() {
 		super();
 	}
 
-	public ChiTietDichVuEntity(String maCTDV, String maHD, String maDV, int soLuong, double tongTien) {
-		super();
+	public ChiTietDichVuEntity(String maCTDV, String maCTHD, String maDV, int soLuong) {
 		this.maCTDV = maCTDV;
-		this.maHD = maHD;
+		this.maCTHD = maCTHD;
 		this.maDV = maDV;
 		this.soLuong = soLuong;
-		this.tongTien = tongTien;
 	}
 
-	public ChiTietDichVuEntity(String maHD, String maDV, int soLuong, double tongTien) {
+	public ChiTietDichVuEntity(String maCTHD, String maDV, int soLuong) {
 		super();
-		this.maHD = maHD;
+		this.maCTHD = maCTHD;
 		this.maDV = maDV;
 		this.soLuong = soLuong;
-		this.tongTien = tongTien;
 	}
 
-	public String getMaHD() {
-		return maHD;
+	public String getmaCTHD() {
+		return maCTHD;
 	}
 
-	public void setMaHD(String maHD) {
-		this.maHD = maHD;
+	public void setmaCTHD(String maCTHD) {
+		this.maCTHD = maCTHD;
 	}
 
 	public String getMaDV() {
@@ -52,14 +48,6 @@ public class ChiTietDichVuEntity {
 
 	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
-	}
-
-	public double getTongTien() {
-		return tongTien;
-	}
-
-	public void setTongTien(double tongTien) {
-		this.tongTien = tongTien;
 	}
 
 	public String getMaCTDV() {
@@ -83,8 +71,8 @@ public class ChiTietDichVuEntity {
 
 	@Override
 	public String toString() {
-		return "ChiTietDichVuEntity [maCTDV=" + maCTDV + ", maHD=" + maHD + ", maDV=" + maDV + ", soLuong=" + soLuong
-				+ ", tongTien=" + tongTien + "]";
+		return "ChiTietDichVuEntity [maCTDV=" + maCTDV + ", maCTHD=" + maCTHD + ", maDV=" + maDV + ", soLuong=" + soLuong
+				+ "]";
 	}
 
 }

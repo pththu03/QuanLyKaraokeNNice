@@ -12,11 +12,15 @@ import javax.swing.JTable;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.ManHinhDatDichVuController;
+
 //import controller.ManHinhDatDichVuController;
 
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import javax.swing.border.SoftBevelBorder;
+import java.awt.event.ActionEvent;
 
 public class ManHinhDatDichVu extends JPanel {
 
@@ -65,7 +69,7 @@ public class ManHinhDatDichVu extends JPanel {
 	private JTextField txt_SoPhong;
 	private JTextField txt_TenKhachHang;
 	private JTextField txt_ThanhTien;
-//	private ManHinhDatDichVuController controller;
+	private ManHinhDatDichVuController controller;
 	
 	public ManHinhDatDichVu() {
 		setLayout(null);
@@ -94,78 +98,80 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_LocMonAn.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_LocMonAn.setFocusable(false);
 		btn_LocMonAn.setToolTipText("Lọc theo loại món ăn");
-		btn_LocMonAn.setBackground(new Color(153, 204, 255));
+		btn_LocMonAn.setBackground(new Color(144, 238, 144));
 		btn_LocMonAn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btn_LocMonAn.setBounds(20, 10, 110, 30);
+		btn_LocMonAn.setBounds(440, 11, 110, 30);
 		panel_TimKiem.add(btn_LocMonAn);
 
 		btn_LocDoUong = new JButton("Đồ uống");
 		btn_LocDoUong.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_LocDoUong.setFocusable(false);
 		btn_LocDoUong.setToolTipText("Lọc theo loại đồ uống");
-		btn_LocDoUong.setBackground(new Color(153, 204, 255));
+		btn_LocDoUong.setBackground(new Color(144, 238, 144));
 		btn_LocDoUong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btn_LocDoUong.setBounds(20, 50, 110, 30);
+		btn_LocDoUong.setBounds(440, 51, 110, 30);
 		panel_TimKiem.add(btn_LocDoUong);
 
 		btn_LocTiec = new JButton("Tiệc");
 		btn_LocTiec.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_LocTiec.setFocusable(false);
 		btn_LocTiec.setToolTipText("Lọc theo loại tiệc");
-		btn_LocTiec.setBackground(new Color(153, 204, 255));
+		btn_LocTiec.setBackground(new Color(144, 238, 144));
 		btn_LocTiec.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btn_LocTiec.setBounds(20, 90, 110, 30);
+		btn_LocTiec.setBounds(440, 91, 110, 30);
 		panel_TimKiem.add(btn_LocTiec);
 
 		lbl_TimKiemTenDV = new JLabel("Tên dịch vụ:");
 		lbl_TimKiemTenDV.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lbl_TimKiemTenDV.setBounds(150, 78, 80, 25);
+		lbl_TimKiemTenDV.setBounds(20, 77, 80, 25);
 		panel_TimKiem.add(lbl_TimKiemTenDV);
 
 		lbl_TimKiemGiaDV = new JLabel("Giá dịch vụ:");
 		lbl_TimKiemGiaDV.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lbl_TimKiemGiaDV.setBounds(150, 34, 76, 25);
+		lbl_TimKiemGiaDV.setBounds(20, 33, 76, 25);
 		panel_TimKiem.add(lbl_TimKiemGiaDV);
 
 		txt_TimKiemTenDV = new JTextField();
-		txt_TimKiemTenDV.setBounds(240, 78, 150, 25);
+		txt_TimKiemTenDV.setBounds(110, 77, 150, 25);
 		panel_TimKiem.add(txt_TimKiemTenDV);
 		txt_TimKiemTenDV.setColumns(10);
 
 		txt_GiaDVToiThieu = new JTextField();
-		txt_GiaDVToiThieu.setBounds(240, 30, 94, 30);
+		txt_GiaDVToiThieu.setBounds(110, 29, 94, 30);
 		panel_TimKiem.add(txt_GiaDVToiThieu);
 		txt_GiaDVToiThieu.setColumns(10);
 
 		lbl_giaDVDen = new JLabel("đến:");
 		lbl_giaDVDen.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lbl_giaDVDen.setBounds(344, 34, 35, 25);
+		lbl_giaDVDen.setBounds(214, 33, 35, 25);
 		panel_TimKiem.add(lbl_giaDVDen);
 
 		txt_GiaDVToiDa = new JTextField();
-		txt_GiaDVToiDa.setBounds(378, 30, 94, 30);
+		txt_GiaDVToiDa.setBounds(248, 29, 94, 30);
 		panel_TimKiem.add(txt_GiaDVToiDa);
 		txt_GiaDVToiDa.setColumns(10);
 
 		btn_TimKiem = new JButton("");
-		btn_TimKiem.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconTimKiem1.png")));
-		btn_TimKiem.setBackground(new Color(255, 255, 102));
+		btn_TimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn_TimKiem.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconTimKiem.png")));
+		btn_TimKiem.setBackground(new Color(144, 238, 144));
 		btn_TimKiem.setFocusable(false);
 		btn_TimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btn_TimKiem.setBounds(502, 27, 35, 35);
+		btn_TimKiem.setBounds(372, 24, 40, 40);
 		panel_TimKiem.add(btn_TimKiem);
 		
 		btn_LamMoi = new JButton("Làm mới");
+		btn_LamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btn_LamMoi.setFocusable(false);
-		btn_LamMoi.setBackground(new Color(152, 251, 152));
+		btn_LamMoi.setBackground(new Color(144, 238, 144));
 		btn_LamMoi.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconLamMoi1.png")));
 		btn_LamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btn_LamMoi.setBounds(424, 76, 120, 30);
+		btn_LamMoi.setBounds(294, 75, 120, 30);
 		panel_TimKiem.add(btn_LamMoi);
 
 		panel_tableDichVu = new JPanel();
 		panel_tableDichVu.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		panel_tableDichVu.setBackground(new Color(153, 204, 255));
+		panel_tableDichVu.setBackground(new Color(230, 230, 250));
 		panel_tableDichVu.setBounds(0, 128, 572, 310);
 		panel_DichVu.add(panel_tableDichVu);
 		panel_tableDichVu.setLayout(null);
@@ -189,6 +195,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ThongTin.add(lbl_TenDV);
 
 		txt_TenDV = new JTextField();
+		txt_TenDV.setBorder(null);
 		txt_TenDV.setEditable(false);
 		txt_TenDV.setBounds(125, 25, 200, 27);
 		panel_ThongTin.add(txt_TenDV);
@@ -200,6 +207,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ThongTin.add(lbl_LoaiDV);
 
 		txt_LoaiDV = new JTextField();
+		txt_LoaiDV.setBorder(null);
 		txt_LoaiDV.setEditable(false);
 		txt_LoaiDV.setBounds(125, 75, 200, 27);
 		panel_ThongTin.add(txt_LoaiDV);
@@ -211,6 +219,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ThongTin.add(lbl_GiaTien);
 
 		txt_GiaTien = new JTextField();
+		txt_GiaTien.setBorder(null);
 		txt_GiaTien.setEditable(false);
 		txt_GiaTien.setBounds(125, 125, 200, 27);
 		panel_ThongTin.add(txt_GiaTien);
@@ -229,15 +238,15 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_Them = new JButton("Thêm");
 		btn_Them.setFocusable(false);
 		btn_Them.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_Them.setBackground(new Color(51, 255, 0));
-		btn_Them.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconThem1.png")));
+		btn_Them.setBackground(new Color(144, 238, 144));
+		btn_Them.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconThem2.png")));
 		btn_Them.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_Them.setBounds(412, 107, 110, 30);
 		panel_ThongTin.add(btn_Them);
 
 		panel_ChiTietDatDichVu = new JPanel();
 		panel_ChiTietDatDichVu.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_ChiTietDatDichVu.setBackground(new Color(255, 182, 193));
+		panel_ChiTietDatDichVu.setBackground(new Color(255, 192, 203));
 		panel_ChiTietDatDichVu.setBounds(581, 0, 503, 602);
 		panel_DatDichVu.add(panel_ChiTietDatDichVu);
 		panel_ChiTietDatDichVu.setLayout(null);
@@ -253,6 +262,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ChiTietDatDichVu.add(lbl_SoPhong);
 
 		txt_SoPhong = new JTextField();
+		txt_SoPhong.setBorder(null);
 		txt_SoPhong.setEditable(false);
 		txt_SoPhong.setBounds(100, 70, 60, 27);
 		panel_ChiTietDatDichVu.add(txt_SoPhong);
@@ -264,6 +274,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ChiTietDatDichVu.add(lbl_TenKhachHang);
 
 		txt_TenKhachHang = new JTextField();
+		txt_TenKhachHang.setBorder(null);
 		txt_TenKhachHang.setEditable(false);
 		txt_TenKhachHang.setBounds(285, 70, 200, 27);
 		panel_ChiTietDatDichVu.add(txt_TenKhachHang);
@@ -275,6 +286,7 @@ public class ManHinhDatDichVu extends JPanel {
 		panel_ChiTietDatDichVu.add(lbl_ThanhTien);
 
 		txt_ThanhTien = new JTextField();
+		txt_ThanhTien.setBorder(null);
 		txt_ThanhTien.setEditable(false);
 		txt_ThanhTien.setBounds(100, 120, 200, 27);
 		panel_ChiTietDatDichVu.add(txt_ThanhTien);
@@ -290,7 +302,7 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_Xoa = new JButton("Xóa");
 		btn_Xoa.setFocusable(false);
 		btn_Xoa.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_Xoa.setBackground(new Color(153, 255, 255));
+		btn_Xoa.setBackground(new Color(144, 238, 144));
 		btn_Xoa.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconXoa1.png")));
 		btn_Xoa.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_Xoa.setBounds(142, 486, 100, 33);
@@ -299,7 +311,7 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_ChinhSua = new JButton("Chỉnh sửa");
 		btn_ChinhSua.setFocusable(false);
 		btn_ChinhSua.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_ChinhSua.setBackground(new Color(153, 255, 255));
+		btn_ChinhSua.setBackground(new Color(144, 238, 144));
 		btn_ChinhSua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_ChinhSua.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconChinhSua.png")));
 		btn_ChinhSua.setBounds(284, 486, 120, 33);
@@ -308,7 +320,7 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_Huy = new JButton("Hủy hóa đơn");
 		btn_Huy.setFocusable(false);
 		btn_Huy.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_Huy.setBackground(new Color(153, 255, 255));
+		btn_Huy.setBackground(new Color(144, 238, 144));
 		btn_Huy.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btn_Huy.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconHuy.png")));
 		btn_Huy.setBounds(92, 536, 150, 33);
@@ -317,23 +329,23 @@ public class ManHinhDatDichVu extends JPanel {
 		btn_Dat = new JButton("Đặt dịch vụ");
 		btn_Dat.setFocusable(false);
 		btn_Dat.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_Dat.setBackground(new Color(153, 255, 255));
+		btn_Dat.setBackground(new Color(144, 238, 144));
 		btn_Dat.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btn_Dat.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconHoanThanh.png")));
+		btn_Dat.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/icons8-tick-40.png")));
 		btn_Dat.setBounds(284, 536, 140, 33);
 		panel_ChiTietDatDichVu.add(btn_Dat);
 
-//		controller = new ManHinhDatDichVuController(this);
-//		btn_LocDoUong.addActionListener(controller);
-//		btn_LocMonAn.addActionListener(controller);
-//		btn_LocTiec.addActionListener(controller);
-//		btn_TimKiem.addActionListener(controller);
-//		btn_Them.addActionListener(controller);
-//		btn_Xoa.addActionListener(controller);
-//		btn_Huy.addActionListener(controller);
-//		btn_ChinhSua.addActionListener(controller);
-//		btn_Dat.addActionListener(controller);
-//		btn_LamMoi.addActionListener(controller);
+		controller = new ManHinhDatDichVuController(this);
+		btn_LocDoUong.addActionListener(controller);
+		btn_LocMonAn.addActionListener(controller);
+		btn_LocTiec.addActionListener(controller);
+		btn_TimKiem.addActionListener(controller);
+		btn_Them.addActionListener(controller);
+		btn_Xoa.addActionListener(controller);
+		btn_Huy.addActionListener(controller);
+		btn_ChinhSua.addActionListener(controller);
+		btn_Dat.addActionListener(controller);
+		btn_LamMoi.addActionListener(controller);
 	}
 	
 	public void chonChucNangLocDoUong() {

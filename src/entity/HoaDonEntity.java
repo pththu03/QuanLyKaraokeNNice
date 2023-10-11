@@ -11,14 +11,13 @@ public class HoaDonEntity {
 	private LocalDate ngayLapHD;
 	private LocalTime gioLapHD;
 	private boolean trangThai;
-	private double tongTien;
 
 	public HoaDonEntity() {
 		super();
 	}
 
 	public HoaDonEntity(String maHD, String maNV, String maKH, LocalDate ngayLapHD, LocalTime gioLapHD,
-			boolean trangThai, double tongTien) {
+			boolean trangThai) {
 		super();
 		this.maHD = maHD;
 		this.maNV = maNV;
@@ -26,18 +25,15 @@ public class HoaDonEntity {
 		this.ngayLapHD = ngayLapHD;
 		this.gioLapHD = gioLapHD;
 		this.trangThai = trangThai;
-		this.tongTien = tongTien;
 	}
 
-	public HoaDonEntity(String maNV, String maKH, LocalDate ngayLapHD, LocalTime gioLapHD, boolean trangThai,
-			double tongTien) {
+	public HoaDonEntity(String maNV, String maKH, LocalDate ngayLapHD, LocalTime gioLapHD, boolean trangThai) {
 		super();
 		this.maNV = maNV;
 		this.maKH = maKH;
 		this.ngayLapHD = ngayLapHD;
 		this.gioLapHD = gioLapHD;
 		this.trangThai = trangThai;
-		this.tongTien = tongTien;
 	}
 
 	public String getMaNV() {
@@ -80,14 +76,6 @@ public class HoaDonEntity {
 		this.trangThai = trangThai;
 	}
 
-	public double getTongTien() {
-		return tongTien;
-	}
-
-	public void setTongTien(double tongTien) {
-		this.tongTien = tongTien;
-	}
-
 	public String getMaHD() {
 		return maHD;
 	}
@@ -110,7 +98,7 @@ public class HoaDonEntity {
 	@Override
 	public String toString() {
 		return "HoaDonEntity [maHD=" + maHD + ", maNV=" + maNV + ", maKH=" + maKH + ", ngayLapHD=" + ngayLapHD
-				+ ", gioLapHD=" + gioLapHD + ", trangThai=" + trangThai + ", tongTien=" + tongTien + "]";
+				+ ", gioLapHD=" + gioLapHD + ", trangThai=" + trangThai + "]";
 	}
 
 }

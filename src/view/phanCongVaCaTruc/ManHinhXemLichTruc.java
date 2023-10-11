@@ -2,6 +2,8 @@ package view.phanCongVaCaTruc;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTable;
@@ -15,62 +17,83 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import com.toedter.calendar.JMonthChooser;
 
+import controller.ManHinhKhachHangController;
+import controller.ManHinhXemLichTrucController;
+
+import javax.swing.JComboBox;
+import javax.swing.AbstractButton;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.SwingConstants;
+
 public class ManHinhXemLichTruc extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
 	
-	private JTable table_CaTruc;
+	private JTable table_XemLichTruc;
 	private JTextField txtMaNV;
 	private JTextField txtTenNV;
+	private JPanel panel_Banner ;
+	private JPanel panel_ChucNang;
+	private JLabel lblXemLichTruc;
+	private JLabel lblTenNV;
+	private JLabel lblMaNV;
+	public JButton btnTiep;
+	public JButton btnTroVe;
+	private JScrollPane scrollPane_XemLichTruc;
+	private DefaultTableModel model_tableXemLichTruc;
+	private ManHinhXemLichTrucController controller; 
 
 	public ManHinhXemLichTruc() {
 		setBounds(0, 0, 1084, 602);
 		setLayout(null);
 		
-		Panel panel_Banner = new Panel();
-		panel_Banner.setBackground(new Color(153, 204, 102));
+		panel_Banner = new JPanel();
+		panel_Banner.setBackground(new Color(255, 192, 203));
 		panel_Banner.setBounds(0, 0, 1084, 149);
 		add(panel_Banner);
 		panel_Banner.setLayout(null);
 		
-		JLabel lblXemLichTruc = new JLabel("Xem Lịch Trực");
+		lblXemLichTruc = new JLabel("Xem Lịch Trực");
 		lblXemLichTruc.setFont(new Font("Segoe UI", Font.BOLD, 40));
 		lblXemLichTruc.setBounds(394, 10, 283, 56);
 		panel_Banner.add(lblXemLichTruc);
 		
-		JLabel lblMaNV = new JLabel("Mã Nhân Viên: \r\n");
+		lblMaNV = new JLabel("Mã Nhân Viên: \r\n");
 		lblMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblMaNV.setBounds(23, 90, 103, 31);
 		panel_Banner.add(lblMaNV);
 		
-		JButton btnLamMoi = new JButton("Làm Mới");
-		btnLamMoi.setBorder(null);
-		btnLamMoi.setFocusable(false);
-		btnLamMoi.setIcon(new ImageIcon("C:\\Users\\DELL\\Downloads\\icons8-refresh-27.png"));
-		btnLamMoi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnLamMoi.setBackground(new Color(0, 255, 255));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLamMoi.setBounds(918, 87, 134, 37);
-		panel_Banner.add(btnLamMoi);
+		btnTiep = new JButton();
+		btnTiep.setText("Tiếp");
+		btnTiep.setVerticalTextPosition(AbstractButton.CENTER);
+		btnTiep.setHorizontalTextPosition(AbstractButton.LEADING);
+		btnTiep.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnTiep.setFocusable(false);
+//		btnTiep.setLayout(new BorderLayout());
+		ImageIcon iconPhai = new ImageIcon(ManHinhXemLichTruc.class.getResource("/images/icon_muiTenPhai2.png"));
+		btnTiep.setIcon(iconPhai);
+		btnTiep.setBackground(new Color(144, 238, 144));
+		btnTiep.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTiep.setBounds(918, 87, 130, 37);
+		panel_Banner.add(btnTiep);
 		
-		JButton btnTim = new JButton("Tìm ");
-		btnTim.setBorder(null);
-		btnTim.setFocusable(false);
-		btnTim.setIcon(new ImageIcon(ManHinhXemLichTruc.class.getResource("/images/iconTimKiem.png")));
-		btnTim.addActionListener(new ActionListener() {
+		btnTroVe = new JButton("Trở Về ");
+		btnTroVe.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnTroVe.setFocusable(false);
+		btnTroVe.setIcon(new ImageIcon(ManHinhXemLichTruc.class.getResource("/images/icon_muiTenTrai2.png")));
+		btnTroVe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnTim.setBackground(new Color(51, 204, 0));
-		btnTim.setForeground(new Color(0, 0, 0));
-		btnTim.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnTim.setBounds(749, 86, 134, 38);
-		panel_Banner.add(btnTim);
+		btnTroVe.setBackground(new Color(144, 238, 144));
+		btnTroVe.setForeground(new Color(0, 0, 0));
+		btnTroVe.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTroVe.setBounds(749, 86, 130, 38);
+		panel_Banner.add(btnTroVe);
 		
 		txtMaNV = new JTextField();
 		txtMaNV.setEnabled(false);
@@ -79,7 +102,7 @@ public class ManHinhXemLichTruc extends JPanel {
 		panel_Banner.add(txtMaNV);
 		txtMaNV.setColumns(10);
 		
-		JLabel lblTenNV = new JLabel("Tên Nhân Viên:\r\n");
+		lblTenNV = new JLabel("Tên Nhân Viên:\r\n");
 		lblTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTenNV.setBounds(366, 93, 103, 24);
 		panel_Banner.add(lblTenNV);
@@ -90,71 +113,38 @@ public class ManHinhXemLichTruc extends JPanel {
 		panel_Banner.add(txtTenNV);
 		txtTenNV.setColumns(10);
 		
-		Panel panel_ChucNang = new Panel();
-		panel_ChucNang.setBackground(new Color(250, 240, 230));
+		panel_ChucNang = new JPanel();
+		panel_ChucNang.setBackground(new Color(191, 205, 219));
 		panel_ChucNang.setBounds(0, 149, 1084, 453);
 		add(panel_ChucNang);
 		panel_ChucNang.setLayout(null);
+			
+		String[] cols_XemLichTruc = { "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6",
+		"Thứ 7", "Chủ Nhật" };
+		model_tableXemLichTruc = new DefaultTableModel(cols_XemLichTruc, 0);
+		table_XemLichTruc  = new JTable(model_tableXemLichTruc );
+		scrollPane_XemLichTruc  = new JScrollPane(table_XemLichTruc );
+		scrollPane_XemLichTruc .setBounds(20, 50, 1042, 381);
+		panel_ChucNang.add(scrollPane_XemLichTruc );
 		
-		JScrollPane scrollPane_table = new JScrollPane();
-		scrollPane_table.setBounds(20, 50, 1042, 329);
-		panel_ChucNang.add(scrollPane_table);
+		JComboBox comboBox = new JComboBox();
+		comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9 ", "Tháng 10", "Tháng 11", "Tháng 12"}));
+		comboBox.setBounds(20, 10, 91, 30);
+		panel_ChucNang.add(comboBox);
 		
-		table_CaTruc = new JTable();
-		table_CaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		table_CaTruc.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Th\u1EE9 2", "Th\u1EE9 3", "Th\u1EE9 4", "Th\u1EE9 5", "Th\u1EE9 6", "Th\u1EE9 7", "Ch\u1EE7 Nh\u1EADt"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, String.class, String.class, String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table_CaTruc.getColumnModel().getColumn(0).setPreferredWidth(40);
-		table_CaTruc.getColumnModel().getColumn(1).setPreferredWidth(90);
-		scrollPane_table.setViewportView(table_CaTruc);
-		
-		JMonthChooser monthChooser = new JMonthChooser();
-		monthChooser.getSpinner().setBackground(Color.WHITE);
-		monthChooser.getComboBox().setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		monthChooser.setBounds(20, 10, 116, 30);
-		panel_ChucNang.add(monthChooser);
-		
-		JPanel panel_Red = new JPanel();
-		panel_Red.setBackground(new Color(255, 0, 0));
-		panel_Red.setBounds(20, 395, 36, 34);
-		panel_ChucNang.add(panel_Red);
-		
-		JPanel panel_Green = new JPanel();
-		panel_Green.setBackground(new Color(0, 255, 0));
-		panel_Green.setBounds(127, 395, 36, 34);
-		panel_ChucNang.add(panel_Green);
-		
-		JPanel panel_yellow = new JPanel();
-		panel_yellow.setBackground(new Color(255, 255, 0));
-		panel_yellow.setBounds(232, 395, 36, 34);
-		panel_ChucNang.add(panel_yellow);
-		
-		JLabel lblVang = new JLabel("Vắng ");
-		lblVang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblVang.setBounds(66, 395, 51, 34);
-		panel_ChucNang.add(lblVang);
-		
-		JLabel lblDiLam = new JLabel("Đi Làm");
-		lblDiLam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblDiLam.setBounds(173, 395, 73, 34);
-		panel_ChucNang.add(lblDiLam);
-		
-		JLabel lblCoLichLamViec = new JLabel("Có Lịch Làm Việc");
-		lblCoLichLamViec.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblCoLichLamViec.setBounds(278, 395, 116, 34);
-		panel_ChucNang.add(lblCoLichLamViec);
+		controller = new ManHinhXemLichTrucController(this);
+		btnTiep.addActionListener(controller);
+		btnTroVe.addActionListener(controller);
 	}
+	
+	public void chonChucNanTroVe() {
+		
+	}
+	public void chonChucNangTiep() {
+		
+	}
+	public void handlerActionClean() {
 
+	}
 }
