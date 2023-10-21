@@ -16,25 +16,25 @@ public class ManHinhDatDichVuController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhDatDichVu.btn_LocMonAn)) {
+		if(o.equals(manHinhDatDichVu.btnLocTheoMonAn)) {
 			manHinhDatDichVu.chonChucNangLocMonAn();
-		} else if(o.equals(manHinhDatDichVu.btn_LocDoUong)) {
+		} else if(o.equals(manHinhDatDichVu.btnLocTheoDoUong)) {
 			manHinhDatDichVu.chonChucNangLocDoUong();
-		} else if(o.equals(manHinhDatDichVu.btn_LocTiec)) {
+		} else if(o.equals(manHinhDatDichVu.btnLocTheoTiec)) {
 			manHinhDatDichVu.chonChucNangLocTiec();
-		} else if(o.equals(manHinhDatDichVu.btn_TimKiem)) {
+		} else if(o.equals(manHinhDatDichVu.btnTimKiem)) {
 			manHinhDatDichVu.chonChucNangTimKiem();
-		} else if(o.equals(manHinhDatDichVu.btn_LamMoi)) {
+		} else if(o.equals(manHinhDatDichVu.btnLamMoi)) {
 			manHinhDatDichVu.chonChucNangLamMoi();
-		} else if(o.equals(manHinhDatDichVu.btn_Them)) {
+		} else if(o.equals(manHinhDatDichVu.btnThem)) {
 			manHinhDatDichVu.chonChucNangThem();
-		} else if(o.equals(manHinhDatDichVu.btn_Xoa)) {
+		} else if(o.equals(manHinhDatDichVu.btnXoa)) {
 			manHinhDatDichVu.chonChucNangXoa();
-		} else if(o.equals(manHinhDatDichVu.btn_ChinhSua)) {
+		} else if(o.equals(manHinhDatDichVu.btnChinhSua)) {
 			manHinhDatDichVu.chonChucNangChinhSua();
-		} else if(o.equals(manHinhDatDichVu.btn_Huy)) {
+		} else if(o.equals(manHinhDatDichVu.btnHuy)) {
 			manHinhDatDichVu.chonChucNangHuy();
-		} else if(o.equals(manHinhDatDichVu.btn_Dat)) {
+		} else if(o.equals(manHinhDatDichVu.btnDat)) {
 			manHinhDatDichVu.chonChucNangDat();
 		}
 	}

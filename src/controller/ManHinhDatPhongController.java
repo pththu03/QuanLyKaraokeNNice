@@ -15,21 +15,21 @@ public class ManHinhDatPhongController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhDatPhong.rbtn_DatPhongCho)) {
+		if(o.equals(manHinhDatPhong.radDatPhongCho)) {
 			manHinhDatPhong.chonRButtonDatPhongCho();
-		} else if(o.equals(manHinhDatPhong.rbtn_DatPhongNgay)) {
+		} else if(o.equals(manHinhDatPhong.radDatPhongNgay)) {
 			manHinhDatPhong.chonRButtonDatPhongNgay();
-		} else if(o.equals(manHinhDatPhong.btn_TimKiemPhong)) {
+		} else if(o.equals(manHinhDatPhong.btnTimKiemPhong)) {
 			manHinhDatPhong.chonChucNangTimKiemPhong();
-		} else if(o.equals(manHinhDatPhong.btn_LamMoi)) {
+		} else if(o.equals(manHinhDatPhong.btnLamMoi)) {
 			manHinhDatPhong.chonChucNangLamMoi();
-		} else if(o.equals(manHinhDatPhong.btn_TimKiemSDTKhachHang)) {
+		} else if(o.equals(manHinhDatPhong.btnTimKiemKhachHang)) {
 			manHinhDatPhong.chonChucNangTimKiemSDTKhachHang();
-		} else if(o.equals(manHinhDatPhong.btn_DatPhong)) {
+		} else if(o.equals(manHinhDatPhong.btnDatPhong)) {
 			manHinhDatPhong.chonChucNangDatPhong();
-		} else if(o.equals(manHinhDatPhong.btn_DoiPhong)) {
+		} else if(o.equals(manHinhDatPhong.btnDoiPhong)) {
 			manHinhDatPhong.chonChucNangDoiPhong();
-		} else if(o.equals(manHinhDatPhong.btn_HuyPhong)) {
+		} else if(o.equals(manHinhDatPhong.btnHuyPhong)) {
 			manHinhDatPhong.chonChucNangHuyPhong();
 		}
 	}

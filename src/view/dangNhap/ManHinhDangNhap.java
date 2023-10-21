@@ -26,12 +26,8 @@ import java.awt.Toolkit;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
-
 public class ManHinhDangNhap extends JFrame {
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,40 +41,45 @@ public class ManHinhDangNhap extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	// JPanel
 	private JPanel contentPane;
+
+	// Controller
+	private ManHinhDangNhapController controller;
+
+	// JTextField
 	private JTextField txtSoDienThoai;
 	private JTextField txtMatKhau;
-	private ManHinhDangNhapController controller;
+
+	// JButton
 	public JButton btnDangNhap;
 	public JButton btnThoat;
 	public JButton btnDanhChoKhachHang;
+
+	// JLabel
 	private JLabel lblSĐT;
 	private JLabel lblMatKhau;
 	private JLabel lblDangNhap;
 
-	
 	public ManHinhDangNhap() {
 		setResizable(false);
 		setTitle("Đăng Nhập");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ManHinhDangNhap.class.getResource("/images/iconLogo1.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 100, 542, 648);
+		setBounds(300, 100, 542, 537);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 204, 255));
 		contentPane.setForeground(new Color(70, 130, 180));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		lblDangNhap = new JLabel("Đăng Nhập ");
 		lblDangNhap.setForeground(SystemColor.desktop);
-		lblDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 43));
-		lblDangNhap.setBounds(145, 86, 237, 65);
+		lblDangNhap.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 43));
+		lblDangNhap.setBounds(132, 85, 252, 65);
 		contentPane.add(lblDangNhap);
-		
+
 		txtSoDienThoai = new JTextField();
 		txtSoDienThoai.setBorder(null);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -86,21 +87,21 @@ public class ManHinhDangNhap extends JFrame {
 		txtSoDienThoai.setBounds(58, 228, 419, 34);
 		contentPane.add(txtSoDienThoai);
 		txtSoDienThoai.setColumns(10);
-		
+
 		txtMatKhau = new JTextField();
 		txtMatKhau.setBorder(null);
 		txtMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtMatKhau.setBounds(58, 306, 419, 34);
 		contentPane.add(txtMatKhau);
 		txtMatKhau.setColumns(10);
-		
+
 		btnDangNhap = new JButton("Đăng Nhập\r\n");
 		btnDangNhap.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		btnDangNhap.setFocusable(false);
@@ -111,7 +112,7 @@ public class ManHinhDangNhap extends JFrame {
 		btnDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDangNhap.setBounds(58, 370, 181, 34);
 		contentPane.add(btnDangNhap);
-		
+
 		btnThoat = new JButton("Thoát\r\n");
 		btnThoat.setFocusable(false);
 		btnThoat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -120,7 +121,7 @@ public class ManHinhDangNhap extends JFrame {
 		btnThoat.setIcon(new ImageIcon(ManHinhDangNhap.class.getResource("/images/iconDangXuat.png")));
 		btnThoat.setBounds(296, 370, 181, 34);
 		contentPane.add(btnThoat);
-		
+
 		btnDanhChoKhachHang = new JButton("Dành cho Khách Hàng");
 		btnDanhChoKhachHang.setFocusable(false);
 		btnDanhChoKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -129,37 +130,36 @@ public class ManHinhDangNhap extends JFrame {
 		btnDanhChoKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDanhChoKhachHang.setBounds(182, 431, 181, 27);
 		contentPane.add(btnDanhChoKhachHang);
-		
+
 		lblSĐT = new JLabel("Số điện thoại:\r\n");
 		lblSĐT.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		lblSĐT.setBounds(58, 197, 107, 21);
 		contentPane.add(lblSĐT);
-		
+
 		lblMatKhau = new JLabel("Mật Khẩu:");
 		lblMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		lblMatKhau.setBounds(58, 275, 87, 21);
 		contentPane.add(lblMatKhau);
-		
+
 		controller = new ManHinhDangNhapController(this);
 		btnDangNhap.addActionListener(controller);
 		btnDanhChoKhachHang.addActionListener(controller);
 		btnThoat.addActionListener(controller);
-		
+
 	}
-	
-	
-	
+
 	public void chonChucNangThoat() {
-		if(JOptionPane.showConfirmDialog(null, "Thông báo", "Xác nhận tắt màn hình?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+		if (JOptionPane.showConfirmDialog(null, "Thông báo", "Xác nhận tắt màn hình?",
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			this.dispose();
 		}
 	}
-	
+
 	public void chonChucNangDangNhap() {
 		new ManHinhChinh().setVisible(true);
 		this.dispose();
 	}
-	
+
 	public void chonChucNangDanhChoKhachHang() {
 		new ManHinhTimKiemPhong().setVisible(true);
 		this.dispose();

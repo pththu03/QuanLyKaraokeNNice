@@ -15,13 +15,13 @@ public class ManHinhTimKiemPhongController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhTimKiemPhong.btn_LoaiPhong)) {
+		if(o.equals(manHinhTimKiemPhong.btnLoaiPhong)) {
 			manHinhTimKiemPhong.chonChucNangLoaiPhong();
-		} else if(o.equals(manHinhTimKiemPhong.btn_SucChua)) {
+		} else if(o.equals(manHinhTimKiemPhong.btnSucChua)) {
 			manHinhTimKiemPhong.chonChucNangSucChua();
-		} else if(o.equals(manHinhTimKiemPhong.btn_TrangThaiPhong)) {
+		} else if(o.equals(manHinhTimKiemPhong.btnTrangThaiPhong)) {
 			manHinhTimKiemPhong.chonChucNangTrangThaiPhong();
-		} else if(o.equals(manHinhTimKiemPhong.btn_timKiem)) {
+		} else if(o.equals(manHinhTimKiemPhong.btnTimKiem)) {
 			manHinhTimKiemPhong.chonChucNangTimKiem();
 		}
 	}

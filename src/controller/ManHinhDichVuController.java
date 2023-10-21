@@ -2,11 +2,13 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import view.dichVu.ManHinhDichVu;
-import view.khachHang.ManHinhKhachHang;
 
-public class ManHinhDichVuController implements ActionListener{
+
+public class ManHinhDichVuController implements ActionListener , MouseListener{
 	
 	private ManHinhDichVu manHinhDichVu;
 	
@@ -25,8 +27,38 @@ public class ManHinhDichVuController implements ActionListener{
 			manHinhDichVu.chonChucNangLamMoi();
 		} else if(o.equals(manHinhDichVu.btnXoa)) {
 			manHinhDichVu.chonChucNangXoa();
-		} else if(o.equals(manHinhDichVu.btnXemDanhSachDV)) {
-			manHinhDichVu.chonChucNangXemDanhSachDV();
 		} 
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		manHinhDichVu.hienThiThongTin();
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

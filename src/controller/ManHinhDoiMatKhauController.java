@@ -2,10 +2,12 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import view.dangNhap.ManHinhDoiMatKhau;
 
-public class ManHinhDoiMatKhauController implements ActionListener{
+public class ManHinhDoiMatKhauController implements ActionListener {
 	private ManHinhDoiMatKhau manHinhDoiMatKhau;
 
 	public ManHinhDoiMatKhauController(ManHinhDoiMatKhau manHinhDoiMatKhau) {
@@ -15,17 +17,18 @@ public class ManHinhDoiMatKhauController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhDoiMatKhau.btn_mkCu)) {
+		if (o.equals(manHinhDoiMatKhau.btnMatKhauCu)) {
 			manHinhDoiMatKhau.chonChucNangXemMKCu();
-		} else if (o.equals(manHinhDoiMatKhau.btn_mkMoi)) {
+		} else if (o.equals(manHinhDoiMatKhau.btnMatKhauMoi)) {
 			manHinhDoiMatKhau.chonChucNangXemMKMoi();
-		} else if (o.equals(manHinhDoiMatKhau.btn_nhapLaiMK)) {
+		} else if (o.equals(manHinhDoiMatKhau.btnNhapLaiMK)) {
 			manHinhDoiMatKhau.chonChucNangXemLaiMK();
-		} else if (o.equals(manHinhDoiMatKhau.btn_doiMK)) {
+		} else if (o.equals(manHinhDoiMatKhau.btnDoiMatKhau)) {
 			manHinhDoiMatKhau.chonChucNangDoiMK();
-		} else if (o.equals(manHinhDoiMatKhau.btn_Thoat)) {
+		} else if (o.equals(manHinhDoiMatKhau.btnThoat)) {
 			manHinhDoiMatKhau.chonChucNangThoat();
 		}
-	
+
 	}
+
 }

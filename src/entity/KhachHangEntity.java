@@ -32,6 +32,65 @@ public class KhachHangEntity {
 		this.namSinh = namSinh;
 		this.slDatPhong = slDatPhong;
 	}
+	
+	
+
+	public KhachHangEntity(String hoTen, String sdt, String email, int namSinh) {
+		super();
+		this.hoTen = hoTen;
+		this.sdt = sdt;
+		this.email = email;
+		this.namSinh = namSinh;
+		
+	}
+
+	public String getMaKH() {
+		return maKH;
+	}
+
+	public void setMaKH(String maKH) {
+		this.maKH = maKH;
+	}
+
+	public String getHoTen() {
+		return hoTen;
+	}
+
+	public void setHoTen(String hoTen) {
+		this.hoTen = hoTen;
+	}
+
+	public String getSdt() {
+		return sdt;
+	}
+
+	public void setSdt(String sdt) {
+		this.sdt = sdt;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getNamSinh() {
+		return namSinh;
+	}
+
+	public void setNamSinh(int namSinh) {
+		this.namSinh = namSinh;
+	}
+
+	public int getSlDatPhong() {
+		return slDatPhong;
+	}
+
+	public void setSlDatPhong(int slDatPhong) {
+		this.slDatPhong = slDatPhong;
+	}
 
 	@Override
 	public int hashCode() {

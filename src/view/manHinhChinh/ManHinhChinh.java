@@ -23,7 +23,6 @@ import view.khachHang.ManHinhKhachHang;
 import view.nhanVien.ManHinhNhanVien;
 import view.phanCongVaCaTruc.ManHinhChamCong;
 import view.phanCongVaCaTruc.ManHinhPhanCong;
-import view.phanCongVaCaTruc.ManHinhXemLichTruc;
 import view.phong.ManHinhPhong;
 import view.taiKhoan.ManHinhTaiKhoanNguoiDung;
 import view.thongKe.ManHinhThongKe;
@@ -45,30 +44,29 @@ public class ManHinhChinh extends JFrame {
 	 * Create the frame.
 	 */
 	
-	private JPanel panel_Chinh;
-	private JPanel panel_Banner;
-	private JPanel panel_NguoiDung;
-	private JMenuBar mn_mucLuc;
-	private JMenu mn_DanhMuc;
-	private JMenu mn_PhanCongVaCaTruc;
-	public JMenuItem mn_DanhMuc_Phong;
-	public JMenuItem mn_DanhMuc_DichVu;
-	public JMenuItem mn_DanhMuc_HoaDon;
-	public JMenuItem mn_DanhMuc_NhanVien;
-	public JMenuItem mn_DanhMuc_KhachHang;
-	public JMenuItem mn_PhanCong;
-	public JMenuItem mn_ChamCong;
-	public JMenuItem mn_XemLichTruc;
-	public JMenuItem mn_TrangChu;
-	public JMenuItem mn_DatPhong;
-	public JMenuItem mn_DatDichVu;
-	public JMenuItem mn_LapHoaDon;
-	public JMenuItem mn_ThongKe;
-	public JButton btn_NguoiDung;
-	private JLabel lbl_TenNhanVien;
-	private JLabel lbl_ChucVu;
-	private JLabel lbl_Slogan1;
-	private JLabel lbl_Slogan2;
+	private JPanel pnlChinh;
+	private JPanel pnlBannner;
+	private JPanel pnlNguoiDung;
+	private JMenuBar mnuMucLuc;
+	private JMenu mnDanhMuc;
+	private JMenu mnPhanCongVaCaTruc;
+	public JMenuItem mniPhong;
+	public JMenuItem mniDichVu;
+	public JMenuItem mniHoaDon;
+	public JMenuItem mniNhanVien;
+	public JMenuItem mniKhachHang;
+	public JMenuItem mniPhanCong;
+	public JMenuItem mniChamCong;
+	public JMenuItem mniTrangChu;
+	public JMenuItem mniDatPhong;
+	public JMenuItem mniDatDichVu;
+	public JMenuItem mniLapHoaDon;
+	public JMenuItem mniThongKe;
+	public JButton btnNguoiDung;
+	private JLabel lblTenNhanVien;
+	private JLabel lblChucVu;
+	private JLabel lblSlogan1;
+	private JLabel lblSlogan2;
 	
 	public ManHinhChinh() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ManHinhChinh.class.getResource("/images/iconLogo.png")));
@@ -100,251 +98,240 @@ public class ManHinhChinh extends JFrame {
 		contentPane.add(panel_mucLuc);
 		panel_mucLuc.setLayout(null);
 		
-		mn_mucLuc = new JMenuBar();
-		mn_mucLuc.setBackground(SystemColor.inactiveCaption);
-		mn_mucLuc.setBounds(0, 0, 901, 52);
-		panel_mucLuc.add(mn_mucLuc);
+		mnuMucLuc = new JMenuBar();
+		mnuMucLuc.setBackground(SystemColor.inactiveCaption);
+		mnuMucLuc.setBounds(0, 0, 901, 52);
+		panel_mucLuc.add(mnuMucLuc);
 		
-		mn_TrangChu = new JMenuItem("Trang chủ");
-		mn_TrangChu.setMinimumSize(new Dimension(115, 0));
-		mn_TrangChu.setFocusable(true);
-		mn_TrangChu.setBackground(SystemColor.inactiveCaption);
-		mn_TrangChu.setForeground(SystemColor.desktop);
-		mn_TrangChu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_TrangChu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconHone.png")));
-		mn_TrangChu.setMaximumSize(new Dimension(140, 120));
-		mn_mucLuc.add(mn_TrangChu);
+		mniTrangChu = new JMenuItem("Trang chủ");
+		mniTrangChu.setMinimumSize(new Dimension(115, 0));
+		mniTrangChu.setFocusable(true);
+		mniTrangChu.setBackground(SystemColor.inactiveCaption);
+		mniTrangChu.setForeground(SystemColor.desktop);
+		mniTrangChu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniTrangChu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconHone.png")));
+		mniTrangChu.setMaximumSize(new Dimension(140, 120));
+		mnuMucLuc.add(mniTrangChu);
 		
-		mn_DanhMuc = new JMenu("Danh mục");
-		mn_DanhMuc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDanhMuc1.png")));
-		mn_DanhMuc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc.setForeground(Color.BLACK);
-		mn_mucLuc.add(mn_DanhMuc);
+		mnDanhMuc = new JMenu("Danh mục");
+		mnDanhMuc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDanhMuc1.png")));
+		mnDanhMuc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnDanhMuc.setForeground(Color.BLACK);
+		mnuMucLuc.add(mnDanhMuc);
 		
-		mn_DanhMuc_Phong = new JMenuItem("Phòng");
-		mn_DanhMuc_Phong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc_Phong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhong.png")));
-		mn_DanhMuc.add(mn_DanhMuc_Phong);
+		mniPhong = new JMenuItem("Phòng");
+		mniPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniPhong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhong.png")));
+		mnDanhMuc.add(mniPhong);
 		
-		mn_DanhMuc_DichVu = new JMenuItem("Dịch vụ");
-		mn_DanhMuc_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc_DichVu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDichVu.png")));
-		mn_DanhMuc.add(mn_DanhMuc_DichVu);
+		mniDichVu = new JMenuItem("Dịch vụ");
+		mniDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniDichVu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDichVu.png")));
+		mnDanhMuc.add(mniDichVu);
 		
-		mn_DanhMuc_HoaDon = new JMenuItem("Hóa đơn");
-		mn_DanhMuc_HoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc_HoaDon.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconHoaDon.png")));
-		mn_DanhMuc.add(mn_DanhMuc_HoaDon);
+		mniHoaDon = new JMenuItem("Hóa đơn");
+		mniHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniHoaDon.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconHoaDon.png")));
+		mnDanhMuc.add(mniHoaDon);
 		
-		mn_DanhMuc_NhanVien = new JMenuItem("Nhân viên");
-		mn_DanhMuc_NhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc_NhanVien.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNhanVien.png")));
-		mn_DanhMuc.add(mn_DanhMuc_NhanVien);
+		mniNhanVien = new JMenuItem("Nhân viên");
+		mniNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniNhanVien.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNhanVien.png")));
+		mnDanhMuc.add(mniNhanVien);
 		
-		mn_DanhMuc_KhachHang = new JMenuItem("Khách hàng");
-		mn_DanhMuc_KhachHang.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconKhachHang.png")));
-		mn_DanhMuc_KhachHang.setForeground(SystemColor.textText);
-		mn_DanhMuc_KhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_DanhMuc.add(mn_DanhMuc_KhachHang);
+		mniKhachHang = new JMenuItem("Khách hàng");
+		mniKhachHang.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconKhachHang.png")));
+		mniKhachHang.setForeground(SystemColor.textText);
+		mniKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnDanhMuc.add(mniKhachHang);
 		
-		mn_PhanCongVaCaTruc = new JMenu("Phân công và ca trực");
-		mn_PhanCongVaCaTruc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhanCongVaCaTruc.png")));
-		mn_PhanCongVaCaTruc.setForeground(Color.BLACK);
-		mn_PhanCongVaCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_mucLuc.add(mn_PhanCongVaCaTruc);
+		mnPhanCongVaCaTruc = new JMenu("Phân công và ca trực");
+		mnPhanCongVaCaTruc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhanCongVaCaTruc.png")));
+		mnPhanCongVaCaTruc.setForeground(Color.BLACK);
+		mnPhanCongVaCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnuMucLuc.add(mnPhanCongVaCaTruc);
 		
-		mn_PhanCong = new JMenuItem("Phân công ca trực");
-		mn_PhanCong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhanCong.png")));
-		mn_PhanCong.setForeground(Color.BLACK);
-		mn_PhanCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_PhanCongVaCaTruc.add(mn_PhanCong);
+		mniPhanCong = new JMenuItem("Phân công ca trực");
+		mniPhanCong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhanCong.png")));
+		mniPhanCong.setForeground(Color.BLACK);
+		mniPhanCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnPhanCongVaCaTruc.add(mniPhanCong);
 		
-		mn_ChamCong = new JMenuItem("Chấm công");
-		mn_ChamCong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconChamCong.png")));
-		mn_ChamCong.setForeground(Color.BLACK);
-		mn_ChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_PhanCongVaCaTruc.add(mn_ChamCong);
+		mniChamCong = new JMenuItem("Chấm công");
+		mniChamCong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconChamCong.png")));
+		mniChamCong.setForeground(Color.BLACK);
+		mniChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnPhanCongVaCaTruc.add(mniChamCong);
 		
-		mn_XemLichTruc = new JMenuItem("Xem lịch trực");
-		mn_XemLichTruc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconXemLichTruc.png")));
-		mn_XemLichTruc.setForeground(Color.BLACK);
-		mn_XemLichTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_PhanCongVaCaTruc.add(mn_XemLichTruc);
+		mniDatPhong = new JMenuItem("Đặt phòng");
+		mniDatPhong.setMinimumSize(new Dimension(115, 0));
+		mniDatPhong.setBackground(SystemColor.inactiveCaption);
+		mniDatPhong.setMaximumSize(new Dimension(130, 130));
+		mniDatPhong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/DatPhong.png")));
+		mniDatPhong.setForeground(SystemColor.desktop);
+		mniDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnuMucLuc.add(mniDatPhong);
 		
-		mn_DatPhong = new JMenuItem("Đặt phòng");
-		mn_DatPhong.setMinimumSize(new Dimension(115, 0));
-		mn_DatPhong.setBackground(SystemColor.inactiveCaption);
-		mn_DatPhong.setMaximumSize(new Dimension(130, 130));
-		mn_DatPhong.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/DatPhong.png")));
-		mn_DatPhong.setForeground(SystemColor.desktop);
-		mn_DatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_mucLuc.add(mn_DatPhong);
+		mniDatDichVu = new JMenuItem("Đặt dịch vụ");
+		mniDatDichVu.setMinimumSize(new Dimension(115, 0));
+		mniDatDichVu.setBackground(SystemColor.inactiveCaption);
+		mniDatDichVu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDatDichVu.png")));
+		mniDatDichVu.setForeground(Color.BLACK);
+		mniDatDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnuMucLuc.add(mniDatDichVu);
 		
-		mn_DatDichVu = new JMenuItem("Đặt dịch vụ");
-		mn_DatDichVu.setMinimumSize(new Dimension(115, 0));
-		mn_DatDichVu.setBackground(SystemColor.inactiveCaption);
-		mn_DatDichVu.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconDatDichVu.png")));
-		mn_DatDichVu.setForeground(Color.BLACK);
-		mn_DatDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_mucLuc.add(mn_DatDichVu);
+		mniLapHoaDon = new JMenuItem("Lập hóa đơn");
+		mniLapHoaDon.setMinimumSize(new Dimension(115, 0));
+		mniLapHoaDon.setBackground(SystemColor.inactiveCaption);
+		mniLapHoaDon.setMaximumSize(new Dimension(140, 140));
+		mniLapHoaDon.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconLapHoaDon.png")));
+		mniLapHoaDon.setForeground(SystemColor.desktop);
+		mniLapHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnuMucLuc.add(mniLapHoaDon);
 		
-		mn_LapHoaDon = new JMenuItem("Lập hóa đơn");
-		mn_LapHoaDon.setMinimumSize(new Dimension(115, 0));
-		mn_LapHoaDon.setBackground(SystemColor.inactiveCaption);
-		mn_LapHoaDon.setMaximumSize(new Dimension(140, 140));
-		mn_LapHoaDon.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconLapHoaDon.png")));
-		mn_LapHoaDon.setForeground(SystemColor.desktop);
-		mn_LapHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		mn_mucLuc.add(mn_LapHoaDon);
+		mniThongKe = new JMenuItem("Thống kê");
+		mniThongKe.setMinimumSize(new Dimension(115, 0));
+		mniThongKe.setForeground(SystemColor.desktop);
+		mniThongKe.setBackground(SystemColor.inactiveCaption);
+		mniThongKe.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconThongKe.png")));
+		mniThongKe.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnuMucLuc.add(mniThongKe);
 		
-		mn_ThongKe = new JMenuItem("Thống kê");
-		mn_ThongKe.setMinimumSize(new Dimension(115, 0));
-		mn_ThongKe.setForeground(SystemColor.desktop);
-		mn_ThongKe.setBackground(SystemColor.inactiveCaption);
-		mn_ThongKe.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconThongKe.png")));
-		mn_ThongKe.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		mn_mucLuc.add(mn_ThongKe);
+		pnlNguoiDung = new JPanel();
+		pnlNguoiDung.setBackground(SystemColor.inactiveCaption);
+		pnlNguoiDung.setBounds(900, 0, 184, 52);
+		panel_mucLuc.add(pnlNguoiDung);
+		pnlNguoiDung.setLayout(null);
 		
-		panel_NguoiDung = new JPanel();
-		panel_NguoiDung.setBackground(SystemColor.inactiveCaption);
-		panel_NguoiDung.setBounds(900, 0, 184, 52);
-		panel_mucLuc.add(panel_NguoiDung);
-		panel_NguoiDung.setLayout(null);
+		lblTenNhanVien = new JLabel("Phan Thị Huỳnh Thư");
+		lblTenNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblTenNhanVien.setBounds(10, 5, 131, 22);
+		pnlNguoiDung.add(lblTenNhanVien);
 		
-		lbl_TenNhanVien = new JLabel("Phan Thị Huỳnh Thư");
-		lbl_TenNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lbl_TenNhanVien.setBounds(10, 5, 131, 22);
-		panel_NguoiDung.add(lbl_TenNhanVien);
+		lblChucVu = new JLabel("Quản lý");
+		lblChucVu.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+		lblChucVu.setBounds(99, 28, 42, 16);
+		pnlNguoiDung.add(lblChucVu);
 		
-		lbl_ChucVu = new JLabel("Quản lý");
-		lbl_ChucVu.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		lbl_ChucVu.setBounds(99, 28, 42, 16);
-		panel_NguoiDung.add(lbl_ChucVu);
+		btnNguoiDung = new JButton("");
+		btnNguoiDung.setFocusable(false);
+		btnNguoiDung.setAutoscrolls(true);
+		btnNguoiDung.setBackground(SystemColor.inactiveCaption);
+		btnNguoiDung.setBorder(null);
+		btnNguoiDung.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNguoiDung.png")));
+		btnNguoiDung.setBounds(142, 5, 42, 39);
+		pnlNguoiDung.add(btnNguoiDung);
 		
-		btn_NguoiDung = new JButton("");
-		btn_NguoiDung.setFocusable(false);
-		btn_NguoiDung.setAutoscrolls(true);
-		btn_NguoiDung.setBackground(SystemColor.inactiveCaption);
-		btn_NguoiDung.setBorder(null);
-		btn_NguoiDung.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNguoiDung.png")));
-		btn_NguoiDung.setBounds(142, 5, 42, 39);
-		panel_NguoiDung.add(btn_NguoiDung);
+		pnlChinh = new JPanel();
+		pnlChinh.setBounds(0, 52, 1084, 602);
+		contentPane.add(pnlChinh);
+		pnlChinh.setLayout(null);
 		
-		panel_Chinh = new JPanel();
-		panel_Chinh.setBounds(0, 52, 1084, 602);
-		contentPane.add(panel_Chinh);
-		panel_Chinh.setLayout(null);
+		pnlBannner = new JPanel();
+		pnlBannner.setBounds(0, 0, 1084, 602);
+		pnlChinh.add(pnlBannner);
+		pnlBannner.setLayout(null);
 		
-		panel_Banner = new JPanel();
-		panel_Banner.setBounds(0, 0, 1084, 602);
-		panel_Chinh.add(panel_Banner);
-		panel_Banner.setLayout(null);
+		lblSlogan1 = new JLabel("Hát hay hơn");
+		lblSlogan1.setForeground(new Color(250, 240, 230));
+		lblSlogan1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 40));
+		lblSlogan1.setBounds(36, 403, 391, 49);
+		pnlBannner.add(lblSlogan1);
 		
-		lbl_Slogan1 = new JLabel("Hát hay hơn");
-		lbl_Slogan1.setForeground(new Color(250, 240, 230));
-		lbl_Slogan1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 40));
-		lbl_Slogan1.setBounds(36, 403, 391, 49);
-		panel_Banner.add(lbl_Slogan1);
-		
-		lbl_Slogan2 = new JLabel("Khi đến với NNICE");
-		lbl_Slogan2.setForeground(new Color(250, 240, 230));
-		lbl_Slogan2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 40));
-		lbl_Slogan2.setBounds(36, 461, 391, 49);
-		panel_Banner.add(lbl_Slogan2);
+		lblSlogan2 = new JLabel("Khi đến với NNICE");
+		lblSlogan2.setForeground(new Color(250, 240, 230));
+		lblSlogan2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 40));
+		lblSlogan2.setBounds(36, 461, 391, 49);
+		pnlBannner.add(lblSlogan2);
 		
 		JLabel lbl_Banner = new JLabel("");
 		lbl_Banner.setBounds(0, 5, 1084, 724);
-		panel_Banner.add(lbl_Banner);
+		pnlBannner.add(lbl_Banner);
 		lbl_Banner.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/Banner.jpg")));
 		
 		ManHinhChinhController controller = new ManHinhChinhController(this);
-		mn_TrangChu.addActionListener(controller);
-		mn_DanhMuc_Phong.addActionListener(controller);
-		mn_DanhMuc_DichVu.addActionListener(controller);
-		mn_DanhMuc_HoaDon.addActionListener(controller);
-		mn_DanhMuc_NhanVien.addActionListener(controller);
-		mn_DanhMuc_KhachHang.addActionListener(controller);
-		mn_PhanCong.addActionListener(controller);
-		mn_ChamCong.addActionListener(controller);
-		mn_XemLichTruc.addActionListener(controller);
-		mn_DatPhong.addActionListener(controller);
-		mn_DatDichVu.addActionListener(controller);
-		mn_LapHoaDon.addActionListener(controller);
-		mn_ThongKe.addActionListener(controller);
-		btn_NguoiDung.addActionListener(controller);
+		mniTrangChu.addActionListener(controller);
+		mniPhong.addActionListener(controller);
+		mniDichVu.addActionListener(controller);
+		mniHoaDon.addActionListener(controller);
+		mniNhanVien.addActionListener(controller);
+		mniKhachHang.addActionListener(controller);
+		mniPhanCong.addActionListener(controller);
+		mniChamCong.addActionListener(controller);
+		mniDatPhong.addActionListener(controller);
+		mniDatDichVu.addActionListener(controller);
+		mniLapHoaDon.addActionListener(controller);
+		mniThongKe.addActionListener(controller);
+		btnNguoiDung.addActionListener(controller);
 	}
 	
 	private void clearSelectedMenu() {
-		mn_TrangChu.setSelected(false);
-		mn_DatPhong.setSelected(false);
-		mn_LapHoaDon.setSelected(false);
-		mn_DatDichVu.setSelected(false);
-		mn_ThongKe.setSelected(false);
+		mniTrangChu.setSelected(false);
+		mniDatPhong.setSelected(false);
+		mniLapHoaDon.setSelected(false);
+		mniDatDichVu.setSelected(false);
+		mniThongKe.setSelected(false);
 	}
 	
 	
 	public void thayDoiPanelChinh(JComponent component, JMenuItem menu) {
 		clearSelectedMenu();
 		menu.setSelected(true);
-		this.panel_Chinh.removeAll();
-		this.panel_Chinh.repaint();
-		this.panel_Chinh.revalidate();
+		this.pnlChinh.removeAll();
+		this.pnlChinh.repaint();
+		this.pnlChinh.revalidate();
 		
-		this.panel_Chinh.add(component);
-		this.panel_Chinh.repaint();
-		this.panel_Chinh.revalidate();
+		this.pnlChinh.add(component);
+		this.pnlChinh.repaint();
+		this.pnlChinh.revalidate();
 	}
 
 	public void chonChucNangTrangChu() {
-		this.thayDoiPanelChinh(panel_Banner, mn_TrangChu);
+		this.thayDoiPanelChinh(pnlBannner, mniTrangChu);
 	}
 	
 	public void chonChucNangDatPhong() {
-		this.thayDoiPanelChinh(new ManHinhDatPhong(), mn_DatPhong);
+		this.thayDoiPanelChinh(new ManHinhDatPhong(), mniDatPhong);
 	}
 	
 	public void chonChucNangDatDichVu() {
-		this.thayDoiPanelChinh(new ManHinhDatDichVu(), mn_DatDichVu);
+		this.thayDoiPanelChinh(new ManHinhDatDichVu(), mniDatDichVu);
 	}
 	
 	public void chonChucNangDanhMucPhong() {
-		this.thayDoiPanelChinh(new ManHinhPhong(), mn_DanhMuc_Phong);
+		this.thayDoiPanelChinh(new ManHinhPhong(), mniPhong);
 	}
 	
 	public void chonChucNangDanhMucNhanVien() {
-		this.thayDoiPanelChinh(new ManHinhNhanVien(), mn_DanhMuc_NhanVien);
+		this.thayDoiPanelChinh(new ManHinhNhanVien(), mniNhanVien);
 	}
 	
 	public void chonChucNangDanhMucDichVu() {
-		this.thayDoiPanelChinh(new ManHinhDichVu(), mn_DanhMuc_DichVu);
+		this.thayDoiPanelChinh(new ManHinhDichVu(), mniDichVu);
 	}
 	
 	public void chonChucNangDanhMucHoaDon() {
-		this.thayDoiPanelChinh(new ManHinhHoaDon(), mn_DanhMuc_HoaDon);
+		this.thayDoiPanelChinh(new ManHinhHoaDon(), mniHoaDon);
 	}
 	
 	public void chonChucNangDanhMucKhachHang() {
-		this.thayDoiPanelChinh(new ManHinhKhachHang(), mn_DanhMuc_KhachHang);
+		this.thayDoiPanelChinh(new ManHinhKhachHang(), mniKhachHang);
 	}
 	
 	public void chonChucNangPhanCongCaTruc() {
-		this.thayDoiPanelChinh(new ManHinhPhanCong(), mn_PhanCong);
+		this.thayDoiPanelChinh(new ManHinhPhanCong(), mniPhanCong);
 	}
 	
 	public void chonChucNangChamCong() {
-		this.thayDoiPanelChinh(new ManHinhChamCong(), mn_ChamCong);
-	}
-	
-	public void chonChucNangXemLichTruc() {
-		this.thayDoiPanelChinh(new ManHinhXemLichTruc(), mn_XemLichTruc);
+		this.thayDoiPanelChinh(new ManHinhChamCong(), mniChamCong);
 	}
 	
 	public void chonChucNangLapHoaDon() {
-		this.thayDoiPanelChinh(new ManHinhLapHoaDon(), mn_LapHoaDon);
+		this.thayDoiPanelChinh(new ManHinhLapHoaDon(), mniLapHoaDon);
 	}
 	
 	public void chonChucNangThongKe() {
-		this.thayDoiPanelChinh(new ManHinhThongKe(), mn_ThongKe);
+		this.thayDoiPanelChinh(new ManHinhThongKe(), mniThongKe);
 	}
 	
 	public void chonBtnNguoiDung() {

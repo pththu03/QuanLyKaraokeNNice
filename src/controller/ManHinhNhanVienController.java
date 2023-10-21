@@ -17,13 +17,13 @@ public class ManHinhNhanVienController implements ActionListener, MouseListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhNhanVien.btn_them)) {
+		if(o.equals(manHinhNhanVien.btnThem)) {
 			manHinhNhanVien.chonChucNangThem();
-		} else if (o.equals(manHinhNhanVien.btn_lamMoi)) {
+		} else if (o.equals(manHinhNhanVien.btnLamMoi)) {
 			manHinhNhanVien.chonChucNangLamMoi();
-		} else if (o.equals(manHinhNhanVien.btn_chinhSua)) {
+		} else if (o.equals(manHinhNhanVien.btnChinhSua)) {
 			manHinhNhanVien.chonChucNangChinhSua();
-		} else if (o.equals(manHinhNhanVien.btn_timKiem)) {
+		} else if (o.equals(manHinhNhanVien.btnTimKiem)) {
 			manHinhNhanVien.chonChucNangTimKiem();
 		}
 	}

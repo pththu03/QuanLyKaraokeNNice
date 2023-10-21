@@ -15,11 +15,11 @@ public class ManHinhThongKeController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhThongKe.rbtn_TheoNgay)) {
+		if(o.equals(manHinhThongKe.radTheoNgay)) {
 			manHinhThongKe.chonButtonTheoNgay();
-		} else if(o.equals(manHinhThongKe.rbtn_TheoThang)) {
+		} else if(o.equals(manHinhThongKe.radTheoThang)) {
 			manHinhThongKe.chonButtonTheoThang();
-		} else if(o.equals(manHinhThongKe.rbtn_TheoNam)) {
+		} else if(o.equals(manHinhThongKe.radTheoNam)) {
 			manHinhThongKe.chonButtonTheoNam();
 		}
 

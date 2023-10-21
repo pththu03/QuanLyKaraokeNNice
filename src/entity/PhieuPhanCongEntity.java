@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,6 +14,13 @@ public class PhieuPhanCongEntity {
 		super();
 	}
 
+	public PhieuPhanCongEntity(String maNV, String maCT, LocalDate ngay) {
+		super();
+		this.maNV = maNV;
+		this.maCT = maCT;
+		this.ngay = ngay;
+	}
+
 	public PhieuPhanCongEntity(String maPPC, String maNV, String maCT, LocalDate ngay) {
 		super();
 		this.maPPC = maPPC;
@@ -21,11 +29,12 @@ public class PhieuPhanCongEntity {
 		this.ngay = ngay;
 	}
 
-	public PhieuPhanCongEntity(String maNV, String maCT, LocalDate ngay) {
-		super();
-		this.maNV = maNV;
-		this.maCT = maCT;
-		this.ngay = ngay;
+	public String getMaPPC() {
+		return maPPC;
+	}
+
+	public void setMaPPC(String maPPC) {
+		this.maPPC = maPPC;
 	}
 
 	public String getMaNV() {
@@ -50,10 +59,6 @@ public class PhieuPhanCongEntity {
 
 	public void setNgay(LocalDate ngay) {
 		this.ngay = ngay;
-	}
-
-	public String getMaPPC() {
-		return maPPC;
 	}
 
 	@Override

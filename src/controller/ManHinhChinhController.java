@@ -15,33 +15,31 @@ public class ManHinhChinhController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o.equals(manHinhChinh.mn_DatPhong)) {
+		if (o.equals(manHinhChinh.mniDatPhong)) {
 			manHinhChinh.chonChucNangDatPhong();
-		} else if(o.equals(manHinhChinh.mn_TrangChu)) {
+		} else if(o.equals(manHinhChinh.mniTrangChu)) {
 			manHinhChinh.chonChucNangTrangChu();
-		} else if(o.equals(manHinhChinh.mn_DanhMuc_Phong)) {
+		} else if(o.equals(manHinhChinh.mniPhong)) {
 			manHinhChinh.chonChucNangDanhMucPhong();
-		} else if(o.equals(manHinhChinh.mn_DanhMuc_DichVu)) {
+		} else if(o.equals(manHinhChinh.mniDichVu)) {
 			manHinhChinh.chonChucNangDanhMucDichVu();
-		} else if(o.equals(manHinhChinh.mn_DanhMuc_HoaDon)) {
+		} else if(o.equals(manHinhChinh.mniHoaDon)) {
 			manHinhChinh.chonChucNangDanhMucHoaDon();
-		} else if(o.equals(manHinhChinh.mn_DanhMuc_KhachHang)) {
+		} else if(o.equals(manHinhChinh.mniKhachHang)) {
 			manHinhChinh.chonChucNangDanhMucKhachHang();
-		} else if(o.equals(manHinhChinh.mn_DanhMuc_NhanVien)) {
+		} else if(o.equals(manHinhChinh.mniNhanVien)) {
 			manHinhChinh.chonChucNangDanhMucNhanVien();
-		} else if(o.equals(manHinhChinh.mn_PhanCong)) {
+		} else if(o.equals(manHinhChinh.mniPhanCong)) {
 			manHinhChinh.chonChucNangPhanCongCaTruc();
-		} else if(o.equals(manHinhChinh.mn_ChamCong)) {
+		} else if(o.equals(manHinhChinh.mniChamCong)) {
 			manHinhChinh.chonChucNangChamCong();
-		} else if(o.equals(manHinhChinh.mn_XemLichTruc)) {
-			manHinhChinh.chonChucNangXemLichTruc();
-		} else if(o.equals(manHinhChinh.mn_LapHoaDon)) {
+		} else if(o.equals(manHinhChinh.mniLapHoaDon)) {
 			manHinhChinh.chonChucNangLapHoaDon();
-		} else if(o.equals(manHinhChinh.mn_DatDichVu)) {
+		} else if(o.equals(manHinhChinh.mniDatDichVu)) {
 			manHinhChinh.chonChucNangDatDichVu();
-		} else if(o.equals(manHinhChinh.mn_ThongKe)) {
+		} else if(o.equals(manHinhChinh.mniThongKe)) {
 			manHinhChinh.chonChucNangThongKe();
-		}else if(o.equals(manHinhChinh.btn_NguoiDung)) {
+		}else if(o.equals(manHinhChinh.btnNguoiDung)) {
 			manHinhChinh.chonBtnNguoiDung();
 		}
 	}

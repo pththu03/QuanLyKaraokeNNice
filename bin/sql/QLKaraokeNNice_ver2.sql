@@ -400,13 +400,95 @@ INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
 	VALUES (N'Nguyễn Thanh Tuyền', '0309650214', 'nguyenthanhtien@gmail.com', 1995, 0)
 GO
 
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Trần Huỳnh Bắc', '0984643251', 'huynhbac05@gmail.com', 2005, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Phan Huỳnh Tuấn', '0976643251', 'phtuan01@gmail.com', 2001, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Trương Trần Quốc Quân', '0970973251', 'ttquocquan@gmail.com', 2003, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Minh Đại', '0982535251', 'leminhdai003@gmail.com', 2003, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Đặng Trần Đan Vũ', '0809633251', 'vuxinhdep@gmail.com', 2000, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Thị Thanh Ngân', '0954363251', 'thanhngan99@gmail.com', 1999, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Thị Phương Xa', '090782212', 'lethiphuongxa@gmail.com', 1993, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Ngọc Hạ', '0809638764', 'nguyenngocha0402@gmail.com', 2002, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Triệu Gia Bảo', '0996538754', 'trieugiabao0903@gmail.com', 2003, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Hàng Tuyết My', '0977238753', 'mymy0899@gmail.com', 1999, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Đinh Trần Anh Quân', '0977238876', 'daicaquan02@gmail.com', 2002, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Đình Đan Phi', '0883389234', 'nguyendinhdanfi@gmail.com', 1990, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Thị Trúc Uyên', '0988238594', 'uyenuyencongchua@gmail.com', 1989, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Phùng Thị Kim Trúc', '0992138284', 'ptktruc97@gmail.com', 1997, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Phan Như Uyên', '0903058232', 'phannhuuyen95@gmail.com', 1995, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Nhật Khánh', '0965338221', 'nguyennhatkhanh@gmail.com', 1998, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Bá Nha', '0969938253', 'banha010394@gmail.com', 1993, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Trần Thanh Sang', '0847898234', 'tranthanhsang93@gmail.com', 1993, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Lê Văn Rôn', '088298254', 'levanron02@gmail.com', 1992, 0)
+GO
+
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
+	VALUES (N'Nguyễn Lưu Anh Thư', '0987898874', 'nguyenluuanhthu@gmail.com', 2001, 0)
+GO
+
+select * from KhachHang
+
 -- NHÂN VIÊN
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
 	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', '12345678', 1980, 35000, N'Quản lí', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', '12345678', 1999, 30000, N'Kế toán', N'Đang làm việc')
+	VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', '12345678', 1999, 30000, N'Quản lí', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
@@ -424,6 +506,7 @@ GO
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
 	VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', '12345678', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
+
 
 -- PHÒNG
 INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
@@ -630,3 +713,6 @@ SELECT *FROM KhachHang
 SELECT *FROM NhanVien
 
 GO
+
+SELECT MaNV, HoTen, SDT, Email, CCCD, Password, NamSinh, MucLuong, Quyen, TrangThai 
+FROM NhanVien WHERE MaNV like 'NV001'

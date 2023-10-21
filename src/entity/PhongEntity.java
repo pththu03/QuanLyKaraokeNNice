@@ -5,15 +5,15 @@ import java.util.Objects;
 public class PhongEntity {
 	private String maPhong;
 	private int soPhong;
-	private int loaiPhong;
-	private int trangThai;
+	private String loaiPhong;
+	private String trangThai;
 	private int sucChua;
 
 	public PhongEntity() {
 		super();
 	}
 
-	public PhongEntity(String maPhong, int soPhong, int loaiPhong, int trangThai, int sucChua) {
+	public PhongEntity(String maPhong, int soPhong, String loaiPhong, String trangThai, int sucChua) {
 		super();
 		this.maPhong = maPhong;
 		this.soPhong = soPhong;
@@ -22,12 +22,20 @@ public class PhongEntity {
 		this.sucChua = sucChua;
 	}
 
-	public PhongEntity(int soPhong, int loaiPhong, int trangThai, int sucChua) {
+	public PhongEntity(int soPhong, String loaiPhong, String trangThai, int sucChua) {
 		super();
 		this.soPhong = soPhong;
 		this.loaiPhong = loaiPhong;
 		this.trangThai = trangThai;
 		this.sucChua = sucChua;
+	}
+
+	public String getMaPhong() {
+		return maPhong;
+	}
+
+	public void setMaPhong(String maPhong) {
+		this.maPhong = maPhong;
 	}
 
 	public int getSoPhong() {
@@ -38,27 +46,19 @@ public class PhongEntity {
 		this.soPhong = soPhong;
 	}
 
-	public int getLoaiPhong() {
+	public String getLoaiPhong() {
 		return loaiPhong;
 	}
 
-	/**
-	 * 
-	 * @param loaiPhong
-	 */
-	public void setLoaiPhong(int loaiPhong) {
+	public void setLoaiPhong(String loaiPhong) {
 		this.loaiPhong = loaiPhong;
 	}
 
-	public int getTrangThai() {
+	public String getTrangThai() {
 		return trangThai;
 	}
 
-	/**
-	 * 
-	 * @param trangThai
-	 */
-	public void setTrangThai(int trangThai) {
+	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
 	}
 
@@ -66,17 +66,8 @@ public class PhongEntity {
 		return sucChua;
 	}
 
-	/**
-	 * 3 mức: 5 người 10 người 20 người
-	 * 
-	 * @param sucChua
-	 */
 	public void setSucChua(int sucChua) {
 		this.sucChua = sucChua;
-	}
-
-	public String getMaPhong() {
-		return maPhong;
 	}
 
 	@Override
@@ -92,12 +83,6 @@ public class PhongEntity {
 			return false;
 		PhongEntity other = (PhongEntity) obj;
 		return Objects.equals(maPhong, other.maPhong);
-	}
-
-	@Override
-	public String toString() {
-		return "PhongEntity [maPhong=" + maPhong + ", soPhong=" + soPhong + ", loaiPhong=" + loaiPhong + ", trangThai="
-				+ trangThai + ", sucChua=" + sucChua + "]";
 	}
 
 }

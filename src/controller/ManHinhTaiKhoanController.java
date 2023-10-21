@@ -16,11 +16,11 @@ public class ManHinhTaiKhoanController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(manHinhTaiKhoan.btn_dangXuat)) {
+		if(o.equals(manHinhTaiKhoan.btnDangXuat)) {
 			manHinhTaiKhoan.chonChucNangDangXuat();
-		} else if(o.equals(manHinhTaiKhoan.btn_doiMatKhau)) {
+		} else if(o.equals(manHinhTaiKhoan.btnDoiMatKhau)) {
 			manHinhTaiKhoan.chonChucNangDoiMatKhau();
-		} else if(o.equals(manHinhTaiKhoan.btn_chinhSua)) {
+		} else if(o.equals(manHinhTaiKhoan.btnChinhSua)) {
 			
 		}
 	}

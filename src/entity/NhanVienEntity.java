@@ -58,7 +58,7 @@ public class NhanVienEntity {
 		return sdt;
 	}
 
-	public void setSdt(String sdt) {
+	public void setSdt(String sdt) throws Exception {
 		this.sdt = sdt;
 	}
 
@@ -128,7 +128,7 @@ public class NhanVienEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maNV);
+		return Objects.hash(CCCD, maNV, sdt);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class NhanVienEntity {
 		if (obj == null)
 			return false;
 		NhanVienEntity other = (NhanVienEntity) obj;
-		return Objects.equals(maNV, other.maNV);
+		return Objects.equals(CCCD, other.CCCD) || Objects.equals(maNV, other.maNV) || Objects.equals(sdt, other.sdt);
 	}
 
 	@Override

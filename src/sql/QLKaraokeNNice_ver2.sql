@@ -713,3 +713,8 @@ SELECT *FROM KhachHang
 SELECT *FROM NhanVien
 
 GO
+select * from NhanVien
+
+
+UPDATE NhanVien
+SET HoTen = N'', SDT = '', Email = '', NamSinh = 0, MucLuong = 0, Quyen = N'', TrangThai = ''
