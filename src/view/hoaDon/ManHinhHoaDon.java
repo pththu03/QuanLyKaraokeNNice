@@ -1,6 +1,7 @@
 package view.hoaDon;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -10,6 +11,9 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.SystemColor;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +22,9 @@ import javax.swing.JTextField;
 
 import controller.ManHinhHoaDonController;
 import dao.ManHinhHoaDonDAO;
+import dao.ManHinhNhanVienDAO;
 import entity.HoaDonEntity;
+import entity.NhanVienEntity;
 import util.DateFormatter;
 import util.TimeFormatter;
 
@@ -64,8 +70,8 @@ public class ManHinhHoaDon extends JPanel {
 	private JLabel lblTimKiemBangNgayLapHD;
 	private JLabel lblDsHoaDon;
 	// JcomboBox
-	private JComboBox cboTrangThai;
-	private DefaultComboBoxModel cbomodelTrangThai;
+	private JComboBox cmbTrangThai;
+	private DefaultComboBoxModel cmbmodelTrangThai;
 	// Jtable
 	private JTable tblDsHoaDon;
 	private DefaultTableModel tblmodelDsHoaDon;
@@ -78,6 +84,7 @@ public class ManHinhHoaDon extends JPanel {
 
 	private ManHinhHoaDonController controller;
 	private ManHinhHoaDonDAO manHinhHoaDonDAO = new ManHinhHoaDonDAO();
+	private ManHinhNhanVienDAO manHinhNhanVienDAO = new ManHinhNhanVienDAO();
 	private List<HoaDonEntity> list;
 
 	public ManHinhHoaDon() {
@@ -188,13 +195,13 @@ public class ManHinhHoaDon extends JPanel {
 		pnlThongTinHoaDon.add(lblTrangThai);
 
 		String[] cols_trangThai = { "", "Đã thanh toán", "Chưa thanh toán" };
-		cbomodelTrangThai = new DefaultComboBoxModel<>(cols_trangThai);
-		cboTrangThai = new JComboBox<String>(cbomodelTrangThai);
-		cboTrangThai.setForeground(Color.BLACK);
-		cboTrangThai.setBorder(null);
-		cboTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cboTrangThai.setBounds(100, 199, 180, 30);
-		pnlThongTinHoaDon.add(cboTrangThai);
+		cmbmodelTrangThai = new DefaultComboBoxModel<>(cols_trangThai);
+		cmbTrangThai = new JComboBox<String>(cmbmodelTrangThai);
+		cmbTrangThai.setForeground(Color.BLACK);
+		cmbTrangThai.setBorder(null);
+		cmbTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		cmbTrangThai.setBounds(100, 199, 180, 30);
+		pnlThongTinHoaDon.add(cmbTrangThai);
 
 		lblTongTien = new JLabel("Tổng tiền: ");
 		lblTongTien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -272,7 +279,7 @@ public class ManHinhHoaDon extends JPanel {
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btnTimKiem.setBounds(262, 240, 120, 35);
 		pnlTimKiem.add(btnTimKiem);
-		
+
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(ManHinhHoaDon.class.getResource("/images/iconLamMoi.png")));
 		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -323,7 +330,8 @@ public class ManHinhHoaDon extends JPanel {
 		tblDsHoaDon.setRowSelectionAllowed(false);
 		tblmodelDsHoaDon.setRowCount(0);
 		list = new ArrayList<HoaDonEntity>();
-		list = manHinhHoaDonDAO.duyetToanBoDanhSach();
+		list = manHinhHoaDonDAO.duyetDanhSach();
+		NhanVienEntity nhanVienEntity = null;
 
 		int stt = 1;
 		for (HoaDonEntity hoaDonEntity : list) {
@@ -331,40 +339,93 @@ public class ManHinhHoaDon extends JPanel {
 			if (hoaDonEntity.isTrangThai()) {
 				trangThai = "Đã thanh toán";
 			}
-			tblmodelDsHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHD(), hoaDonEntity.getMaNV(),
+			nhanVienEntity = manHinhNhanVienDAO.timTheoMa(hoaDonEntity.getMaNV());
+			tblmodelDsHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHD(), nhanVienEntity.getHoTen(),
 					hoaDonEntity.getMaKH(), DateFormatter.format(hoaDonEntity.getNgayLapHD()),
 					TimeFormatter.format(hoaDonEntity.getGioLapHD()), trangThai });
 		}
 	}
-	
+
 	public void hienThiThongTin() {
 		list = new ArrayList<HoaDonEntity>();
-		list = manHinhHoaDonDAO.duyetToanBoDanhSach();
+		list = manHinhHoaDonDAO.duyetDanhSach();
 		int row = tblDsHoaDon.getSelectedRow();
-		if(row >= 0) {
+		NhanVienEntity nhanVienEntity = null;
+
+		if (row >= 0) {
 			txtMaHD.setText(list.get(row).getMaHD());
-			txtMaNV.setText(list.get(row).getMaNV());
-//			txt_hoVaTenNV
 			txtMaKH.setText(list.get(row).getMaKH());
-//			txt_hoVaTenKH
-			if(list.get(row).isTrangThai()) {
-				cboTrangThai.setSelectedIndex(1);
+			txtMaNV.setText(list.get(row).getMaNV());
+			nhanVienEntity = manHinhNhanVienDAO.timTheoMa(list.get(row).getMaNV());
+			txtTenNV.setText(nhanVienEntity.getHoTen());
+			if (list.get(row).isTrangThai()) {
+				cmbTrangThai.setSelectedIndex(1);
 			} else {
-				cboTrangThai.setSelectedIndex(2);;
+				cmbTrangThai.setSelectedIndex(2);
+				;
 			}
-			txtNgayLapHD.setText(String.valueOf(list.get(row).getNgayLapHD()));;
+			txtNgayLapHD.setText(String.valueOf(list.get(row).getNgayLapHD()));
+			;
 		}
 	}
 
+	/**
+	 * Tìm kiếm
+	 */
 	public void chonChucNangTimKiem() {
+		if (kiemTraDuLieuTim()) {
 
+		}
 	}
-	
+
+	private boolean kiemTraDuLieuTim() {
+		String maNV = txtTimKiemBangMaNV.getText().trim();
+		String tenKH = txtTimKiemBangTenKH.getText().trim();
+		String ngayLapHD = txtTimKiemBangNgayLapHD.getText().trim();
+		String tongTien = txtTimKiemBangTongTien.getText().trim();
+
+		if (maNV.isEmpty() && tenKH.isEmpty() && ngayLapHD.isEmpty() && tongTien.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Hãy nhập dữ liệu cần tìm", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+
+		if (tongTien.length() > 0 && !(tongTien.length() > 0 && tongTien.matches("[0-9]+"))) {
+			JOptionPane.showMessageDialog(this, "Tổng tiền nhập vào  là số nguyên", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTimKiemBangTongTien.requestFocus();
+			return false;
+		}
+
+		if (ngayLapHD.length() > 0) {
+//			LocalDate ngay = LocalDate.parse(ngayLapHD, DateTimeFormatter.ISO_LOCAL_DATE);
+//			if (ngayLapHD == DateFormatter.format(ngay)) {
+//				JOptionPane.showMessageDialog(this, "Nhập không đúng định dạng", "Thông báo",
+//						JOptionPane.INFORMATION_MESSAGE);
+//			}
+		}
+		return true;
+	}
+
+	/**
+	 * Làm mới
+	 */
 	public void chonChucNangLamMoi() {
-
+		txtMaHD.setText("");
+		txtMaKH.setText("");
+		txtTenKH.setText("");
+		txtMaNV.setText("");
+		txtTenNV.setText("");
+		txtNgayLapHD.setText("");
+		cmbTrangThai.setSelectedIndex(0);
+		txtTongTien.setText("");
+		txtTimKiemBangMaNV.setText("");
+		txtTimKiemBangNgayLapHD.setText("");
+		txtTimKiemBangTenKH.setText("");
+		txtTimKiemBangTongTien.setText("");
 	}
-	
+
 	public void chonChucNangXemChiTietHoaDon() {
-		
+
 	}
 }

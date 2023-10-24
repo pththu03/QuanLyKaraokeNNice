@@ -213,7 +213,7 @@ public class ManHinhDoiMatKhau extends JDialog {
 	}
 
 	public void chonChucNangThoat() {
-		this.setVisible(false);
+		this.dispose();
 	}
 
 	public boolean trungKhopMK() {

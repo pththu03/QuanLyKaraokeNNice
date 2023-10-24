@@ -36,6 +36,14 @@ public class HoaDonEntity {
 		this.trangThai = trangThai;
 	}
 
+	public HoaDonEntity(String maHD, String maNV, String maKH, boolean trangThai) {
+		super();
+		this.maHD = maHD;
+		this.maNV = maNV;
+		this.maKH = maKH;
+		this.trangThai = trangThai;
+	}
+
 	public String getMaNV() {
 		return maNV;
 	}
@@ -78,6 +86,10 @@ public class HoaDonEntity {
 
 	public String getMaHD() {
 		return maHD;
+	}
+
+	public void setMaHD(String maHD) {
+		this.maHD = maHD;
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class ManHinhNhanVienDAO {
 	}
 
 	public NhanVienEntity timTheoMa(String maNhanVien) {
-		NhanVienEntity nhanVienKetQua = null;
+		NhanVienEntity nhanVienKetQua = new NhanVienEntity();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
 		PreparedStatement statement = null;
@@ -72,7 +72,6 @@ public class ManHinhNhanVienDAO {
 				statement.setString(1, maNhanVien);
 				result = statement.executeQuery();
 				while (result.next()) {
-					String maNV = result.getString(1);
 					String hoTen = result.getString(2);
 					String sdt = result.getString(3);
 					String email = result.getString(4);

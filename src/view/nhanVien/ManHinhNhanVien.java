@@ -18,6 +18,7 @@ import controller.ManHinhNhanVienController;
 import dao.ManHinhNhanVienDAO;
 import entity.NhanVienEntity;
 import util.MoneyFormatter;
+import util.PasswordHasher;
 import view.taiKhoan.ManHinhTaiKhoanNguoiDung;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -278,7 +279,6 @@ public class ManHinhNhanVien extends JPanel {
 		String[] cols_chucVu_1 = { "Tất cả", "Quản lí", "Tiếp tân" };
 		cmdmodelTimTheoChucVu = new DefaultComboBoxModel<>(cols_chucVu_1);
 		cmbTimTheoChucVu = new JComboBox<String>(cmdmodelTimTheoChucVu);
-//		comboBox_timBangChucVu.setSelectedIndex(0);
 		cmbTimTheoChucVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		cmbTimTheoChucVu.setBounds(94, 168, 230, 30);
 		pnlTimKiem.add(cmbTimTheoChucVu);
@@ -422,6 +422,7 @@ public class ManHinhNhanVien extends JPanel {
 		cmbChucVu.setSelectedIndex(0);
 		tblBangNhanVien.setRowSelectionAllowed(false);
 		txtCCCD.setEditable(true);
+		radDaNghi.setSelected(true);
 		loadData();
 	}
 
@@ -432,7 +433,7 @@ public class ManHinhNhanVien extends JPanel {
 			String sdt = txtSDT.getText();
 			String cccd = txtCCCD.getText();
 			String email = txtEmail.getText();
-			String password = "12345678";
+			String password = PasswordHasher.hashPassword("12345678");
 			String quyen = cmbChucVu.getSelectedItem().toString();
 			int namSinh = Integer.parseInt(txtNamSinh.getText());
 			double mucLuong = Double.parseDouble(txtTienLuong.getText());
@@ -449,8 +450,10 @@ public class ManHinhNhanVien extends JPanel {
 			String maNhanVien = txtTimTheoMaNhanVien.getText().trim();
 			String hoTen = txtTimTheoHoVaTen.getText().trim();
 			int namSinh = -1;
+			if(txtTimTheoNamSinh.getText().trim().length() > 0) {
+				namSinh = Integer.parseInt(txtTimTheoNamSinh.getText().trim());
+			}
 			String chucVu = cmbTimTheoChucVu.getSelectedItem().toString().trim();
-			System.out.println(chucVu);
 			list = new ArrayList<>();
 			tblBangNhanVien.removeAll();
 			tblmdelNhanVien.setRowCount(0);

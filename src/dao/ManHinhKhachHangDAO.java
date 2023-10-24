@@ -21,7 +21,7 @@ public class ManHinhKhachHangDAO {
 		
 	}
 	
-	public List<KhachHangEntity> duyetToanBoDanhSach(){
+	public List<KhachHangEntity> duyetDanhSach(){
 		List<KhachHangEntity> list = new ArrayList<>();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
@@ -34,9 +34,9 @@ public class ManHinhKhachHangDAO {
 			while(result.next()) {
 				String maKH = result.getString(1);
 				String hoTen = result.getString(2);
-				int namSinh = result.getInt(3);
+				String sdt = result.getString(3);
 				String email = result.getString(4);
-				String sdt = result.getString(5);
+				int namSinh = result.getInt(5);
 				int sLDatPhong = result.getInt(6);
 				khachHangEntity = new KhachHangEntity(maKH,hoTen, sdt, email, namSinh, sLDatPhong);
 				list.add(khachHangEntity);
@@ -63,8 +63,8 @@ public class ManHinhKhachHangDAO {
 			statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, khachHangEntity.getHoTen());
 			statement.setString(2, khachHangEntity.getSdt());
-			statement.setInt(3, khachHangEntity.getNamSinh());
-			statement.setString(4, khachHangEntity.getEmail());
+			statement.setString(3, khachHangEntity.getEmail());
+			statement.setInt(4, khachHangEntity.getNamSinh());
 			statement.executeUpdate();
 			result = statement.getGeneratedKeys();
 		} catch (SQLException e) {

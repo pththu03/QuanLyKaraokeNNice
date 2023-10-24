@@ -28,7 +28,7 @@ public class ManHinhDatDichVuController implements ActionListener{
 			manHinhDatDichVu.chonChucNangLamMoi();
 		} else if(o.equals(manHinhDatDichVu.btnThem)) {
 			manHinhDatDichVu.chonChucNangThem();
-		} else if(o.equals(manHinhDatDichVu.btnXoa)) {
+		} else if(o.equals(manHinhDatDichVu.btnXoaDichVu)) {
 			manHinhDatDichVu.chonChucNangXoa();
 		} else if(o.equals(manHinhDatDichVu.btnChinhSua)) {
 			manHinhDatDichVu.chonChucNangChinhSua();

@@ -16,15 +16,23 @@ import java.awt.SystemColor;
 import javax.swing.border.TitledBorder;
 
 import controller.ManHinhDangNhapController;
+import dao.ManHinhNhanVienDAO;
+import entity.NhanVienEntity;
+import util.PasswordHasher;
 import view.manHinhChinh.ManHinhChinh;
 import view.timKiem.ManHinhTimKiemPhong;
 
 import javax.swing.border.MatteBorder;
 import java.awt.event.ActionListener;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
+import javax.swing.JPasswordField;
+import java.awt.event.KeyEvent;
 
 public class ManHinhDangNhap extends JFrame {
 
@@ -44,12 +52,11 @@ public class ManHinhDangNhap extends JFrame {
 	// JPanel
 	private JPanel contentPane;
 
-	// Controller
-	private ManHinhDangNhapController controller;
-
 	// JTextField
 	private JTextField txtSoDienThoai;
-	private JTextField txtMatKhau;
+
+	// JPassswordField
+	private JPasswordField pwd;
 
 	// JButton
 	public JButton btnDangNhap;
@@ -60,6 +67,12 @@ public class ManHinhDangNhap extends JFrame {
 	private JLabel lblSĐT;
 	private JLabel lblMatKhau;
 	private JLabel lblDangNhap;
+
+	// Controller
+	private ManHinhDangNhapController controller;
+
+	private List<NhanVienEntity> list;
+	private ManHinhNhanVienDAO manHinhNhanVienDAO = new ManHinhNhanVienDAO();
 
 	public ManHinhDangNhap() {
 		setResizable(false);
@@ -81,29 +94,16 @@ public class ManHinhDangNhap extends JFrame {
 		contentPane.add(lblDangNhap);
 
 		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setText("0333411964");
 		txtSoDienThoai.setBorder(null);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSoDienThoai.setForeground(Color.BLACK);
-		txtSoDienThoai.setBounds(58, 228, 419, 34);
+		txtSoDienThoai.setBounds(58, 229, 419, 34);
 		contentPane.add(txtSoDienThoai);
 		txtSoDienThoai.setColumns(10);
 
-		txtMatKhau = new JTextField();
-		txtMatKhau.setBorder(null);
-		txtMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtMatKhau.setBounds(58, 306, 419, 34);
-		contentPane.add(txtMatKhau);
-		txtMatKhau.setColumns(10);
-
 		btnDangNhap = new JButton("Đăng Nhập\r\n");
-		btnDangNhap.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		btnDangNhap.setMnemonic(KeyEvent.VK_ALT_GRAPH);
 		btnDangNhap.setFocusable(false);
 		btnDangNhap.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDangNhap.setIcon(new ImageIcon("E:\\QuanLyKaraokeN\\src\\images\\iconDangNhap.png"));
@@ -138,14 +138,34 @@ public class ManHinhDangNhap extends JFrame {
 
 		lblMatKhau = new JLabel("Mật Khẩu:");
 		lblMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblMatKhau.setBounds(58, 275, 87, 21);
+		lblMatKhau.setBounds(58, 274, 87, 21);
 		contentPane.add(lblMatKhau);
+
+		pwd = new JPasswordField();
+		pwd.setBounds(58, 306, 419, 34);
+		contentPane.add(pwd);
 
 		controller = new ManHinhDangNhapController(this);
 		btnDangNhap.addActionListener(controller);
 		btnDanhChoKhachHang.addActionListener(controller);
 		btnThoat.addActionListener(controller);
 
+	}
+
+	private boolean kiemTraDuLieuNhap() {
+		String sdt = txtSoDienThoai.getText().trim();
+		if (!(sdt.length() > 0 && sdt.matches("\\d{10}"))) {
+			JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số");
+			txtSoDienThoai.requestFocus();
+			return false;
+		}
+
+		if (!(pwd.toString().trim().length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
+			pwd.requestFocus();
+			return false;
+		}
+		return true;
 	}
 
 	public void chonChucNangThoat() {
@@ -156,13 +176,27 @@ public class ManHinhDangNhap extends JFrame {
 	}
 
 	public void chonChucNangDangNhap() {
-		new ManHinhChinh().setVisible(true);
-		this.dispose();
+		if (kiemTraDuLieuNhap()) {
+			String sdt = txtSoDienThoai.getText().trim();
+			String password = PasswordHasher.hashPassword(pwd.getText().trim());
+			list = new ArrayList<>();
+			list = manHinhNhanVienDAO.duyetDanhSach();
+			boolean ketQua = false;
+			for (NhanVienEntity nhanVienEntity : list) {
+				if (nhanVienEntity.getSdt().equals(sdt) && nhanVienEntity.getPassword().equals(password)) {
+					ketQua = true;
+					new ManHinhChinh(nhanVienEntity).setVisible(true);
+					this.dispose();
+				}
+			}
+			if(!ketQua) {
+				JOptionPane.showMessageDialog(this, "Mật khẩu hoặc số điện thoại không hợp lệ");
+			}
+		}
 	}
 
 	public void chonChucNangDanhChoKhachHang() {
 		new ManHinhTimKiemPhong().setVisible(true);
 		this.dispose();
 	}
-
 }

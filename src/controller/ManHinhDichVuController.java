@@ -27,7 +27,9 @@ public class ManHinhDichVuController implements ActionListener , MouseListener{
 			manHinhDichVu.chonChucNangLamMoi();
 		} else if(o.equals(manHinhDichVu.btnXoa)) {
 			manHinhDichVu.chonChucNangXoa();
-		} 
+		} else if(o.equals(manHinhDichVu.btnTim)){
+			manHinhDichVu.chonChucNangTim();
+		}
 	}
 
 	@Override

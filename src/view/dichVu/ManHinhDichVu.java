@@ -1,6 +1,7 @@
 package view.dichVu;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Font;
 import java.awt.Color;
@@ -34,7 +35,7 @@ public class ManHinhDichVu extends JPanel {
 	// JPanel
 	private JPanel pnlbanner;
 	private JPanel pnlChucNang;
-	
+	private JPanel pnlTimKiem;
 	// JTable
 	private JTable tblQLDV;
 	
@@ -43,6 +44,8 @@ public class ManHinhDichVu extends JPanel {
 	private JTextField txtTenDV;
 	private JTextField txtGia;
 	private JTextField txtGiaDen;
+	private JTextField txtGiaDichVu;
+	private JTextField txtMaDVTimKiem;
 	
 	// JLabel
 	private JLabel lblQuanLiDichVu;
@@ -51,9 +54,16 @@ public class ManHinhDichVu extends JPanel {
 	private JLabel lblLoaiDV;
 	private JLabel lblGia;
 	private JLabel lblGiaDen;
+	private JLabel lblMaDichVuTimKiem;
+	private JLabel lblGiaDichVu;
+	private JLabel lblLoaiDVTimKiem;
+	private JLabel lblTimKiem;
 	
 	// JComboBox
 	private JComboBox<String> cmbLoaiDV;
+	private JComboBox<String> cmbLoaiDVTimKiem;
+	private DefaultComboBoxModel cmbmodelLoaiDV;
+	private DefaultComboBoxModel cmbmodelLoaiDVTimKiem;
 	
 	// JScrollPane
 	private JScrollPane scrQLDV;
@@ -70,12 +80,9 @@ public class ManHinhDichVu extends JPanel {
 	private ManHinhDichVuController controller;
 	private List<DichVuEntity> list;
 	private ManHinhDichVuDAO manHinhDichVuDAO = new ManHinhDichVuDAO();
-	private JPanel pnlTimKiem;
-	private JLabel lblGiDchV;
-	private JTextField textField;
-	private JTextField textField_1;
 	
 	
+
 
 	public ManHinhDichVu() {
 		setBounds(0, 0, 1084, 602);
@@ -120,9 +127,10 @@ public class ManHinhDichVu extends JPanel {
 		lblLoaiDV.setBounds(10, 103, 90, 30);
 		pnlbanner.add(lblLoaiDV);
 		
-		cmbLoaiDV = new JComboBox();
+		String[] cols_loaiDv = {"","Đồ uống", "Món ăn"};
+		cmbmodelLoaiDV = new DefaultComboBoxModel<>(cols_loaiDv );
+		cmbLoaiDV = new JComboBox<String>(cmbmodelLoaiDV);
 		cmbLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbLoaiDV.setModel(new DefaultComboBoxModel(new String[] {"Tất cả ", "Đồ uống", "Món ăn"}));
 		cmbLoaiDV.setBounds(110, 102, 166, 33);
 		pnlbanner.add(cmbLoaiDV);
 		
@@ -163,16 +171,16 @@ public class ManHinhDichVu extends JPanel {
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
-		lblGiDchV = new JLabel("Giá Dịch vụ:");
-		lblGiDchV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblGiDchV.setBounds(299, 101, 90, 30);
-		pnlbanner.add(lblGiDchV);
+		lblGiaDichVu = new JLabel("Giá Dịch vụ:");
+		lblGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblGiaDichVu.setBounds(299, 101, 90, 30);
+		pnlbanner.add(lblGiaDichVu);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		textField.setColumns(10);
-		textField.setBounds(399, 100, 166, 33);
-		pnlbanner.add(textField);
+		txtGia = new JTextField();
+		txtGia.setBounds(399, 102, 166, 33);
+		pnlbanner.add(txtGia);
+		txtGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtGia.setColumns(10);
 		btnThem.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		btnXoa.addActionListener(controller);
@@ -204,12 +212,6 @@ public class ManHinhDichVu extends JPanel {
 		pnlTimKiem.add(lblGia);
 		lblGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
-		txtGia = new JTextField();
-		txtGia.setBounds(146, 156, 101, 33);
-		pnlTimKiem.add(txtGia);
-		txtGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGia.setColumns(10);
-		
 		lblGiaDen = new JLabel("Đến:");
 		lblGiaDen.setBounds(257, 157, 34, 30);
 		pnlTimKiem.add(lblGiaDen);
@@ -232,32 +234,49 @@ public class ManHinhDichVu extends JPanel {
 		btnTim.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTim.setIcon(new ImageIcon(ManHinhDichVu.class.getResource("/images/iconTimKiem.png")));
 		
-		JLabel lblMaDichVu_1 = new JLabel("Mã Dịch Vụ : ");
-		lblMaDichVu_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaDichVu_1.setBounds(46, 53, 90, 30);
-		pnlTimKiem.add(lblMaDichVu_1);
+		lblMaDichVuTimKiem = new JLabel("Mã Dịch Vụ : ");
+		lblMaDichVuTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblMaDichVuTimKiem.setBounds(46, 53, 90, 30);
+		pnlTimKiem.add(lblMaDichVuTimKiem);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		textField_1.setEnabled(false);
-		textField_1.setColumns(10);
-		textField_1.setBounds(146, 52, 265, 33);
-		pnlTimKiem.add(textField_1);
+		txtMaDVTimKiem = new JTextField();
+		txtMaDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtMaDVTimKiem.setEnabled(false);
+		txtMaDVTimKiem.setColumns(10);
+		txtMaDVTimKiem.setBounds(146, 52, 265, 33);
+		pnlTimKiem.add(txtMaDVTimKiem);
 		
-		JLabel lblLoaiDV_1 = new JLabel("Loại Dịch Vụ :");
-		lblLoaiDV_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblLoaiDV_1.setBounds(46, 107, 90, 30);
-		pnlTimKiem.add(lblLoaiDV_1);
+		lblLoaiDVTimKiem = new JLabel("Loại Dịch Vụ :");
+		lblLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblLoaiDVTimKiem.setBounds(46, 107, 90, 30);
+		pnlTimKiem.add(lblLoaiDVTimKiem);
 		
-		JComboBox cmbLoaiDV_1 = new JComboBox();
-		cmbLoaiDV_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbLoaiDV_1.setBounds(146, 106, 265, 33);
-		pnlTimKiem.add(cmbLoaiDV_1);
 		
-		JLabel lblTmKim = new JLabel("Tìm kiếm");
-		lblTmKim.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblTmKim.setBounds(194, 11, 84, 30);
-		pnlTimKiem.add(lblTmKim);
+		String[] cols_LoaiDVTimKiem = { "Tất cả", "Đồ uống", "Món ăn" };
+		cmbmodelLoaiDVTimKiem = new DefaultComboBoxModel<>(cols_LoaiDVTimKiem);
+		cmbLoaiDVTimKiem = new JComboBox<String>(cmbmodelLoaiDVTimKiem);
+		cmbLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		cmbLoaiDVTimKiem.setBounds(146, 106, 265, 33);
+		pnlTimKiem.add(cmbLoaiDVTimKiem);
+
+		
+		lblTimKiem = new JLabel("Tìm kiếm");
+		lblTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 17));
+		lblTimKiem.setBounds(194, 11, 84, 30);
+		pnlTimKiem.add(lblTimKiem);
+		
+		txtGiaDichVu = new JTextField();
+		txtGiaDichVu.setBounds(146, 157, 101, 33);
+		pnlTimKiem.add(txtGiaDichVu);
+		txtGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtGiaDichVu.setColumns(10);
+		
+		controller = new ManHinhDichVuController(this);
+		btnTim.addActionListener(controller);
+		btnThem.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		btnLamMoi.addActionListener(controller);
+		btnXoa.addActionListener(controller);
 		tblQLDV.addMouseListener(controller);
 		loadDate();
 
@@ -268,7 +287,7 @@ public class ManHinhDichVu extends JPanel {
 		tblQLDV.setRowSelectionAllowed(false);
 		mdlTableQLDV.setRowCount(0);
 		list = new ArrayList<>();
-		list = manHinhDichVuDAO.duyetToanBoDanhSach();
+		list = manHinhDichVuDAO.duyetDanhSach();
 		
 		int stt = 1;
 		for (DichVuEntity dichVuEntity : list) {
@@ -279,9 +298,23 @@ public class ManHinhDichVu extends JPanel {
 		
 	}
 	
+	public void chonChucNangLamMoi() {
+		txtMaDV.setText("");
+		txtTenDV.setText("");
+		txtGia.setText("");
+		txtGiaDen.setText("");
+		txtGiaDichVu.setText("");
+		txtMaDVTimKiem.setText("");
+		cmbLoaiDV.setSelectedIndex(0);
+		cmbLoaiDVTimKiem.setSelectedIndex(0);
+		tblQLDV.setRowSelectionAllowed(false);
+		loadDate();
+		
+	}
+	
 	public void hienThiThongTin() {
-		list = new ArrayList();
-		list = manHinhDichVuDAO.duyetToanBoDanhSach();
+		list = new ArrayList<>();
+		list = manHinhDichVuDAO.duyetDanhSach();
 		int row = tblQLDV.getSelectedRow();
 		if(row >= 0){
 			txtMaDV.setText(list.get(row).getMaDV());
@@ -292,20 +325,78 @@ public class ManHinhDichVu extends JPanel {
 			}else {
 				cmbLoaiDV.setSelectedIndex(2);
 			}
+			
 		}
 	}
 	
-	public void chonChucNangChinhSua() {
-		String maDV = txtMaDV.getText();
-		String tenDV = txtTenDV.getText();
-		String loaiDV = cmbLoaiDV.getSelectedItem().toString();
-		double gia = Double.parseDouble(txtGia.getText());
-		DichVuEntity dichVuEntity = new DichVuEntity(tenDV,loaiDV,gia);
-		dichVuEntity = manHinhDichVuDAO.themDichVu(dichVuEntity);
-		loadDate();
-		
-	}
 	public void chonChucNangThem() {
+		if (kiemTraDuLieuThem()) {
+		String maDV = txtMaDV.getText();
+		String tenDV = txtTenDV.getText();
+		String loaiDV = cmbLoaiDV.getSelectedItem().toString();
+		double Gia = Double.parseDouble(txtGia.getText());
+		DichVuEntity dichVuEntity = new DichVuEntity(tenDV,loaiDV,Gia);
+		dichVuEntity = manHinhDichVuDAO.themDichVu(dichVuEntity);
+		loadDate();
+		}
+	}
+	
+	private boolean kiemTraDuLieuThem() {
+		String tenDV = txtTenDV.getText();
+		String gia = txtGia.getText();
+		list = new ArrayList<>();
+		list = manHinhDichVuDAO.duyetDanhSach();
+		
+		/**
+		 * Tên Dịch Vụ Không được để trống 
+		 */
+		if(!(tenDV.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Tên Dịch Vụ không được để trống!", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE	);
+			txtTenDV.requestFocus();
+			return false;
+		}
+		/**
+		 * Loại Dịch Vụ > 0
+		 */
+		if(cmbLoaiDV.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(this, "Hãy chọn loại dịch vụ", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			cmbLoaiDV.requestFocus();
+			return false;
+		}
+		
+		/**
+		 * Giá Dịch Vụ > 0
+		 */
+		
+		if(gia.length() > 0) {
+			try {
+				Double Gia = Double.parseDouble(gia);
+				if(!(Gia > 0)) {
+					JOptionPane.showMessageDialog(this, "Giá Dịch Vụ Phải Lớn hơn 0 ", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtGia.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Giá Nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtGia.requestFocus();
+				return false;
+			} 
+		} else {
+			JOptionPane.showMessageDialog(this, "Mức lương không được để trống " ,"Thông báo",
+				JOptionPane.INFORMATION_MESSAGE	);
+			txtGia.requestFocus();
+			return false;
+		}
+		return false;
+		
+	}
+	
+	public void chonChucNangChinhSua() {
+		if(kiemTraDuLieuChinhSua()) {
 		String maDV = txtMaDV.getText();
 		String tenDV = txtTenDV.getText();
 		String loaiDV = cmbLoaiDV.getSelectedItem().toString();
@@ -313,25 +404,31 @@ public class ManHinhDichVu extends JPanel {
 		DichVuEntity dichVuEntity = new DichVuEntity(tenDV,loaiDV,gia);
 		dichVuEntity = manHinhDichVuDAO.themDichVu(dichVuEntity);
 		loadDate();
+		}
+	}
+	
+	private boolean kiemTraDuLieuChinhSua() {
+		String tenDV = txtTenDV.getText();
+		String gia = txtGia.getText();
+		list = new ArrayList<>();
+		list = manHinhDichVuDAO.duyetDanhSach();
+		
+		
+		
+		
+		
+		return false;
 		
 	}
+	
+	
 	
 	
 	public void chonChucNangXoa() {
 		
 	}
-	public void chonChucNangLamMoi() {
-		txtMaDV.setText("");
-		txtTenDV.setText("");
-		txtGia.setText("");
-		cmbLoaiDV.setSelectedIndex(0);
-		tblQLDV.setRowSelectionAllowed(false);
+	
+	public void chonChucNangTim() {
 		
-	}
-	public void chonChucNangXemDanhSachDV() {
-		
-	}
-	public void handlerActionClean() {
-
 	}
 }

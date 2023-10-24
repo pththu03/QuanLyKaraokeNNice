@@ -240,7 +240,7 @@ CREATE TABLE NhanVien(
 	SDT VARCHAR(10) NOT NULL,
 	Email VARCHAR(100),
 	CCCD VARCHAR(12) NOT NULL,
-	Password VARCHAR(12) NOT NULL,
+	Password VARCHAR(100) NOT NULL,
 	NamSinh INT NOT NULL,
 	MucLuong MONEY NOT NULL,
 	Quyen NVARCHAR(8) NOT NULL,
@@ -484,27 +484,27 @@ select * from KhachHang
 
 -- NHÂN VIÊN
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', '12345678', 1980, 35000, N'Quản lí', N'Đang làm việc')
+	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1993, 35000, N'Quản lí', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', '12345678', 1999, 30000, N'Quản lí', N'Đang làm việc')
+	VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 30000, N'Quản lí', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Nguyễn Minh Hải', '0389660754', 'nguyenhai2009@gmail.com', '217958221685', '12345678', 1989, 28000, N'Tiếp tân', N'Đang làm việc')
+	VALUES (N'Nguyễn Minh Hải', '0389660754', 'nguyenhai2009@gmail.com', '217958221685', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1989, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Nguyễn Tiến Dũng', '0782566343', 'nguyentdung1110@gmail.com', '211019927954', '12345678', 2000, 28000, N'Tiếp tân', N'Đang làm việc')
+	VALUES (N'Nguyễn Tiến Dũng', '0782566343', 'nguyentdung1110@gmail.com', '211019927954', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Phan Thanh Nam', '0936279762', 'thanhnam1210@gmail.com', '219422793198', '12345678', 2000, 28000, N'Tiếp tân', N'Đã nghỉ')
+	VALUES (N'Phan Thanh Nam', '0936279762', 'thanhnam1210@gmail.com', '219422793198', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đã nghỉ')
 GO
 
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])
-	VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', '12345678', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
+	VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
 
@@ -549,6 +549,13 @@ INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
 	VALUES (205, 'VIP', N'Trống', 20)
 GO
 
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (205, 'VIP', N'Đang sử dụng', 20)
+GO
+
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
+	VALUES (205, 'VIP', N'Chờ', 20)
+GO
 -- CA TRỰC
 INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
 	VALUES (N'Ca 1', '08:00:00', '13:00:00')
@@ -709,13 +716,11 @@ GO
 SELECT *FROM CaTruc
 SELECT *FROM DichVu
 SELECT *FROM Phong
-SELECT *FROM KhachHang
 SELECT *FROM NhanVien
+SELECT *FROM KhachHang
+SELECT *FROM ChiTietDatPhong
+SELECT *FROM ChiTietHoaDon
+delete from HoaDon
+SELECT *FROM HoaDon
 
-GO
-select * from NhanVien
-
-
-UPDATE NhanVien
-SET HoTen = N'ABC', SDT = '0987654321', Email = 'tram@gmail.com', NamSinh = 2000, MucLuong = 30000, Quyen = N'Tiếp tân', TrangThai = N'Đã nghỉ'
-Where MaNV = 'NV009'
+--INSERT INTO HoaDon (MaNV, MaKH, TrangThai) VALUES ('NV001', 'KH001', 'P001')

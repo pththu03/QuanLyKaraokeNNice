@@ -42,28 +42,32 @@ public class ManHinhKhachHang extends JPanel {
 		private JTextField txtSDT;
 		private JTextField txtNamSinh;
 		private JTextField txtEmail;
-		private JTextField txtTenKhachHang;
+		private JTextField txtMaKhachHang;
+		private JTextField txtSoDienThoai;
 		private JTextField txtSLTu;
-		private JTextField txtSLDen;
 		
 		// JTable
 		private JTable tblKhachHang;
 		
 		// JLabel
 		private JLabel lblMaKhachHang;
-		private JLabel lblTenKH;
+		private JLabel lblMaKH;
 		private JLabel lblTenKhachHang;
 		private JLabel lblSDT;
 		private JLabel lblNamSinh;
 		private JLabel lblSoDienThoai;
-		private JLabel lblSoLuongDatPhong;
-		private JLabel lblSLDatPhong;
+		private JLabel lblEmail;
+		private JLabel lblSLPhongTu;
 		private JLabel lblKhachHang;
+		private JLabel lblSLDen;
+		private JLabel lblTimKiem;
+		private JLabel lblTenKH;
 		
 		// JButton
 		public JButton btnChinhSua;
 		public JButton btnTimKiem;
 		public JButton btnThem;
+		public JButton btnLamMoi;
 		
 		// JScrollPane
 		private JScrollPane scrKhachHang;
@@ -71,10 +75,10 @@ public class ManHinhKhachHang extends JPanel {
 		private ManHinhKhachHangController controller;
 		private ManHinhKhachHangDAO manHinhKhachHangDAO = new ManHinhKhachHangDAO();
 		private List<KhachHangEntity> list;
-		private JTextField textField;
-		private JTextField textField_1;
-		private JLabel lblSoLuongDatPhong_1;
-		private JTextField textField_2;
+		private JTextField txtSLDen;
+		private JTextField txtSLDatPhong;
+		private JLabel lblSLDatPhong;
+		private JTextField txtTenKhachHang;
 		
 
 	
@@ -109,26 +113,26 @@ public class ManHinhKhachHang extends JPanel {
 		pnlTimKiem.setBackground(new Color(204, 204, 255));
 		pnlTimKiem.setLayout(null);
 		
-		lblTenKH = new JLabel("Mã khách hàng:");
-		lblTenKH.setBounds(32, 58, 110, 20);
-		pnlTimKiem.add(lblTenKH);
-		lblTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblMaKH = new JLabel("Mã khách hàng:");
+		lblMaKH.setBounds(32, 58, 110, 20);
+		pnlTimKiem.add(lblMaKH);
+		lblMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
-		txtTenKhachHang = new JTextField();
-		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTenKhachHang.setBounds(175, 55, 211, 27);
-		pnlTimKiem.add(txtTenKhachHang);
-		txtTenKhachHang.setColumns(10);
+		txtMaKhachHang = new JTextField();
+		txtMaKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtMaKhachHang.setBounds(175, 55, 211, 27);
+		pnlTimKiem.add(txtMaKhachHang);
+		txtMaKhachHang.setColumns(10);
 		
 		lblSDT = new JLabel("Số điện thoại:");
 		lblSDT.setBounds(32, 128, 110, 25);
 		pnlTimKiem.add(lblSDT);
 		lblSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
-		lblSLDatPhong = new JLabel("Số Lượng Đặt Phòng : ");
-		lblSLDatPhong.setBounds(32, 164, 150, 27);
-		pnlTimKiem.add(lblSLDatPhong);
-		lblSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSLPhongTu = new JLabel("Số Lượng Đặt Phòng : ");
+		lblSLPhongTu.setBounds(32, 164, 150, 27);
+		pnlTimKiem.add(lblSLPhongTu);
+		lblSLPhongTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setFocusable(false);
@@ -139,41 +143,41 @@ public class ManHinhKhachHang extends JPanel {
 		btnTimKiem.setBounds(261, 202, 125, 30);
 		pnlTimKiem.add(btnTimKiem);
 		
-		txtSLDen = new JTextField();
-		txtSLDen.setBounds(175, 164, 80, 27);
-		pnlTimKiem.add(txtSLDen);
-		txtSLDen.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("Đến:");
-		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblNewLabel.setBounds(266, 164, 46, 27);
-		pnlTimKiem.add(lblNewLabel);
-		
 		txtSLTu = new JTextField();
-		txtSLTu.setColumns(10);
-		txtSLTu.setBounds(175, 127, 211, 27);
+		txtSLTu.setBounds(175, 164, 80, 27);
 		pnlTimKiem.add(txtSLTu);
+		txtSLTu.setColumns(10);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(306, 164, 80, 27);
-		pnlTimKiem.add(textField);
+		lblSLDen = new JLabel("Đến:");
+		lblSLDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSLDen.setBounds(266, 164, 46, 27);
+		pnlTimKiem.add(lblSLDen);
 		
-		JLabel lblTmKim = new JLabel("Tìm kiếm");
-		lblTmKim.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblTmKim.setBounds(169, 11, 94, 33);
-		pnlTimKiem.add(lblTmKim);
+		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setColumns(10);
+		txtSoDienThoai.setBounds(175, 127, 211, 27);
+		pnlTimKiem.add(txtSoDienThoai);
 		
-		JLabel lblTnKhchHng = new JLabel("Tên khách hàng");
-		lblTnKhchHng.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTnKhchHng.setBounds(32, 89, 110, 20);
-		pnlTimKiem.add(lblTnKhchHng);
+		txtSLDen = new JTextField();
+		txtSLDen.setColumns(10);
+		txtSLDen.setBounds(306, 164, 80, 27);
+		pnlTimKiem.add(txtSLDen);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		textField_2.setColumns(10);
-		textField_2.setBounds(175, 91, 211, 27);
-		pnlTimKiem.add(textField_2);
+		lblTimKiem = new JLabel("Tìm kiếm");
+		lblTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 17));
+		lblTimKiem.setBounds(169, 11, 94, 33);
+		pnlTimKiem.add(lblTimKiem);
+		
+		lblTenKH = new JLabel("Tên khách hàng");
+		lblTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblTenKH.setBounds(32, 89, 110, 20);
+		pnlTimKiem.add(lblTenKH);
+		
+		txtTenKhachHang = new JTextField();
+		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtTenKhachHang.setColumns(10);
+		txtTenKhachHang.setBounds(175, 91, 211, 27);
+		pnlTimKiem.add(txtTenKhachHang);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 192, 203));
@@ -210,7 +214,7 @@ public class ManHinhKhachHang extends JPanel {
 		lblNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		txtSDT = new JTextField();
-		txtSDT.setBounds(467, 93, 166, 27);
+		txtSDT.setBounds(149, 92, 176, 27);
 		panel.add(txtSDT);
 		txtSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSDT.setColumns(10);
@@ -221,15 +225,15 @@ public class ManHinhKhachHang extends JPanel {
 		lblSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		txtNamSinh = new JTextField();
-		txtNamSinh.setBounds(149, 92, 176, 27);
+		txtNamSinh.setBounds(467, 93, 166, 27);
 		panel.add(txtNamSinh);
 		txtNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtNamSinh.setColumns(10);
 		
-		lblSoLuongDatPhong = new JLabel("Email:");
-		lblSoLuongDatPhong.setBounds(27, 130, 59, 25);
-		panel.add(lblSoLuongDatPhong);
-		lblSoLuongDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(27, 130, 59, 25);
+		panel.add(lblEmail);
+		lblEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		txtEmail = new JTextField();
 		txtEmail.setBounds(149, 129, 176, 27);
@@ -259,25 +263,25 @@ public class ManHinhKhachHang extends JPanel {
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		textField_1.setColumns(10);
-		textField_1.setBounds(467, 130, 166, 27);
-		panel.add(textField_1);
+		txtSLDatPhong = new JTextField();
+		txtSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtSLDatPhong.setColumns(10);
+		txtSLDatPhong.setBounds(467, 130, 166, 27);
+		panel.add(txtSLDatPhong);
 		
-		lblSoLuongDatPhong_1 = new JLabel("Số lượng đặt phòng:");
-		lblSoLuongDatPhong_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSoLuongDatPhong_1.setBounds(335, 131, 129, 25);
-		panel.add(lblSoLuongDatPhong_1);
+		lblSLDatPhong = new JLabel("Số lượng đặt phòng:");
+		lblSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSLDatPhong.setBounds(335, 131, 129, 25);
+		panel.add(lblSLDatPhong);
 		
-		JButton btnLmMi = new JButton("Làm mới");
-		btnLmMi.setIcon(new ImageIcon(ManHinhKhachHang.class.getResource("/images/iconLamMoi.png")));
-		btnLmMi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLmMi.setFocusable(false);
-		btnLmMi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnLmMi.setBackground(new Color(144, 238, 144));
-		btnLmMi.setBounds(211, 189, 129, 33);
-		panel.add(btnLmMi);
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(ManHinhKhachHang.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnLamMoi.setFocusable(false);
+		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLamMoi.setBackground(new Color(144, 238, 144));
+		btnLamMoi.setBounds(211, 189, 129, 33);
+		panel.add(btnLamMoi);
 		btnThem.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
@@ -289,24 +293,12 @@ public class ManHinhKhachHang extends JPanel {
 		
 	}
 	
-
-	public void chonChucNangChinhSua() {
-		
-	}
-	public void chonChucNangTimKiem() {
-		
-	}
-	public void handlerActionClean() {
-
-	}
-	
 	private void loadData() {
 		tblKhachHang.removeAll();
 		tblKhachHang.setRowSelectionAllowed(false);
 		modeltableKhachHang.setRowCount(0);
 		list = new ArrayList<>();
-		list = manHinhKhachHangDAO.duyetToanBoDanhSach();
-
+		list = manHinhKhachHangDAO.duyetDanhSach();
 		int stt = 1;
 		for (KhachHangEntity khachHangEntity : list) {
 			modeltableKhachHang.addRow(new Object[] {stt++,khachHangEntity.getMaKH() ,khachHangEntity.getHoTen(), khachHangEntity.getNamSinh(),
@@ -317,7 +309,7 @@ public class ManHinhKhachHang extends JPanel {
 	
 	public void hienThiThongTin() {
 		list = new ArrayList<>();
-		list = manHinhKhachHangDAO.duyetToanBoDanhSach();
+		list = manHinhKhachHangDAO.duyetDanhSach();
 		int row = tblKhachHang.getSelectedRow();
 		if(row >= 0) {
 			txtMaKH.setText(list.get(row).getMaKH());
@@ -325,6 +317,7 @@ public class ManHinhKhachHang extends JPanel {
 			txtNamSinh.setText(String.valueOf(list.get(row).getNamSinh()));
 			txtEmail.setText(list.get(row).getEmail());
 			txtSDT.setText(list.get(row).getSdt());
+			txtSLDatPhong.setText(String.valueOf(list.get(row).getSlDatPhong()));
 		}
 	}
 	
@@ -338,4 +331,16 @@ public class ManHinhKhachHang extends JPanel {
 		//khachHangEntity = manHinhKhachHangDAO.themKhachHang(khachHangEntity);
 		loadData();
 	}
+	
+	public void chonChucNangChinhSua() {
+		
+	}
+	public void chonChucNangTimKiem() {
+		
+	}
+	public void handlerActionClean() {
+
+	}
+	
+	
 }

@@ -21,7 +21,7 @@ public class ManHinhDichVuDAO {
 		
 	}
 	
-	public List<DichVuEntity> duyetToanBoDanhSach(){
+	public List<DichVuEntity> duyetDanhSach(){
 		List<DichVuEntity> list = new ArrayList<>();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
@@ -56,6 +56,7 @@ public class ManHinhDichVuDAO {
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
 		PreparedStatement statement = null;
+		if(connect != null) {
 		try {
 			String query = "INSERT INTO DichVu "
 					+ "([TenDV], [LoaiDV], [Gia])"
@@ -68,7 +69,7 @@ public class ManHinhDichVuDAO {
 			result = statement.getGeneratedKeys();
 			while(result.next()) {
 				dichVuEntity2 = new DichVuEntity();
-				dichVuEntity2.setLoaiDV(result.getString(3));
+				dichVuEntity2.setLoaiDV(result.getString(1));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -77,41 +78,36 @@ public class ManHinhDichVuDAO {
 			ConnectDB.closeConnect(connect);
 			ConnectDB.closePreStatement(statement);
 			ConnectDB.closeResultSet(result);
+			}
 		}
-		
 		return dichVuEntity2;
 	}
 	
-	public DichVuEntity chonChucNangChinhSua(DichVuEntity dichVuEntity) {
-		DichVuEntity dichVuEntity2 = null;
+	public int chonChucNangChinhSua(DichVuEntity dichVuEntity) {
 		Connection connect = ConnectDB.getConnect();
-		ResultSet result = null;
 		PreparedStatement statement = null;
-		try {
-			String query = "UPDATE INTO DichVu "
-					+ "([TenDV], [LoaiDV], [Gia])"
-					+ "VALUES (?, ?, ?)";
-			statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, dichVuEntity.getTenDV());
-			statement.setString(2, dichVuEntity.getLoaiDV());
-			statement.setDouble(3, dichVuEntity.getGia());
-			statement.executeUpdate();
-			result = statement.getGeneratedKeys();
-			while(result.next()) {
-				dichVuEntity2 = new DichVuEntity();
-				dichVuEntity2.setLoaiDV(result.getString(3));
+		
+		if(connect != null) {
+			try {
+				String query = "UPDATE DichVu\r\n SET TenDV = ?, LoaiDV = ?, " + "Gia = ? "
+								+ "MaDV = ?\r\n" + "Where MaDV LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, dichVuEntity.getTenDV());
+				statement.setString(2, dichVuEntity.getLoaiDV());
+				statement.setDouble(3, dichVuEntity.getGia());
+				statement.setString(4, dichVuEntity.getMaDV());
+				return statement.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			} finally {
+				
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
 			ConnectDB.closeConnect(connect);
 			ConnectDB.closePreStatement(statement);
-			ConnectDB.closeResultSet(result);
 		}
-		
-		return dichVuEntity2;
-	
+		return 0;
 	
 }
 }

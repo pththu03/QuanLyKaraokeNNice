@@ -33,6 +33,10 @@ public class ChiTietHoaDonEntity {
 		return maCTHD;
 	}
 
+	public void setMaCTHD(String maCTHD) {
+		this.maCTHD = maCTHD;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(maCTHD);

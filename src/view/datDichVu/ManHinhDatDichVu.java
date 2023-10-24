@@ -17,10 +17,12 @@ import controller.ManHinhDatDichVuController;
 //import controller.ManHinhDatDichVuController;
 
 import javax.swing.JPasswordField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class ManHinhDatDichVu extends JPanel {
 
@@ -42,7 +44,7 @@ public class ManHinhDatDichVu extends JPanel {
 	public JButton btnDat;
 	public JButton btnHuy;
 	public JButton btnChinhSua;
-	public JButton btnXoa;
+	public JButton btnXoaDichVu;
 	public JButton btnThem;
 	public JButton btnLamMoi;
 	private JScrollPane scrDanhSachDichVuDat;
@@ -69,6 +71,10 @@ public class ManHinhDatDichVu extends JPanel {
 	private JTextField txtSoPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtThanhTien;
+	private JLabel lblChonHoaDon;
+	private JComboBox<String> cmbChonPhong;
+	private DefaultComboBoxModel<String> cmbmodelChonPhong;
+	
 	private ManHinhDatDichVuController controller;
 	
 	public ManHinhDatDichVu() {
@@ -270,7 +276,7 @@ public class ManHinhDatDichVu extends JPanel {
 
 		lblTenKhachHang = new JLabel("Tên khách hàng:");
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblTenKhachHang.setBounds(170, 70, 120, 25);
+		lblTenKhachHang.setBounds(165, 70, 120, 25);
 		pnlChiTietDatDichVu.add(lblTenKhachHang);
 
 		txtTenKhachHang = new JTextField();
@@ -282,13 +288,13 @@ public class ManHinhDatDichVu extends JPanel {
 
 		lblThanhTien = new JLabel("Thành tiền:");
 		lblThanhTien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblThanhTien.setBounds(20, 120, 80, 25);
+		lblThanhTien.setBounds(20, 125, 80, 25);
 		pnlChiTietDatDichVu.add(lblThanhTien);
 
 		txtThanhTien = new JTextField();
 		txtThanhTien.setBorder(null);
 		txtThanhTien.setEditable(false);
-		txtThanhTien.setBounds(100, 120, 200, 27);
+		txtThanhTien.setBounds(100, 124, 155, 27);
 		pnlChiTietDatDichVu.add(txtThanhTien);
 		txtThanhTien.setColumns(10);
 
@@ -299,14 +305,14 @@ public class ManHinhDatDichVu extends JPanel {
 		scrDanhSachDichVuDat.setBounds(20, 175, 465, 300);
 		pnlChiTietDatDichVu.add(scrDanhSachDichVuDat);
 
-		btnXoa = new JButton("Xóa");
-		btnXoa.setFocusable(false);
-		btnXoa.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnXoa.setBackground(new Color(144, 238, 144));
-		btnXoa.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconXoa1.png")));
-		btnXoa.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnXoa.setBounds(142, 486, 100, 33);
-		pnlChiTietDatDichVu.add(btnXoa);
+		btnXoaDichVu = new JButton("Xóa dịch vụ");
+		btnXoaDichVu.setFocusable(false);
+		btnXoaDichVu.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnXoaDichVu.setBackground(new Color(144, 238, 144));
+		btnXoaDichVu.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/iconXoa1.png")));
+		btnXoaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnXoaDichVu.setBounds(111, 486, 131, 33);
+		pnlChiTietDatDichVu.add(btnXoaDichVu);
 
 		btnChinhSua = new JButton("Chỉnh sửa");
 		btnChinhSua.setFocusable(false);
@@ -334,6 +340,16 @@ public class ManHinhDatDichVu extends JPanel {
 		btnDat.setIcon(new ImageIcon(ManHinhDatDichVu.class.getResource("/images/icons8-tick-40.png")));
 		btnDat.setBounds(284, 536, 140, 33);
 		pnlChiTietDatDichVu.add(btnDat);
+		
+		lblChonHoaDon = new JLabel("Chọn phòng:");
+		lblChonHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblChonHoaDon.setBounds(265, 125, 93, 25);
+		pnlChiTietDatDichVu.add(lblChonHoaDon);
+		
+		cmbmodelChonPhong = new DefaultComboBoxModel<>();
+		cmbChonPhong = new JComboBox<String>(cmbmodelChonPhong);
+		cmbChonPhong.setBounds(368, 124, 117, 27);
+		pnlChiTietDatDichVu.add(cmbChonPhong);
 
 		controller = new ManHinhDatDichVuController(this);
 		btnLocTheoDoUong.addActionListener(controller);
@@ -341,7 +357,7 @@ public class ManHinhDatDichVu extends JPanel {
 		btnLocTheoTiec.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
 		btnThem.addActionListener(controller);
-		btnXoa.addActionListener(controller);
+		btnXoaDichVu.addActionListener(controller);
 		btnHuy.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		btnDat.addActionListener(controller);
