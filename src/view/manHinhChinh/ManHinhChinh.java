@@ -16,6 +16,7 @@ import javax.swing.border.BevelBorder;
 import controller.ManHinhChinhController;
 import entity.NhanVienEntity;
 import view.datPhong.ManHinhDatPhong;
+import view.caTruc.ManHinhCaTruc;
 import view.datDichVu.ManHinhDatDichVu;
 import view.dichVu.ManHinhDichVu;
 import view.hoaDon.ManHinhHoaDon;
@@ -66,6 +67,7 @@ public class ManHinhChinh extends JFrame {
 	public JMenuItem mniDatDichVu;
 	public JMenuItem mniLapHoaDon;
 	public JMenuItem mniThongKe;
+	public JMenuItem mniCaTruc;
 	public JButton btnNguoiDung;
 	private JLabel lblTenNhanVien;
 	private JLabel lblChucVu;
@@ -78,8 +80,7 @@ public class ManHinhChinh extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ManHinhChinh.class.getResource("/images/iconLogo1.png")));
 		setTitle("Quản lý hệ thống karaoke NNice");
 		setBackground(new Color(255, 51, 51));
-		setResizable(false);
-		setSize(1100, 685);
+		setSize(1370, 770);
 		setLocationRelativeTo(null);
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -101,13 +102,13 @@ public class ManHinhChinh extends JFrame {
 		JPanel panel_mucLuc = new JPanel();
 		panel_mucLuc.setBackground(SystemColor.window);
 		panel_mucLuc.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		panel_mucLuc.setBounds(0, 0, 1084, 52);
+		panel_mucLuc.setBounds(0, 0, 1354, 52);
 		contentPane.add(panel_mucLuc);
 		panel_mucLuc.setLayout(null);
 
 		mnuMucLuc = new JMenuBar();
 		mnuMucLuc.setBackground(SystemColor.inactiveCaption);
-		mnuMucLuc.setBounds(0, 0, 901, 52);
+		mnuMucLuc.setBounds(0, 0, 1048, 52);
 		panel_mucLuc.add(mnuMucLuc);
 
 		mniTrangChu = new JMenuItem("Trang chủ");
@@ -151,6 +152,12 @@ public class ManHinhChinh extends JFrame {
 		mniKhachHang.setForeground(SystemColor.textText);
 		mniKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		mnDanhMuc.add(mniKhachHang);
+		
+		mniCaTruc = new JMenuItem("Ca trực");
+		mniCaTruc.setForeground(SystemColor.textText);
+		mniCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mniCaTruc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconXemLichTruc.png")));
+		mnDanhMuc.add(mniCaTruc);
 
 		mnPhanCongVaCaTruc = new JMenu("Phân công và ca trực");
 		mnPhanCongVaCaTruc.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconPhanCongVaCaTruc.png")));
@@ -213,20 +220,20 @@ public class ManHinhChinh extends JFrame {
 
 		pnlNguoiDung = new JPanel();
 		pnlNguoiDung.setBackground(SystemColor.inactiveCaption);
-		pnlNguoiDung.setBounds(900, 0, 184, 52);
+		pnlNguoiDung.setBounds(1039, 0, 315, 52);
 		panel_mucLuc.add(pnlNguoiDung);
 		pnlNguoiDung.setLayout(null);
 
 		lblTenNhanVien = new JLabel(nhanVienEntity.getHoTen());
 		lblTenNhanVien.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTenNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblTenNhanVien.setBounds(0, 5, 141, 22);
+		lblTenNhanVien.setBounds(0, 5, 263, 22);
 		pnlNguoiDung.add(lblTenNhanVien);
 
 		lblChucVu = new JLabel(nhanVienEntity.getQuyen());
 		lblChucVu.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblChucVu.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		lblChucVu.setBounds(74, 28, 67, 16);
+		lblChucVu.setBounds(74, 28, 189, 16);
 		pnlNguoiDung.add(lblChucVu);
 
 		btnNguoiDung = new JButton("");
@@ -234,17 +241,17 @@ public class ManHinhChinh extends JFrame {
 		btnNguoiDung.setAutoscrolls(true);
 		btnNguoiDung.setBackground(SystemColor.inactiveCaption);
 		btnNguoiDung.setBorder(null);
-		btnNguoiDung.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNguoiDung.png")));
-		btnNguoiDung.setBounds(147, 11, 32, 33);
+		btnNguoiDung.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/iconNguoiDung1.png")));
+		btnNguoiDung.setBounds(273, 11, 32, 33);
 		pnlNguoiDung.add(btnNguoiDung);
 
 		pnlChinh = new JPanel();
-		pnlChinh.setBounds(0, 52, 1084, 602);
+		pnlChinh.setBounds(0, 52, 1354, 679);
 		contentPane.add(pnlChinh);
 		pnlChinh.setLayout(null);
 
 		pnlBannner = new JPanel();
-		pnlBannner.setBounds(0, 0, 1084, 602);
+		pnlBannner.setBounds(0, 0, 1354, 679);
 		pnlChinh.add(pnlBannner);
 		pnlBannner.setLayout(null);
 
@@ -261,9 +268,9 @@ public class ManHinhChinh extends JFrame {
 		pnlBannner.add(lblSlogan2);
 
 		JLabel lblBanner = new JLabel("");
-		lblBanner.setBounds(0, 5, 1084, 724);
+		lblBanner.setBounds(0, 0, 1354, 679);
 		pnlBannner.add(lblBanner);
-		lblBanner.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/Banner.jpg")));
+		lblBanner.setIcon(new ImageIcon(ManHinhChinh.class.getResource("/images/Banner2.jpg")));
 
 		ManHinhChinhController controller = new ManHinhChinhController(this);
 		mniTrangChu.addActionListener(controller);
@@ -279,7 +286,7 @@ public class ManHinhChinh extends JFrame {
 		mniLapHoaDon.addActionListener(controller);
 		mniDatDichVu.addActionListener(controller);
 		mniDatPhong.addActionListener(controller);
-
+		mniCaTruc.addActionListener(controller);
 		kiemTraQuyen();
 	}
 
@@ -387,6 +394,10 @@ public class ManHinhChinh extends JFrame {
 	}
 
 	public void chonBtnNguoiDung() {
-		this.thayDoiPanelChinh(new ManHinhTaiKhoanNguoiDung(), new JMenuItem());
+		this.thayDoiPanelChinh(new ManHinhTaiKhoanNguoiDung(nhanVienEntity), new JMenuItem());
+	}
+	
+	public void chonChucNangCaTruc() {
+		this.thayDoiPanelChinh(new ManHinhCaTruc(), mniCaTruc);
 	}
 }

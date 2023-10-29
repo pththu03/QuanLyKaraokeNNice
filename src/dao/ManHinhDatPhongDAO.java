@@ -124,67 +124,72 @@ public class ManHinhDatPhongDAO {
 	}
 
 	public HoaDonEntity themHoaDon(HoaDonEntity hoaDonEntity) {
-		HoaDonEntity hoaDonEntity1 = null;
 		Connection connect = ConnectDB.getConnect();
-		PreparedStatement statement = null;
+		PreparedStatement preStatement = null;
+		Statement statement = null;
 		ResultSet result = null;
 
 		if (connect != null) {
 			try {
-				String query = "INSERT INTO HoaDon (MaNV, MaKH, TrangThai)\r\n" + "VALUES (?, ?, ?)";
-				statement = connect.prepareStatement(query, new String[]{"MaHD"});
-				statement.setString(1, hoaDonEntity.getMaNV());
-				statement.setString(2, hoaDonEntity.getMaKH());
+				String queryInsert = "INSERT INTO HoaDon (MaNV, MaKH, TrangThai)" + "VALUES (?, ?, ?)";
+				preStatement = connect.prepareStatement(queryInsert);
+				preStatement.setString(1, hoaDonEntity.getMaNV());
+				preStatement.setString(2, hoaDonEntity.getMaKH());
 				String trangThai = "Chưa thanh toán";
-				statement.setString(3, trangThai);
+				preStatement.setString(3, trangThai);
+				preStatement.executeUpdate();
 
-				statement.executeUpdate();
-				result = statement.getGeneratedKeys();
+				String querySelect = "SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC";
+				statement = connect.createStatement();
+				result = statement.executeQuery(querySelect);
 				while (result.next()) {
-					hoaDonEntity1 = new HoaDonEntity(result.getString(1), hoaDonEntity.getMaNV(),
-							hoaDonEntity.getMaKH(), null, null, false);
+					hoaDonEntity.setMaHD(result.getString(1));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
-				ConnectDB.closePreStatement(statement);
+				ConnectDB.closePreStatement(preStatement);
+				ConnectDB.closeStatement(statement);
 				ConnectDB.closeResultSet(result);
 			}
 		}
 
-		return hoaDonEntity1;
+		return hoaDonEntity;
 	}
 
 	public ChiTietHoaDonEntity themChiTietHoaDon(ChiTietHoaDonEntity chiTietHoaDonEntity) {
-		ChiTietHoaDonEntity chiTietHoaDonEntity1 = null;
 		Connection connect = ConnectDB.getConnect();
-		PreparedStatement statement = null;
+		PreparedStatement preStatement = null;
+		Statement statement = null;
 		ResultSet result = null;
 
 		if (connect != null) {
 			try {
-				String query = "INSERT INTO ChiTietHoaDon (MaHD)\r\n" + "VALUES (?)";
-				statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-				statement.setString(1, chiTietHoaDonEntity.getMaHD());
+				String queryInsert = "INSERT INTO ChiTietHoaDon (MaHD)" + "VALUES (?)";
+				preStatement = connect.prepareStatement(queryInsert);
+				preStatement.setString(1, chiTietHoaDonEntity.getMaHD());
+				preStatement.executeUpdate();
 
-				statement.executeUpdate();
-				result = statement.getGeneratedKeys();
+				String querySelect = "SELECT TOP 1 MaCTHD FROM ChiTietHoaDon ORDER BY MaCTHD DESC";
+				statement = connect.createStatement();
+				result = statement.executeQuery(querySelect);
 				while (result.next()) {
-					chiTietHoaDonEntity1 = new ChiTietHoaDonEntity(result.getString(1), chiTietHoaDonEntity.getMaHD());
+					chiTietHoaDonEntity.setMaCTHD(result.getString(1));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
-				ConnectDB.closePreStatement(statement);
+				ConnectDB.closePreStatement(preStatement);
+				ConnectDB.closeStatement(statement);
 				ConnectDB.closeResultSet(result);
 			}
 		}
 
-		return chiTietHoaDonEntity1;
+		return chiTietHoaDonEntity;
 	}
 
 	public ChiTietDatPhongEntity themChiTietDatPhong(ChiTietDatPhongEntity chiTietDatPhongEntity) {
@@ -219,5 +224,26 @@ public class ManHinhDatPhongDAO {
 		}
 
 		return chiTietDatPhongEntity1;
+	}
+
+	public int capNhatTrangThaiPhong(String maPhong, String trangThai) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "UPDATE Phong SET TrangThai = ? WHERE MaPhong LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, trangThai);
+				statement.setString(2, maPhong);
+				return statement.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return 0;
 	}
 }

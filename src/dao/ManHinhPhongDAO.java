@@ -133,8 +133,9 @@ public class ManHinhPhongDAO {
 			try {
 				String query = "DELETE FROM Phong\r\n" + "WHERE MaPhong = ?";
 				statement = connect.prepareStatement(query);
-				statement.setString(1, phongEntity.getMaPhong());
-				return statement.executeUpdate();
+				statement.setString(1, maPhong);
+				statement.executeUpdate();
+				return 1;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
@@ -254,6 +255,48 @@ public class ManHinhPhongDAO {
 					query.append(String.format(" WHERE TrangThai LIKE N'%%%s%%' AND SucChua = %d", trangThai, sucChua));
 				}
 
+				statement = connect.createStatement();
+				result = statement.executeQuery(query.toString());
+				while (result.next()) {
+					String maPh = result.getString(1);
+					int soPhong = result.getInt(2);
+					String loaiPh = result.getString(3);
+					String trangThaiPh = result.getString(4);
+					int sucChuaPh = result.getInt(5);
+					PhongEntity phongEntity = new PhongEntity(maPh, soPhong, loaiPh, trangThaiPh, sucChuaPh);
+					list.add(phongEntity);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closeStatement(statement);
+			}
+		}
+
+		return list;
+	}
+
+	public List<PhongEntity> timKiemCuaKH(String loaiPhong, int sucChua) {
+		List<PhongEntity> list = new ArrayList<PhongEntity>();
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				StringBuilder query = new StringBuilder("SELECT * FROM Phong");
+				if(!loaiPhong.equals("") && sucChua >= 0) {
+					// loaiPhong + sucChua
+					query.append(String.format(" WHERE LoaiPhong LIKE N'%%%s%%' AND SucChua = %d", loaiPhong, sucChua));
+				} else if (!loaiPhong.equals("") && sucChua == -1) {
+					// loaiPhong
+					query.append(String.format(" WHERE LoaiPhong LIKE N'%%%s%%'", loaiPhong));
+				} else if (loaiPhong.equals("") && sucChua >= 0) {
+					// sucChua
+					query.append(String.format(" WHERE SucChua = '%d'", sucChua));
+				}
 				statement = connect.createStatement();
 				result = statement.executeQuery(query.toString());
 				while (result.next()) {

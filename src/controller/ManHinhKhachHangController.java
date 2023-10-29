@@ -19,12 +19,14 @@ public class ManHinhKhachHangController implements ActionListener,MouseListener{
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o.equals(manHinhKhachHang.btnThem)){
-			manHinhKhachHang.chonChucNangThem();;
+			manHinhKhachHang.chonChucNangThem();
 		} else if(o.equals(manHinhKhachHang.btnChinhSua)) {
-			manHinhKhachHang.chonChucNangChinhSua();;
+			manHinhKhachHang.chonChucNangChinhSua();
 		} else if(o.equals(manHinhKhachHang.btnTimKiem)) {
 			manHinhKhachHang.chonChucNangTimKiem();
-		} 
+		} else if(o.equals(manHinhKhachHang.btnLamMoi)) {
+			manHinhKhachHang.chonChucNangLamMoi();
+		}
 	}
 	
 	@Override

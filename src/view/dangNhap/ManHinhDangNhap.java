@@ -33,6 +33,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.JPasswordField;
 import java.awt.event.KeyEvent;
+import javax.swing.SwingConstants;
 
 public class ManHinhDangNhap extends JFrame {
 
@@ -79,7 +80,7 @@ public class ManHinhDangNhap extends JFrame {
 		setTitle("Đăng Nhập");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ManHinhDangNhap.class.getResource("/images/iconLogo1.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 100, 542, 537);
+		setBounds(300, 100, 544, 376);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 204, 255));
 		contentPane.setForeground(new Color(70, 130, 180));
@@ -88,9 +89,10 @@ public class ManHinhDangNhap extends JFrame {
 		contentPane.setLayout(null);
 
 		lblDangNhap = new JLabel("Đăng Nhập ");
+		lblDangNhap.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDangNhap.setForeground(SystemColor.desktop);
-		lblDangNhap.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 43));
-		lblDangNhap.setBounds(132, 85, 252, 65);
+		lblDangNhap.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 36));
+		lblDangNhap.setBounds(132, 24, 252, 65);
 		contentPane.add(lblDangNhap);
 
 		txtSoDienThoai = new JTextField();
@@ -98,7 +100,7 @@ public class ManHinhDangNhap extends JFrame {
 		txtSoDienThoai.setBorder(null);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSoDienThoai.setForeground(Color.BLACK);
-		txtSoDienThoai.setBounds(58, 229, 419, 34);
+		txtSoDienThoai.setBounds(166, 100, 310, 34);
 		contentPane.add(txtSoDienThoai);
 		txtSoDienThoai.setColumns(10);
 
@@ -106,11 +108,11 @@ public class ManHinhDangNhap extends JFrame {
 		btnDangNhap.setMnemonic(KeyEvent.VK_ALT_GRAPH);
 		btnDangNhap.setFocusable(false);
 		btnDangNhap.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnDangNhap.setIcon(new ImageIcon("E:\\QuanLyKaraokeN\\src\\images\\iconDangNhap.png"));
+		btnDangNhap.setIcon(new ImageIcon(ManHinhDangNhap.class.getResource("/images/iconDangNhap.png")));
 		btnDangNhap.setBackground(new Color(144, 238, 144));
 		btnDangNhap.setForeground(new Color(0, 0, 0));
 		btnDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDangNhap.setBounds(58, 370, 181, 34);
+		btnDangNhap.setBounds(57, 219, 181, 34);
 		contentPane.add(btnDangNhap);
 
 		btnThoat = new JButton("Thoát\r\n");
@@ -119,7 +121,7 @@ public class ManHinhDangNhap extends JFrame {
 		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnThoat.setBackground(new Color(144, 238, 144));
 		btnThoat.setIcon(new ImageIcon(ManHinhDangNhap.class.getResource("/images/iconDangXuat.png")));
-		btnThoat.setBounds(296, 370, 181, 34);
+		btnThoat.setBounds(295, 219, 181, 34);
 		contentPane.add(btnThoat);
 
 		btnDanhChoKhachHang = new JButton("Dành cho Khách Hàng");
@@ -128,21 +130,21 @@ public class ManHinhDangNhap extends JFrame {
 		btnDanhChoKhachHang.setIcon(new ImageIcon("C:\\Users\\DELL\\Downloads\\icons8-account-27.png"));
 		btnDanhChoKhachHang.setBackground(new Color(144, 238, 144));
 		btnDanhChoKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDanhChoKhachHang.setBounds(182, 431, 181, 27);
+		btnDanhChoKhachHang.setBounds(181, 280, 181, 27);
 		contentPane.add(btnDanhChoKhachHang);
 
 		lblSĐT = new JLabel("Số điện thoại:\r\n");
 		lblSĐT.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblSĐT.setBounds(58, 197, 107, 21);
+		lblSĐT.setBounds(57, 100, 107, 34);
 		contentPane.add(lblSĐT);
 
 		lblMatKhau = new JLabel("Mật Khẩu:");
 		lblMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblMatKhau.setBounds(58, 274, 87, 21);
+		lblMatKhau.setBounds(57, 159, 87, 34);
 		contentPane.add(lblMatKhau);
 
 		pwd = new JPasswordField();
-		pwd.setBounds(58, 306, 419, 34);
+		pwd.setBounds(166, 159, 310, 34);
 		contentPane.add(pwd);
 
 		controller = new ManHinhDangNhapController(this);

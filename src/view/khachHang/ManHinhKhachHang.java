@@ -1,6 +1,7 @@
 package view.khachHang;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.border.CompoundBorder;
@@ -71,7 +72,7 @@ public class ManHinhKhachHang extends JPanel {
 		
 		// JScrollPane
 		private JScrollPane scrKhachHang;
-		private DefaultTableModel modeltableKhachHang;
+		private DefaultTableModel cmbmodeltableKhachHang;
 		private ManHinhKhachHangController controller;
 		private ManHinhKhachHangDAO manHinhKhachHangDAO = new ManHinhKhachHangDAO();
 		private List<KhachHangEntity> list;
@@ -101,8 +102,8 @@ public class ManHinhKhachHang extends JPanel {
 		
 		String[] cols_KhachHang = { "STT", "Mã Khách Hàng", "Tên khách hàng", "Số điện thoại", "Email",
 		"Năm Sinh", "Số Lượng Đặt Phòng" };
-		modeltableKhachHang = new DefaultTableModel(cols_KhachHang, 0);
-		tblKhachHang = new JTable(modeltableKhachHang);
+		cmbmodeltableKhachHang = new DefaultTableModel(cols_KhachHang, 0);
+		tblKhachHang = new JTable(cmbmodeltableKhachHang);
 		scrKhachHang = new JScrollPane(tblKhachHang);
 		scrKhachHang.setBounds(10, 11, 1064, 326);
 		pnlChucNang.add(scrKhachHang);
@@ -282,12 +283,12 @@ public class ManHinhKhachHang extends JPanel {
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setBounds(211, 189, 129, 33);
 		panel.add(btnLamMoi);
+		
+		controller = new ManHinhKhachHangController(this);
 		btnThem.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
-		
-		controller = new ManHinhKhachHangController(this);
-		
+		btnLamMoi.addActionListener(controller);
 		tblKhachHang.addMouseListener(controller);
 		loadData();
 		
@@ -296,13 +297,13 @@ public class ManHinhKhachHang extends JPanel {
 	private void loadData() {
 		tblKhachHang.removeAll();
 		tblKhachHang.setRowSelectionAllowed(false);
-		modeltableKhachHang.setRowCount(0);
+		cmbmodeltableKhachHang.setRowCount(0);
 		list = new ArrayList<>();
 		list = manHinhKhachHangDAO.duyetDanhSach();
 		int stt = 1;
 		for (KhachHangEntity khachHangEntity : list) {
-			modeltableKhachHang.addRow(new Object[] {stt++,khachHangEntity.getMaKH() ,khachHangEntity.getHoTen(), khachHangEntity.getNamSinh(),
-					khachHangEntity.getEmail(), khachHangEntity.getSdt(), khachHangEntity.getSlDatPhong()});
+		cmbmodeltableKhachHang.addRow(new Object[] {stt++,khachHangEntity.getMaKH() ,khachHangEntity.getHoTen(),khachHangEntity.getSdt(), 
+		khachHangEntity.getEmail(),khachHangEntity.getNamSinh(),  khachHangEntity.getSlDatPhong()});
 		}
 	
 	}
@@ -321,25 +322,308 @@ public class ManHinhKhachHang extends JPanel {
 		}
 	}
 	
+	public void chonChucNangLamMoi() {
+		txtEmail.setText("");
+		txtMaKH.setText("");
+		txtMaKhachHang.setText("");
+		txtNamSinh.setText("");
+		txtSDT.setText("");
+		txtSLDatPhong.setText("");
+		txtSLDen.setText("");
+		txtSLTu.setText("");
+		txtSoDienThoai.setText("");
+		txtTenKH.setText("");
+		txtTenKhachHang.setText("");
+		tblKhachHang.setRowSelectionAllowed(false);
+		loadData();
+	}
+	
 	public void chonChucNangThem() {
+		if(kiemTraDuLieuThem()) {
 		String maKH = txtMaKH.getText();
 		String hoTen = txtTenKH.getText();
 		String sdt = txtSDT.getText();
 		String email = txtEmail.getText();
 		int namSinh = Integer.parseInt(txtNamSinh.getText());
-		//KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, namSinh);
-		//khachHangEntity = manHinhKhachHangDAO.themKhachHang(khachHangEntity);
+		int sLDatPhong = Integer.parseInt(txtSLDatPhong.getText());
+		KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, sLDatPhong);
+		khachHangEntity = manHinhKhachHangDAO.themKhachHang(khachHangEntity);
 		loadData();
 	}
+}
 	
-	public void chonChucNangChinhSua() {
-		
-	}
 	public void chonChucNangTimKiem() {
 		
+		String maKhachHang = txtMaKhachHang.getText().trim();
+		String tenKH = txtTenKhachHang.getText().trim();
+		String sdt = txtSoDienThoai.getText().trim();
+		int slTu = 0, slDen = -1;
+		if(txtSLTu.getText().trim().length() > 0) {
+			slTu = Integer.parseInt(txtSLTu.getText().trim());
+		}
+		if(txtSLDen.getText().trim().length() > 0) {
+			slDen = Integer.parseInt(txtSLDen.getText().trim());
+		}
+		list = new ArrayList<>();
+		tblKhachHang.removeAll();
+		cmbmodeltableKhachHang.setRowCount(0);
+		//list = manHinhKhachHangDAO.timKiem(maKhachHang, tenKH, sdt, slTu, slDen);
+		list = manHinhKhachHangDAO.timKiem(maKhachHang, tenKH, sdt, slTu, slDen);
+		int stt = 1;
+		for (KhachHangEntity khachHangEntity : list) {
+			cmbmodeltableKhachHang.addRow(new Object[] {stt++,khachHangEntity.getMaKH() ,khachHangEntity.getHoTen(),khachHangEntity.getSdt(), 
+					khachHangEntity.getEmail(),khachHangEntity.getNamSinh(),  khachHangEntity.getSlDatPhong()});
+			}
+		}
+	
+	public void chonChucNangChinhSua() {
+		if (kiemTraDuLieuChinhSua()) {
+			String maKH = txtMaKH.getText().trim();
+			String hoTen = txtTenKH.getText().trim();
+			String sdt = txtSDT.getText().trim();
+			String email = txtEmail.getText().trim();
+			int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
+			int sLDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
+			
+			KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, sLDatPhong);
+			if(manHinhKhachHangDAO.chinhSua(khachHangEntity) != 0) {
+				JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin Khách Háng thành công");
+				chonChucNangLamMoi();
+				loadData();
+			}
+		}
+		
 	}
-	public void handlerActionClean() {
+	
+	
+	/*
+	 * Kiểm Tra Dư Liệu Nhập Vào
+	 */
+	
+	private boolean kiemTraDuLieuChinhSua() {
+		String tenKH = txtTenKH.getText();
+		String namSinh = txtNamSinh.getText();
+		String sdt = txtSDT.getText();
+		String email = txtEmail.getText();
+		String slDatPhong = txtSLDatPhong.getText();
+		list = new ArrayList<>();
+		list = manHinhKhachHangDAO.duyetDanhSach();
+		int row = tblKhachHang.getSelectedRow();
+		/**
+		 * Tên Khách Hàng Không được để trống 
+		 */
+		
+		if(!(tenKH.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được để trống","Thông báo"
+			, JOptionPane.INFORMATION_MESSAGE);
+			txtTenKH.requestFocus();
+			return false;
+		}
+		
+		/**
+		 *  Năm Sinh 
+		 */
+		
+		if(namSinh.length() > 0) {
+			try {
+				int nam = Integer.parseInt(namSinh);
+				int tuoi = 2023 - nam;
+				if(!(tuoi >= 18)){
+					JOptionPane.showMessageDialog(this, "Khách hàng phải đủ 18 tuổi trở lên","Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm Sinh nhập vào phải là số nguyên", "Thông báo", 
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
 
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm Sinh không được để trống","Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+		
+		/**
+		 * sdt phải ký tự là số, sdt của mỗi người duy nhất nên không được trùng
+		 */
+		
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		
+		/**
+		 * email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
+		 */
+		
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
+			}
+		}
+		
+		/**
+		 * slDatPhong > 0
+		 */
+		if (slDatPhong.length() > 0) {
+			try {
+				Double sl  = Double.parseDouble(slDatPhong);
+				if (!(sl >= 0 )) {
+					JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng phải lớn hơn 0", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtSLDatPhong.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSLDatPhong.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSLDatPhong.requestFocus();
+			return false;
+		}
+			return false;
+		
+	}
+	
+	private boolean kiemTraDuLieuThem() {
+		String tenKH = txtTenKH.getText();
+		String namSinh = txtNamSinh.getText();
+		String sdt = txtSDT.getText();
+		String email = txtEmail.getText();
+		String slDatPhong = txtSLDatPhong.getText();
+		list = new ArrayList<>();
+		list = manHinhKhachHangDAO.duyetDanhSach();
+		
+		/**
+		 * Tên Khách Hàng Không được để trống 
+		 */
+		
+		if(!(tenKH.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được để trống","Thông báo"
+			, JOptionPane.INFORMATION_MESSAGE);
+			txtTenKH.requestFocus();
+			return false;
+		}
+		
+		/**
+		 *  Năm Sinh 
+		 */
+		
+		if(namSinh.length() > 0) {
+			try {
+				int nam = Integer.parseInt(namSinh);
+				int tuoi = 2023 - nam;
+				if(!(tuoi >= 18)){
+					JOptionPane.showMessageDialog(this, "Khách hàng phải đủ 18 tuổi trở lên","Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm Sinh nhập vào phải là số nguyên", "Thông báo", 
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm Sinh không được để trống","Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+		
+		/**
+		 * sdt phải đủ 12 ký tự là số, sdt của mỗi người duy nhất nên không được trùng
+		 */
+		
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		
+		/**
+		 * email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
+		 */
+		
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
+			}
+		}
+		
+		/**
+		 * slDatPhong > 0
+		 */
+		if (slDatPhong.length() > 0) {
+			try {
+				Double sl  = Double.parseDouble(slDatPhong);
+				if (!(sl >= 0 )) {
+					JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng phải lớn hơn 0", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtSLDatPhong.requestFocus();
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSLDatPhong.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSLDatPhong.requestFocus();
+			return false;
+		}
+			return false;
+		
 	}
 	
 	

@@ -10,6 +10,7 @@ import java.util.List;
 
 import entity.NhanVienEntity;
 import util.ConnectDB;
+import util.PasswordHasher;
 
 public class ManHinhNhanVienDAO {
 
@@ -114,50 +115,67 @@ public class ManHinhNhanVienDAO {
 					query.append(String.format(
 							" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%s%%'",
 							maNhanVien, hoTen, namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0 && chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (!maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + HoTen + NamSinh
 					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND NamSinh = %d",
 							maNhanVien, hoTen, namSinh));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0) && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + HoTen + ChucVu
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND Quyen LIKE N'%%%s%%'",
-							maNhanVien, hoTen, chucVu));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0 && !chucVu.equalsIgnoreCase("Tất cả")) {
+					query.append(
+							String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND Quyen LIKE N'%%%s%%'",
+									maNhanVien, hoTen, chucVu));
+				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + NamSinh + ChucVu
 					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%%s%%'",
 							maNhanVien, namSinh, chucVu));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0 && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// HoTen + NamSinh + ChucVu
-					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%s%%'", hoTen,
-							namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0) && chucVu.equalsIgnoreCase("Tất cả")) {
+					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%s%%'",
+							hoTen, namSinh, chucVu));
+				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + Hoten
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%'", maNhanVien, hoTen));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0 && chucVu.equalsIgnoreCase("Tất cả")) {
+					query.append(
+							String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%'", maNhanVien, hoTen));
+				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + NamSinh
 					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND NamSinh = %d", maNhanVien, namSinh));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0) && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV + ChucVu
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND Quyen LIKE N'%%%s%%'", maNhanVien, chucVu));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0 && chucVu.equalsIgnoreCase("Tất cả")) {
+					query.append(
+							String.format(" WHERE MaNV LIKE '%%%s%%' AND Quyen LIKE N'%%%s%%'", maNhanVien, chucVu));
+				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// HoTen + NamSinh
 					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND NamSinh = %d", hoTen, namSinh));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0) && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// HoTen + ChucVu
 					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND Quyen LIKE N'%%%s%%'", hoTen, chucVu));
-				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0 && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// NamSinh + ChucVu
 					query.append(String.format(" WHERE NamSinh = %d AND Quyen LIKE N'%%%s%%'", namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0) && chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// MaNV
 					query.append(String.format(" WHERE MaNV LIKE '%%%s%%'", maNhanVien));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0) && chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// Hoten
 					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%'", hoTen));
-				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0 && chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
+						&& chucVu.equalsIgnoreCase("Tất cả")) {
 					// NamSinh
 					query.append(String.format(" WHERE NamSinh = %d ", namSinh));
-				} else if(maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0) && !chucVu.equalsIgnoreCase("Tất cả")) {
+				} else if (maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
+						&& !chucVu.equalsIgnoreCase("Tất cả")) {
 					// ChucVu
 					query.append(String.format(" WHERE Quyen LIKE N'%%%s%%'", chucVu));
 				}
@@ -275,5 +293,28 @@ public class ManHinhNhanVienDAO {
 		}
 
 		return 0;
+	}
+
+	public boolean capNhatMatKhau(String mkMoi, String sdt) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		int n = -1;
+		String query = "UPDATE NhanVien\r\n" + "SET Password = ?\r\n" + "WHERE SDT = ?";
+		if (connect != null) {
+			try {
+				statement = connect.prepareStatement(query);
+				mkMoi = PasswordHasher.hashPassword(mkMoi);
+				statement.setString(1, mkMoi);
+				statement.setString(2, sdt);
+				n = statement.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+
+			}
+			ConnectDB.closeConnect(connect);
+			ConnectDB.closePreStatement(statement);
+		}
+		return n > 0;
 	}
 }

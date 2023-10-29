@@ -23,38 +23,36 @@ public class ManHinhPhanCongController implements ActionListener, MouseListener 
 			manHinhPhanCong.chonChucNangLamMoi();
 		} else if (o.equals(manHinhPhanCong.btnXoa)) {
 			manHinhPhanCong.chonChucNangXoa();
-		} else {
-			manHinhPhanCong.chonChucNangTimKiem();
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		manHinhPhanCong.hienThiThongTin();
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

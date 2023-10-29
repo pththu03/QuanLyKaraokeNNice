@@ -713,6 +713,9 @@ SELECT *FROM KhachHang
 SELECT *FROM NhanVien
 
 GO
+select * from NhanVien
 
-SELECT MaNV, HoTen, SDT, Email, CCCD, Password, NamSinh, MucLuong, Quyen, TrangThai 
-FROM NhanVien WHERE MaNV like 'NV001'
+
+UPDATE NhanVien
+SET HoTen = N'ABC', SDT = '0987654321', Email = 'tram@gmail.com', NamSinh = 2000, MucLuong = 30000, Quyen = N'Tiếp tân', TrangThai = N'Đã nghỉ'
+Where MaNV = 'NV009'

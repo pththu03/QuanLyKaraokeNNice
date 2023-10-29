@@ -22,10 +22,13 @@ import javax.swing.JTextField;
 
 import controller.ManHinhHoaDonController;
 import dao.ManHinhHoaDonDAO;
+import dao.ManHinhKhachHangDAO;
 import dao.ManHinhNhanVienDAO;
 import entity.HoaDonEntity;
+import entity.KhachHangEntity;
 import entity.NhanVienEntity;
 import util.DateFormatter;
+import util.MoneyFormatter;
 import util.TimeFormatter;
 
 import javax.swing.JComboBox;
@@ -48,7 +51,7 @@ public class ManHinhHoaDon extends JPanel {
 	private JTextField txtTenNV;
 	private JTextField txtTenKH;
 	private JTextField txtTongTien;
-	private JTextField txtTimKiemBangMaNV;
+	private JTextField txtTimKiemBangTenNV;
 	private JTextField txtTimKiemBangTenKH;
 	private JTextField txtTimKiemBangTongTien;
 	private JTextField txtTimKiemBangNgayLapHD;
@@ -64,7 +67,7 @@ public class ManHinhHoaDon extends JPanel {
 	private JLabel lblTrangThai;
 	private JLabel lblTongTien;
 	private JLabel lblTimKiem;
-	private JLabel lblTimKiemBangMaNV;
+	private JLabel lblTimKiemBangTenNV;
 	private JLabel lblTimKiemBangTenKH;
 	private JLabel lblTimKiemBangTongTien;
 	private JLabel lblTimKiemBangNgayLapHD;
@@ -85,6 +88,7 @@ public class ManHinhHoaDon extends JPanel {
 	private ManHinhHoaDonController controller;
 	private ManHinhHoaDonDAO manHinhHoaDonDAO = new ManHinhHoaDonDAO();
 	private ManHinhNhanVienDAO manHinhNhanVienDAO = new ManHinhNhanVienDAO();
+	private ManHinhKhachHangDAO manHinhKhachHangDAO = new ManHinhKhachHangDAO();
 	private List<HoaDonEntity> list;
 
 	public ManHinhHoaDon() {
@@ -228,16 +232,16 @@ public class ManHinhHoaDon extends JPanel {
 		lblTimKiem.setBounds(50, 10, 150, 35);
 		pnlTimKiem.add(lblTimKiem);
 
-		lblTimKiemBangMaNV = new JLabel("Mã NV:");
-		lblTimKiemBangMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTimKiemBangMaNV.setBounds(50, 49, 100, 30);
-		pnlTimKiem.add(lblTimKiemBangMaNV);
+		lblTimKiemBangTenNV = new JLabel("Nhân viên:");
+		lblTimKiemBangTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblTimKiemBangTenNV.setBounds(50, 49, 100, 30);
+		pnlTimKiem.add(lblTimKiemBangTenNV);
 
-		txtTimKiemBangMaNV = new JTextField();
-		txtTimKiemBangMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTimKiemBangMaNV.setBounds(145, 49, 237, 30);
-		pnlTimKiem.add(txtTimKiemBangMaNV);
-		txtTimKiemBangMaNV.setColumns(10);
+		txtTimKiemBangTenNV = new JTextField();
+		txtTimKiemBangTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtTimKiemBangTenNV.setBounds(145, 49, 237, 30);
+		pnlTimKiem.add(txtTimKiemBangTenNV);
+		txtTimKiemBangTenNV.setColumns(10);
 
 		lblTimKiemBangTenKH = new JLabel("Khách hàng:");
 		lblTimKiemBangTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -332,6 +336,7 @@ public class ManHinhHoaDon extends JPanel {
 		list = new ArrayList<HoaDonEntity>();
 		list = manHinhHoaDonDAO.duyetDanhSach();
 		NhanVienEntity nhanVienEntity = null;
+		KhachHangEntity khachHangEntity = null;
 
 		int stt = 1;
 		for (HoaDonEntity hoaDonEntity : list) {
@@ -340,9 +345,17 @@ public class ManHinhHoaDon extends JPanel {
 				trangThai = "Đã thanh toán";
 			}
 			nhanVienEntity = manHinhNhanVienDAO.timTheoMa(hoaDonEntity.getMaNV());
+			khachHangEntity = manHinhKhachHangDAO.timTheoMa(hoaDonEntity.getMaKH());
+			String ngayLapHD = "NULL";
+			String gioLapHD = "NULL";
+			if (hoaDonEntity.getNgayLapHD() != null) {
+				ngayLapHD = DateFormatter.format(hoaDonEntity.getNgayLapHD());
+			}
+			if (hoaDonEntity.getGioLapHD() != null) {
+				gioLapHD = TimeFormatter.format(hoaDonEntity.getGioLapHD());
+			}
 			tblmodelDsHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHD(), nhanVienEntity.getHoTen(),
-					hoaDonEntity.getMaKH(), DateFormatter.format(hoaDonEntity.getNgayLapHD()),
-					TimeFormatter.format(hoaDonEntity.getGioLapHD()), trangThai });
+					khachHangEntity.getHoTen(), ngayLapHD, gioLapHD, trangThai });
 		}
 	}
 
@@ -351,6 +364,7 @@ public class ManHinhHoaDon extends JPanel {
 		list = manHinhHoaDonDAO.duyetDanhSach();
 		int row = tblDsHoaDon.getSelectedRow();
 		NhanVienEntity nhanVienEntity = null;
+		KhachHangEntity khachHangEntity = null;
 
 		if (row >= 0) {
 			txtMaHD.setText(list.get(row).getMaHD());
@@ -358,6 +372,8 @@ public class ManHinhHoaDon extends JPanel {
 			txtMaNV.setText(list.get(row).getMaNV());
 			nhanVienEntity = manHinhNhanVienDAO.timTheoMa(list.get(row).getMaNV());
 			txtTenNV.setText(nhanVienEntity.getHoTen());
+			khachHangEntity = manHinhKhachHangDAO.timTheoMa(list.get(row).getMaKH());
+			txtTenKH.setText(khachHangEntity.getHoTen());
 			if (list.get(row).isTrangThai()) {
 				cmbTrangThai.setSelectedIndex(1);
 			} else {
@@ -374,12 +390,32 @@ public class ManHinhHoaDon extends JPanel {
 	 */
 	public void chonChucNangTimKiem() {
 		if (kiemTraDuLieuTim()) {
+			String maNV = txtTimKiemBangTenNV.getText().trim();
+			String tenKH = txtTimKiemBangTenKH.getText().trim();
+			String ngayLapHD = txtTimKiemBangNgayLapHD.getText().trim();
+			String tongTien = txtTimKiemBangTongTien.getText().trim();
 
+			NhanVienEntity nhanVienEntity = null;
+			list = new ArrayList<HoaDonEntity>();
+			tblDsHoaDon.removeAll();
+			tblmodelDsHoaDon.setRowCount(0);
+//			list = manHinhHoaDonDAO.
+			int stt = 1;
+			for (HoaDonEntity hoaDonEntity : list) {
+				String trangThai = "Chưa thanh toán";
+				if (hoaDonEntity.isTrangThai()) {
+					trangThai = "Đã thanh toán";
+				}
+				nhanVienEntity = manHinhNhanVienDAO.timTheoMa(maNV);
+				tblmodelDsHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHD(), nhanVienEntity.getHoTen(),
+						hoaDonEntity.getMaKH(), DateFormatter.format(hoaDonEntity.getNgayLapHD()),
+						TimeFormatter.format(hoaDonEntity.getGioLapHD()), trangThai });
+			}
 		}
 	}
 
 	private boolean kiemTraDuLieuTim() {
-		String maNV = txtTimKiemBangMaNV.getText().trim();
+		String maNV = txtTimKiemBangTenNV.getText().trim();
 		String tenKH = txtTimKiemBangTenKH.getText().trim();
 		String ngayLapHD = txtTimKiemBangNgayLapHD.getText().trim();
 		String tongTien = txtTimKiemBangTongTien.getText().trim();
@@ -398,11 +434,7 @@ public class ManHinhHoaDon extends JPanel {
 		}
 
 		if (ngayLapHD.length() > 0) {
-//			LocalDate ngay = LocalDate.parse(ngayLapHD, DateTimeFormatter.ISO_LOCAL_DATE);
-//			if (ngayLapHD == DateFormatter.format(ngay)) {
-//				JOptionPane.showMessageDialog(this, "Nhập không đúng định dạng", "Thông báo",
-//						JOptionPane.INFORMATION_MESSAGE);
-//			}
+			
 		}
 		return true;
 	}
@@ -419,7 +451,7 @@ public class ManHinhHoaDon extends JPanel {
 		txtNgayLapHD.setText("");
 		cmbTrangThai.setSelectedIndex(0);
 		txtTongTien.setText("");
-		txtTimKiemBangMaNV.setText("");
+		txtTimKiemBangTenNV.setText("");
 		txtTimKiemBangNgayLapHD.setText("");
 		txtTimKiemBangTenKH.setText("");
 		txtTimKiemBangTongTien.setText("");

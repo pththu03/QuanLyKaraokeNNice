@@ -21,7 +21,7 @@ public class ManHinhTaiKhoanController implements ActionListener{
 		} else if(o.equals(manHinhTaiKhoan.btnDoiMatKhau)) {
 			manHinhTaiKhoan.chonChucNangDoiMatKhau();
 		} else if(o.equals(manHinhTaiKhoan.btnChinhSua)) {
-			
+			manHinhTaiKhoan.chonChucNangChinhSua();
 		}
 	}
 

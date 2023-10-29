@@ -79,7 +79,7 @@ public class ManHinhDatDichVu extends JPanel {
 	
 	public ManHinhDatDichVu() {
 		setLayout(null);
-		setBounds(0, 0, 1084, 602);
+		setBounds(0, 0, 1354, 679);
 
 		JPanel panel_DatDichVu = new JPanel();
 		panel_DatDichVu.setBounds(0, 0, 1084, 602);

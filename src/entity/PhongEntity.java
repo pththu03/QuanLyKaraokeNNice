@@ -72,7 +72,7 @@ public class PhongEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maPhong);
+		return Objects.hash(maPhong, soPhong);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class PhongEntity {
 		if (obj == null)
 			return false;
 		PhongEntity other = (PhongEntity) obj;
-		return Objects.equals(maPhong, other.maPhong);
+		return Objects.equals(maPhong, other.maPhong) || soPhong == other.soPhong;
 	}
 
 }

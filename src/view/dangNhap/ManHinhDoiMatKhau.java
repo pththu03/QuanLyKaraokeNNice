@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.ManHinhDangNhapController;
 import controller.ManHinhDoiMatKhauController;
 import dao.ManHinhNhanVienDAO;
 import entity.NhanVienEntity;
@@ -46,10 +47,12 @@ public class ManHinhDoiMatKhau extends JDialog {
 	public JButton btnDoiMatKhau;
 	public JButton btnThoat;
 
-	private NhanVienEntity nv;
+	private NhanVienEntity nhanVienEntity = new NhanVienEntity();
 	private ManHinhDoiMatKhauController controller;
+	private ManHinhNhanVienDAO manHinhNhanVienDAO = new ManHinhNhanVienDAO();
 
-	public ManHinhDoiMatKhau() {
+	public ManHinhDoiMatKhau(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(ManHinhDoiMatKhau.class.getResource("/images/iconLogo1.png")));
 		setTitle("Đổi mật khẩu");
@@ -199,16 +202,16 @@ public class ManHinhDoiMatKhau extends JDialog {
 
 	public void chonChucNangDoiMK() {
 		if (trungKhopMK()) {
-			if (JOptionPane.showConfirmDialog(this, "Bạn muốn thay đổi mật khẩu?", "Cảnh báo❗",
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				try {
-					String mk = new String(txtMatKhauCu.getPassword());
-					String tk = nv.getSdt();
-				} catch (Exception e) {
-//					Logger.getLogger(ManHinhTaiKhoanNguoiDung.class.getName()).log(Level.SEVERE, "Có lỗi khi đổi mật khẩu", e);
-
-				}
+			String mkMoi = new String(txtMatKhauMoi.getPassword());
+			if (manHinhNhanVienDAO.capNhatMatKhau(mkMoi, nhanVienEntity.getSdt())) {
+				JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				chonChucNangThoat();
+			} else {
+				JOptionPane.showMessageDialog(this, "Đổi mật khẩu không thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
+
 		}
 	}
 
@@ -219,24 +222,19 @@ public class ManHinhDoiMatKhau extends JDialog {
 	public boolean trungKhopMK() {
 		String mkCu = new String(txtMatKhauCu.getPassword());
 		String mkMoi = new String(txtMatKhauMoi.getPassword());
-		String xemLaiMKMoi = new String(txtMatKhauCu.getPassword());
+		String nhapLaiMKMoi = new String(txtNhapLaiMK.getPassword());
 
-		if (mkCu.isEmpty() || mkMoi.isEmpty() || xemLaiMKMoi.isEmpty()) {
+		if (mkCu.isEmpty() || mkMoi.isEmpty() || nhapLaiMKMoi.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
 			return false;
-		}
-
-		if (mkCu.equals(mkMoi)) {
+		} else if (mkMoi.equals(mkCu) == true) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải khác mật khẩu hiện tại");
 			return false;
-		}
-
-		if (mkMoi.equals(xemLaiMKMoi)) {
+		} else if (nhapLaiMKMoi.equals(mkMoi) == false) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu không giống nhau!");
 			return false;
-		}
-		if (!mkMoi.matches("^[a-z0-9]{8}$")) {
-			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 kí tự!");
+		} else if (!mkMoi.matches("^[a-zA-Z][0-9a-zA-Z]{7}$")) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 kí tự và bắt đầu bằng chữ!");
 			return false;
 		}
 		return true;

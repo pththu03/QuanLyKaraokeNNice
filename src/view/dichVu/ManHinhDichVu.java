@@ -26,8 +26,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.EmptyBorder;
 
 
 public class ManHinhDichVu extends JPanel {
@@ -81,11 +79,9 @@ public class ManHinhDichVu extends JPanel {
 	private List<DichVuEntity> list;
 	private ManHinhDichVuDAO manHinhDichVuDAO = new ManHinhDichVuDAO();
 	
-	
-
 
 	public ManHinhDichVu() {
-		setBounds(0, 0, 1084, 602);
+		setBounds(0, 0, 1354, 679);
 		setLayout(null);
 		
 		pnlbanner = new JPanel();
@@ -127,7 +123,7 @@ public class ManHinhDichVu extends JPanel {
 		lblLoaiDV.setBounds(10, 103, 90, 30);
 		pnlbanner.add(lblLoaiDV);
 		
-		String[] cols_loaiDv = {"","Đồ uống", "Món ăn"};
+		String[] cols_loaiDv = {"","Đồ uống", "Món ăn", "Tiệc"};
 		cmbmodelLoaiDV = new DefaultComboBoxModel<>(cols_loaiDv );
 		cmbLoaiDV = new JComboBox<String>(cmbmodelLoaiDV);
 		cmbLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -252,7 +248,7 @@ public class ManHinhDichVu extends JPanel {
 		pnlTimKiem.add(lblLoaiDVTimKiem);
 		
 		
-		String[] cols_LoaiDVTimKiem = { "Tất cả", "Đồ uống", "Món ăn" };
+		String[] cols_LoaiDVTimKiem = { "Tất cả", "Đồ uống", "Món ăn" , "Tiệc" };
 		cmbmodelLoaiDVTimKiem = new DefaultComboBoxModel<>(cols_LoaiDVTimKiem);
 		cmbLoaiDVTimKiem = new JComboBox<String>(cmbmodelLoaiDVTimKiem);
 		cmbLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -319,7 +315,7 @@ public class ManHinhDichVu extends JPanel {
 		if(row >= 0){
 			txtMaDV.setText(list.get(row).getMaDV());
 			txtTenDV.setText(list.get(row).getTenDV());
-			txtGia.setText(MoneyFormatter.format(list.get(row).getGia()));
+			txtGia.setText(String.valueOf(list.get(row).getGia()));
 			if(list.get(row).getLoaiDV().equalsIgnoreCase("Đồ uống")) {
 				cmbLoaiDV.setSelectedIndex(1);
 			}else {
@@ -346,7 +342,6 @@ public class ManHinhDichVu extends JPanel {
 		String gia = txtGia.getText();
 		list = new ArrayList<>();
 		list = manHinhDichVuDAO.duyetDanhSach();
-		
 		/**
 		 * Tên Dịch Vụ Không được để trống 
 		 */
@@ -357,7 +352,7 @@ public class ManHinhDichVu extends JPanel {
 			return false;
 		}
 		/**
-		 * Loại Dịch Vụ > 0
+		 * Loại Dịch Vụ 
 		 */
 		if(cmbLoaiDV.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(this, "Hãy chọn loại dịch vụ", "Thông báo",
@@ -409,26 +404,101 @@ public class ManHinhDichVu extends JPanel {
 	
 	private boolean kiemTraDuLieuChinhSua() {
 		String tenDV = txtTenDV.getText();
+		String loaiDV = cmbLoaiDVTimKiem.getSelectedItem().toString();
 		String gia = txtGia.getText();
 		list = new ArrayList<>();
 		list = manHinhDichVuDAO.duyetDanhSach();
+		int row = tblQLDV.getSelectedRow();
+		/**
+		 * Tên Dịch Vụ Không được để trống 
+		 */
+		if(!(tenDV.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Tên Dịch Vụ không được để trống!", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE	);
+			txtTenDV.requestFocus();
+			return false;
+		}
+		/**
+		 * Loại Dịch Vụ 
+		 */
+		if(cmbLoaiDV.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(this, "Hãy chọn loại dịch vụ", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			cmbLoaiDV.requestFocus();
+			return false;
+		}
 		
+		/**
+		 * Giá Dịch Vụ > 0
+		 */
 		
-		
-		
-		
+		if(gia.length() > 0) {
+			try {
+				Double Gia = Double.parseDouble(gia);
+				if(!(Gia > 0)) {
+					JOptionPane.showMessageDialog(this, "Giá Dịch Vụ Phải Lớn hơn 0 ", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtGia.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Giá Nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtGia.requestFocus();
+				return false;
+			} 
+		} else {
+			JOptionPane.showMessageDialog(this, "Mức lương không được để trống " ,"Thông báo",
+				JOptionPane.INFORMATION_MESSAGE	);
+			txtGia.requestFocus();
+			return false;
+		}
 		return false;
 		
 	}
-	
-	
-	
-	
+
 	public void chonChucNangXoa() {
-		
+		int row = tblQLDV.getSelectedRow();
+		if (row >= 0) {
+			int option = JOptionPane.showConfirmDialog(null, "Xác Nhận Xóa", "Cảnh Báo", JOptionPane.YES_NO_OPTION);
+			if (option == JOptionPane.YES_OPTION) {
+				String maDV = txtMaDV.getText();
+				if (!maDV.equals("")) {
+					if (manHinhDichVuDAO.xoaDichVu(Integer.parseInt(maDV)) != 0) {
+						JOptionPane.showMessageDialog(null, "Xóa thành công");
+					} else {
+						JOptionPane.showMessageDialog(null, "Xóa không thành công");
+					}
+				}
+				chonChucNangLamMoi();
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn dòng để xóa!");
+		}
 	}
 	
 	public void chonChucNangTim() {
-		
+		String maDichVu = txtMaDVTimKiem.getText().trim();
+		String loaiDV = cmbLoaiDVTimKiem.getSelectedItem().toString().trim();
+		Double giaTu = null;
+		if (!txtGia.getText().trim().equals("")) {
+			giaTu = Double.valueOf(txtGia.getText().trim());
+		}
+
+		Double giaDen = null;
+		if (!txtGiaDen.getText().trim().equals("")) {
+			giaDen = Double.valueOf(txtGiaDen.getText().trim());
+		}
+		list = new ArrayList<>();
+		tblQLDV.removeAll();
+		mdlTableQLDV.setRowCount(0);
+		list = manHinhDichVuDAO.timKiem(maDichVu, loaiDV, giaTu ,giaDen);
+		int stt = 1;
+		for (DichVuEntity dichVuEntity : list) {
+			mdlTableQLDV.addRow(new Object[] {stt++, dichVuEntity.getMaDV(), dichVuEntity.getTenDV(),
+					dichVuEntity.getLoaiDV(),
+					MoneyFormatter.format(dichVuEntity.getGia())});
+		}
 	}
 }
+	

@@ -35,13 +35,12 @@ public class ManHinhHoaDonDAO {
 				String maHD = result.getString(1);
 				String maKH = result.getString(2);
 				String maNV = result.getString(3);
-				LocalDate ngayLapHD = result.getDate(4).toLocalDate();
-				LocalTime gioLapHD = result.getTime(5).toLocalTime();
+				LocalDate ngayLapHD = (LocalDate) result.getObject("NgayLapHD");
+				LocalTime gioLapHD = (LocalTime) result.getObject("GioLapHD");
 				boolean trangThai = false;
 				if (result.getString(6).equalsIgnoreCase("Đã thanh toán")) {
 					trangThai = true;
 				}
-
 				hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, gioLapHD, trangThai);
 
 				list.add(hoaDonEntity);

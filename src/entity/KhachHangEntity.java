@@ -33,16 +33,15 @@ public class KhachHangEntity {
 		this.slDatPhong = slDatPhong;
 	}
 	
-	
 
-	public KhachHangEntity(String hoTen, String sdt, String email, int namSinh) {
-		super();
-		this.hoTen = hoTen;
-		this.sdt = sdt;
-		this.email = email;
-		this.namSinh = namSinh;
-		
-	}
+//	public KhachHangEntity(String hoTen, String sdt, String email, int namSinh) {
+//		super();
+//		this.hoTen = hoTen;
+//		this.sdt = sdt;
+//		this.email = email;
+//		this.namSinh = namSinh;
+//		
+//	}
 
 	public String getMaKH() {
 		return maKH;
@@ -64,7 +63,7 @@ public class KhachHangEntity {
 		return sdt;
 	}
 
-	public void setSdt(String sdt) {
+	public void setSdt(String sdt) throws Exception {
 		this.sdt = sdt;
 	}
 
@@ -94,7 +93,7 @@ public class KhachHangEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maKH);
+		return Objects.hash(maKH,sdt);
 	}
 
 	@Override
@@ -104,7 +103,7 @@ public class KhachHangEntity {
 		if (obj == null)
 			return false;
 		KhachHangEntity other = (KhachHangEntity) obj;
-		return Objects.equals(maKH, other.maKH);
+		return Objects.equals(maKH, other.maKH) || Objects.equals(sdt, other.sdt);
 	}
 
 	@Override
