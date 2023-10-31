@@ -32,16 +32,6 @@ public class KhachHangEntity {
 		this.namSinh = namSinh;
 		this.slDatPhong = slDatPhong;
 	}
-	
-
-//	public KhachHangEntity(String hoTen, String sdt, String email, int namSinh) {
-//		super();
-//		this.hoTen = hoTen;
-//		this.sdt = sdt;
-//		this.email = email;
-//		this.namSinh = namSinh;
-//		
-//	}
 
 	public String getMaKH() {
 		return maKH;
@@ -93,7 +83,7 @@ public class KhachHangEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maKH,sdt);
+		return Objects.hash(maKH, sdt);
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class ChiTietDatPhongEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maCTHD);
+		return Objects.hash(maCTDP);
 	}
 
 	@Override
@@ -82,10 +82,8 @@ public class ChiTietDatPhongEntity {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		ChiTietDatPhongEntity other = (ChiTietDatPhongEntity) obj;
-		return Objects.equals(maCTHD, other.maCTHD);
+		return Objects.equals(maCTDP, other.maCTDP);
 	}
 
 	@Override

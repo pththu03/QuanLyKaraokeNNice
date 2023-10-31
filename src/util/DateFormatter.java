@@ -19,11 +19,12 @@ public class DateFormatter {
 
 		return day + "/" + month + "/" + year;
 	}
-	
+
 	public static String format(Date date) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		String formattedDate = dateFormat.format(date);
 		return formattedDate;
 	}
+
 }
