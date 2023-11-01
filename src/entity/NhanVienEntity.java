@@ -3,47 +3,55 @@ package entity;
 import java.util.Objects;
 
 public class NhanVienEntity {
-	private String maNV;
+	private String maNhanVien;
 	private String hoTen;
-	private String sdt;
+	private String soDienThoai;
 	private String email;
 	private String CCCD;
 	private String password;
 	private int namSinh;
 	private double mucLuong;
-	private String quyen;
+	private String chucVu;
 	private boolean trangThai;
 
 	public NhanVienEntity() {
 	}
 
-	public NhanVienEntity(String maNV, String hoTen, String sdt, String email, String cCCD, String password,
-			int namSinh, double mucLuong, String quyen, boolean trangThai) {
+	public NhanVienEntity(String maNhanVien, String hoTen, String soDienThoai, String email, String cCCD,
+			String password, int namSinh, double mucLuong, String chucVu, boolean trangThai) {
 		super();
-		this.maNV = maNV;
+		this.maNhanVien = maNhanVien;
 		this.hoTen = hoTen;
-		this.sdt = sdt;
+		this.soDienThoai = soDienThoai;
 		this.email = email;
 		CCCD = cCCD;
 		this.password = password;
 		this.namSinh = namSinh;
 		this.mucLuong = mucLuong;
-		this.quyen = quyen;
+		this.chucVu = chucVu;
 		this.trangThai = trangThai;
 	}
 
-	public NhanVienEntity(String hoTen, String sdt, String email, String cCCD, String password, int namSinh,
-			double mucLuong, String quyen, boolean trangThai) {
+	public NhanVienEntity(String hoTen, String soDienThoai, String email, String cCCD, String password, int namSinh,
+			double mucLuong, String chucVu, boolean trangThai) {
 		super();
 		this.hoTen = hoTen;
-		this.sdt = sdt;
+		this.soDienThoai = soDienThoai;
 		this.email = email;
 		CCCD = cCCD;
 		this.password = password;
 		this.namSinh = namSinh;
 		this.mucLuong = mucLuong;
-		this.quyen = quyen;
+		this.chucVu = chucVu;
 		this.trangThai = trangThai;
+	}
+
+	public String getMaNhanVien() {
+		return maNhanVien;
+	}
+
+	public void setMaNhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
 	}
 
 	public String getHoTen() {
@@ -54,12 +62,12 @@ public class NhanVienEntity {
 		this.hoTen = hoTen;
 	}
 
-	public String getSdt() {
-		return sdt;
+	public String getSoDienThoai() {
+		return soDienThoai;
 	}
 
-	public void setSdt(String sdt) throws Exception {
-		this.sdt = sdt;
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
 	}
 
 	public String getEmail() {
@@ -102,12 +110,12 @@ public class NhanVienEntity {
 		this.mucLuong = mucLuong;
 	}
 
-	public String getQuyen() {
-		return quyen;
+	public String getChucVu() {
+		return chucVu;
 	}
 
-	public void setQuyen(String quyen) {
-		this.quyen = quyen;
+	public void setChucVu(String chucVu) {
+		this.chucVu = chucVu;
 	}
 
 	public boolean isTrangThai() {
@@ -118,17 +126,9 @@ public class NhanVienEntity {
 		this.trangThai = trangThai;
 	}
 
-	public String getMaNV() {
-		return maNV;
-	}
-
-	public void setMaNV(String maNV) {
-		this.maNV = maNV;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(CCCD, maNV, sdt);
+		return Objects.hash(CCCD, maNhanVien, soDienThoai);
 	}
 
 	@Override
@@ -138,14 +138,15 @@ public class NhanVienEntity {
 		if (obj == null)
 			return false;
 		NhanVienEntity other = (NhanVienEntity) obj;
-		return Objects.equals(CCCD, other.CCCD) || Objects.equals(maNV, other.maNV) || Objects.equals(sdt, other.sdt);
+		return Objects.equals(CCCD, other.CCCD) || Objects.equals(maNhanVien, other.maNhanVien)
+				|| Objects.equals(soDienThoai, other.soDienThoai);
 	}
 
 	@Override
 	public String toString() {
-		return "NhanVienEntity [maNV=" + maNV + ", hoTen=" + hoTen + ", sdt=" + sdt + ", email=" + email + ", CCCD="
-				+ CCCD + ", password=" + password + ", namSinh=" + namSinh + ", mucLuong=" + mucLuong + ", quyen="
-				+ quyen + ", trangThai=" + trangThai + "]";
+		return "NhanVienEntity [maNhanVien=" + maNhanVien + ", hoTen=" + hoTen + ", soDienThoai=" + soDienThoai
+				+ ", email=" + email + ", CCCD=" + CCCD + ", password=" + password + ", namSinh=" + namSinh
+				+ ", mucLuong=" + mucLuong + ", chucVu=" + chucVu + ", trangThai=" + trangThai + "]";
 	}
 
 }

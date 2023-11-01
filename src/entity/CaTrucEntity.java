@@ -4,61 +4,65 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class CaTrucEntity {
-	private String maCT;
-	private String tenCT;
-	private LocalTime gioBD;
-	private LocalTime gioKT;
+	private String maCaTruc;
+	private String tenCaTruc;
+	private LocalTime gioBatDau;
+	private LocalTime gioKetThuc;
 
 	public CaTrucEntity() {
 		super();
 	}
 
-	public CaTrucEntity(String maCT, String tenCT, LocalTime gioBD, LocalTime gioKT) {
+	public CaTrucEntity(String maCaTruc, String tenCaTruc, LocalTime gioBatDau, LocalTime gioKetThuc) {
 		super();
-		this.maCT = maCT;
-		this.tenCT = tenCT;
-		this.gioBD = gioBD;
-		this.gioKT = gioKT;
+		this.maCaTruc = maCaTruc;
+		this.tenCaTruc = tenCaTruc;
+		this.gioBatDau = gioBatDau;
+		this.gioKetThuc = gioKetThuc;
 	}
 
-	public CaTrucEntity(String tenCT, LocalTime gioBD, LocalTime gioKT) {
+	public CaTrucEntity(String tenCaTruc, LocalTime gioBatDau, LocalTime gioKetThuc) {
 		super();
-		this.tenCT = tenCT;
-		this.gioBD = gioBD;
-		this.gioKT = gioKT;
+		this.tenCaTruc = tenCaTruc;
+		this.gioBatDau = gioBatDau;
+		this.gioKetThuc = gioKetThuc;
 	}
 
-	public String getTenCT() {
-		return tenCT;
+	public String getMaCaTruc() {
+		return maCaTruc;
 	}
 
-	public void setTenCT(String tenCT) {
-		this.tenCT = tenCT;
+	public void setMaCaTruc(String maCaTruc) {
+		this.maCaTruc = maCaTruc;
 	}
 
-	public LocalTime getGioBD() {
-		return gioBD;
+	public String getTenCaTruc() {
+		return tenCaTruc;
 	}
 
-	public void setGioBD(LocalTime gioBD) {
-		this.gioBD = gioBD;
+	public void setTenCaTruc(String tenCaTruc) {
+		this.tenCaTruc = tenCaTruc;
 	}
 
-	public LocalTime getGioKT() {
-		return gioKT;
+	public LocalTime getGioBatDau() {
+		return gioBatDau;
 	}
 
-	public void setGioKT(LocalTime gioKT) {
-		this.gioKT = gioKT;
+	public void setGioBatDau(LocalTime gioBatDau) {
+		this.gioBatDau = gioBatDau;
 	}
 
-	public String getMaCT() {
-		return maCT;
+	public LocalTime getGioKetThuc() {
+		return gioKetThuc;
+	}
+
+	public void setGioKetThuc(LocalTime gioKetThuc) {
+		this.gioKetThuc = gioKetThuc;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maCT);
+		return Objects.hash(maCaTruc);
 	}
 
 	@Override
@@ -68,12 +72,13 @@ public class CaTrucEntity {
 		if (obj == null)
 			return false;
 		CaTrucEntity other = (CaTrucEntity) obj;
-		return Objects.equals(maCT, other.maCT);
+		return Objects.equals(maCaTruc, other.maCaTruc);
 	}
 
 	@Override
 	public String toString() {
-		return "CaTrucEntity [maCT=" + maCT + ", tenCT=" + tenCT + ", gioBD=" + gioBD + ", gioKT=" + gioKT + "]";
+		return "CaTrucEntity [maCaTruc=" + maCaTruc + ", tenCaTruc=" + tenCaTruc + ", gioBatDau=" + gioBatDau
+				+ ", gioKetThuc=" + gioKetThuc + "]";
 	}
 
 }

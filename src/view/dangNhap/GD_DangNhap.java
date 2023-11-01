@@ -179,20 +179,21 @@ public class GD_DangNhap extends JFrame {
 
 	public void chonChucNangDangNhap() {
 		if (kiemTraDuLieuNhap()) {
-			String sdt = txtSoDienThoai.getText().trim();
+			String soDienThoai = txtSoDienThoai.getText().trim();
 			@SuppressWarnings("deprecation")
 			String password = PasswordHasher.hashPassword(pwd.getText().trim());
 			list = new ArrayList<>();
 			list = quanLyNhanVienDAO.duyetDanhSach();
 			boolean ketQua = false;
 			for (NhanVienEntity nhanVienEntity : list) {
-				if (nhanVienEntity.getSdt().equals(sdt) && nhanVienEntity.getPassword().equals(password)) {
+				if (nhanVienEntity.getSoDienThoai().equals(soDienThoai)
+						&& nhanVienEntity.getPassword().equals(password)) {
 					ketQua = true;
 					new GD_TrangChu(nhanVienEntity).setVisible(true);
 					this.dispose();
 				}
 			}
-			if(!ketQua) {
+			if (!ketQua) {
 				JOptionPane.showMessageDialog(this, "Mật khẩu hoặc số điện thoại không hợp lệ");
 			}
 		}

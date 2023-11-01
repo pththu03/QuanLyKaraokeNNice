@@ -64,14 +64,14 @@ public class PhanCongDAO {
 			String query = "INSERT INTO [PhieuPhanCong] ([MaNV], [MaCT], [Ngay]) \r\n" + "VALUES (?, ?, ?)";
 			statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1, phieuPhanCongEntity.getMaNV());
-			statement.setString(2, phieuPhanCongEntity.getMaCT());
+			statement.setString(1, phieuPhanCongEntity.getMaNhanVien());
+			statement.setString(2, phieuPhanCongEntity.getMaCaTruc());
 			statement.setDate(3, phieuPhanCongEntity.getNgay());
 			statement.executeUpdate();
 			result = statement.getGeneratedKeys();
 			while (result.next()) {
 				phieuPhanCongEntity2 = new PhieuPhanCongEntity();
-				phieuPhanCongEntity2.setMaPPC(result.getString(1));
+				phieuPhanCongEntity2.setMaPhieuPhanCong(result.getString(1));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

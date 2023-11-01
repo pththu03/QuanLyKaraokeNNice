@@ -20,14 +20,8 @@ public class QuanLyPhongController implements ActionListener, MouseListener {
 		Object o = e.getSource();
 		if (o.equals(giaoDienQuanLyPhong.btnLamMoi)) {
 			giaoDienQuanLyPhong.chonChucNangLamMoi();
-		} else if (o.equals(giaoDienQuanLyPhong.btnChinhSua)) {
-			giaoDienQuanLyPhong.chonChucNangChinhSua();
 		} else if (o.equals(giaoDienQuanLyPhong.btnTimKiem)) {
 			giaoDienQuanLyPhong.chonChucNangTimKiem();
-		} else if (o.equals(giaoDienQuanLyPhong.btnThem)) {
-			giaoDienQuanLyPhong.chonChucNangThem();
-		} else if (o.equals(giaoDienQuanLyPhong.btnXoa)) {
-			giaoDienQuanLyPhong.chonChucNangXoa();
 		}
 	}
 

@@ -36,6 +36,8 @@ public class DatPhongController implements ActionListener, MouseListener {
 			giaoDienDatPhong.chonChucNangHuyPhong();
 		} else if (o.equals(giaoDienDatPhong.btnChonPhong)) {
 			giaoDienDatPhong.chonChucNangChonPhong();
+		} else if (o.equals(giaoDienDatPhong.btnNhanPhong)) {
+			giaoDienDatPhong.chonChucNangNhanPhong();
 		}
 	}
 

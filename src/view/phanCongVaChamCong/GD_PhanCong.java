@@ -255,10 +255,10 @@ public class GD_PhanCong extends JPanel {
 
 		int stt = 1;
 		for (PhieuPhanCongEntity phieuPhanCongEntity : list) {
-			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(phieuPhanCongEntity.getMaNV());
-			caTrucEntity = quanLyCaTrucDAO.timTheoMa(phieuPhanCongEntity.getMaCT());
-			tblmodelPhanCong.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPPC(), nhanVienEntity.getHoTen(),
-					caTrucEntity.getTenCT(), DateFormatter.format(phieuPhanCongEntity.getNgay()) });
+			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(phieuPhanCongEntity.getMaNhanVien());
+			caTrucEntity = quanLyCaTrucDAO.timTheoMa(phieuPhanCongEntity.getMaCaTruc());
+			tblmodelPhanCong.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPhieuPhanCong(), nhanVienEntity.getHoTen(),
+					caTrucEntity.getTenCaTruc(), DateFormatter.format(phieuPhanCongEntity.getNgay()) });
 		}
 	}
 
@@ -267,7 +267,7 @@ public class GD_PhanCong extends JPanel {
 //		cmbmodelMaNV.removeAllElements();
 		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
 		for (NhanVienEntity nhanVienEntity : listNhanVien) {
-			cmbMaNV.addItem(nhanVienEntity.getMaNV());
+			cmbMaNV.addItem(nhanVienEntity.getMaNhanVien());
 		}
 	}
 
@@ -276,7 +276,7 @@ public class GD_PhanCong extends JPanel {
 //		cmbmodelCaTruc.removeAllElements();
 		listCaTruc = quanLyCaTrucDAO.duyetDanhSach();
 		for (CaTrucEntity caTrucEntity : listCaTruc) {
-			cmbMaCaTruc.addItem(caTrucEntity.getMaCT());
+			cmbMaCaTruc.addItem(caTrucEntity.getMaCaTruc());
 		}
 	}
 
@@ -288,14 +288,14 @@ public class GD_PhanCong extends JPanel {
 		CaTrucEntity caTrucEntity = null;
 
 		if (row >= 0) {
-			txtMaPC.setText(list.get(row).getMaPPC());
+			txtMaPC.setText(list.get(row).getMaPhieuPhanCong());
 			dchNgay.setDate(list.get(row).getNgay());
-			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(list.get(row).getMaNV());
+			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(list.get(row).getMaNhanVien());
 			txtTenNV.setText(nhanVienEntity.getHoTen());
-			cmbmodelMaNV.setSelectedItem(nhanVienEntity.getMaNV());
-			cmbmodelCaTruc.setSelectedItem(list.get(row).getMaCT());
-			caTrucEntity = quanLyCaTrucDAO.timTheoMa(list.get(row).getMaCT());
-			txtCaTruc.setText(caTrucEntity.getTenCT());
+			cmbmodelMaNV.setSelectedItem(nhanVienEntity.getMaNhanVien());
+			cmbmodelCaTruc.setSelectedItem(list.get(row).getMaCaTruc());
+			caTrucEntity = quanLyCaTrucDAO.timTheoMa(list.get(row).getMaCaTruc());
+			txtCaTruc.setText(caTrucEntity.getTenCaTruc());
 		}
 	}
 

@@ -27,4 +27,10 @@ public class DateFormatter {
 		return formattedDate;
 	}
 
+	public static String format(java.util.Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+		String formattedDate = dateFormat.format(date);
+		return formattedDate;
+	}
 }

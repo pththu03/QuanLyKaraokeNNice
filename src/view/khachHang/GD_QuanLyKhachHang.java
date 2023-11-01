@@ -23,6 +23,7 @@ import javax.swing.border.BevelBorder;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 public class GD_QuanLyKhachHang extends JPanel {
 	/**
@@ -40,7 +41,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JTextField txtNamSinh;
 	private JTextField txtEmail;
 	private JTextField txtSoDienThoai;
-	private JTextField txtSLTu;
 
 	// JTable
 	private JTable tblKhachHang;
@@ -52,9 +52,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JLabel lblNamSinh;
 	private JLabel lblSoDienThoai;
 	private JLabel lblEmail;
-	private JLabel lblSLPhongTu;
 	private JLabel lblKhachHang;
-	private JLabel lblSLDen;
 	private JLabel lblTenKH;
 
 	// JButton
@@ -65,15 +63,16 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 	// JScrollPane
 	private JScrollPane scrKhachHang;
-	private DefaultTableModel cmbmodeltableKhachHang;
+	private DefaultTableModel tblmdelKhachHang;
 	private QuanLyKhachHangController controller;
 	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
 	private List<KhachHangEntity> list;
-	private JTextField txtSLDen;
 	private JTextField txtSLDatPhong;
 	private JLabel lblSLDatPhong;
 	private JTextField txtTenKhachHang;
 	private JLabel lblDanhSchKhch;
+	private JTextField txtSoLanDatPhongTu;
+	private JTextField txtSoLanDatPhongDen;
 
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
@@ -94,8 +93,8 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		String[] cols_KhachHang = { "STT", "Mã Khách Hàng", "Tên khách hàng", "Số điện thoại", "Email", "Năm Sinh",
 				"Số Lượng Đặt Phòng" };
-		cmbmodeltableKhachHang = new DefaultTableModel(cols_KhachHang, 0);
-		tblKhachHang = new JTable(cmbmodeltableKhachHang);
+		tblmdelKhachHang = new DefaultTableModel(cols_KhachHang, 0);
+		tblKhachHang = new JTable(tblmdelKhachHang);
 		scrKhachHang = new JScrollPane(tblKhachHang);
 		scrKhachHang.setBounds(10, 89, 674, 593);
 		pnlChucNang.add(scrKhachHang);
@@ -117,41 +116,19 @@ public class GD_QuanLyKhachHang extends JPanel {
 		pnlTimKiem.add(lblSDT);
 		lblSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-		lblSLPhongTu = new JLabel("Số Lần Đặt Phòng : ");
-		lblSLPhongTu.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSLPhongTu.setBounds(323, 22, 150, 27);
-		pnlTimKiem.add(lblSLPhongTu);
-		lblSLPhongTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setFocusable(false);
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiem.setBounds(530, 121, 120, 35);
+		btnTimKiem.setBounds(510, 122, 120, 35);
 		pnlTimKiem.add(btnTimKiem);
-
-		txtSLTu = new JTextField();
-		txtSLTu.setBounds(477, 24, 178, 27);
-		pnlTimKiem.add(txtSLTu);
-		txtSLTu.setColumns(10);
-
-		lblSLDen = new JLabel("Đến:");
-		lblSLDen.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSLDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSLDen.setBounds(340, 70, 127, 27);
-		pnlTimKiem.add(lblSLDen);
 
 		txtSoDienThoai = new JTextField();
 		txtSoDienThoai.setColumns(10);
 		txtSoDienThoai.setBounds(135, 70, 171, 27);
 		pnlTimKiem.add(txtSoDienThoai);
-
-		txtSLDen = new JTextField();
-		txtSLDen.setColumns(10);
-		txtSLDen.setBounds(477, 71, 178, 27);
-		pnlTimKiem.add(txtSLDen);
 
 		lblTenKH = new JLabel("Tên khách hàng:");
 		lblTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -164,65 +141,95 @@ public class GD_QuanLyKhachHang extends JPanel {
 		txtTenKhachHang.setBounds(135, 21, 178, 27);
 		pnlTimKiem.add(txtTenKhachHang);
 
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 192, 203));
-		panel.setBounds(0, 1, 672, 519);
-		pnlKhachHang.add(panel);
-		panel.setLayout(null);
+		JPanel pnlTimTheoSoLanDatPhong = new JPanel();
+		pnlTimTheoSoLanDatPhong.setBackground(new Color(204, 204, 255));
+		pnlTimTheoSoLanDatPhong.setBorder(new TitledBorder(null, "S\u1ED1 l\u1EA7n \u0111\u1EB7t ph\u00F2ng",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlTimTheoSoLanDatPhong.setBounds(350, 11, 280, 100);
+		pnlTimKiem.add(pnlTimTheoSoLanDatPhong);
+		pnlTimTheoSoLanDatPhong.setLayout(null);
+
+		JLabel lblSoLanDatPhongTu = new JLabel("Từ:");
+		lblSoLanDatPhongTu.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSoLanDatPhongTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSoLanDatPhongTu.setBounds(21, 21, 40, 27);
+		pnlTimTheoSoLanDatPhong.add(lblSoLanDatPhongTu);
+
+		JLabel lblSoLanDatPhongDen = new JLabel("Đến:");
+		lblSoLanDatPhongDen.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSoLanDatPhongDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSoLanDatPhongDen.setBounds(21, 60, 54, 27);
+		pnlTimTheoSoLanDatPhong.add(lblSoLanDatPhongDen);
+
+		txtSoLanDatPhongTu = new JTextField();
+		txtSoLanDatPhongTu.setColumns(10);
+		txtSoLanDatPhongTu.setBounds(71, 21, 178, 27);
+		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongTu);
+
+		txtSoLanDatPhongDen = new JTextField();
+		txtSoLanDatPhongDen.setColumns(10);
+		txtSoLanDatPhongDen.setBounds(71, 59, 178, 27);
+		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongDen);
+
+		JPanel pnlThongTin = new JPanel();
+		pnlThongTin.setBackground(new Color(255, 192, 203));
+		pnlThongTin.setBounds(0, 1, 672, 519);
+		pnlKhachHang.add(pnlThongTin);
+		pnlThongTin.setLayout(null);
 
 		lblMaKhachHang = new JLabel("Mã Khách Hàng :");
 		lblMaKhachHang.setBounds(80, 106, 112, 25);
-		panel.add(lblMaKhachHang);
+		pnlThongTin.add(lblMaKhachHang);
 		lblMaKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtMaKH = new JTextField();
-		txtMaKH.setBounds(210, 105, 369, 27);
-		panel.add(txtMaKH);
+		txtMaKH.setBounds(228, 105, 351, 27);
+		pnlThongTin.add(txtMaKH);
 		txtMaKH.setEnabled(false);
 		txtMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtMaKH.setColumns(10);
 
 		lblTenKhachHang = new JLabel("Tên Khách Hàng :");
 		lblTenKhachHang.setBounds(80, 156, 112, 25);
-		panel.add(lblTenKhachHang);
+		pnlThongTin.add(lblTenKhachHang);
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtTenKH = new JTextField();
-		txtTenKH.setBounds(210, 155, 369, 27);
-		panel.add(txtTenKH);
+		txtTenKH.setBounds(228, 155, 351, 27);
+		pnlThongTin.add(txtTenKH);
 		txtTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtTenKH.setColumns(10);
 
 		lblNamSinh = new JLabel("Năm Sinh :");
 		lblNamSinh.setBounds(80, 206, 99, 25);
-		panel.add(lblNamSinh);
+		pnlThongTin.add(lblNamSinh);
 		lblNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtSDT = new JTextField();
-		txtSDT.setBounds(210, 255, 369, 27);
-		panel.add(txtSDT);
+		txtSDT.setBounds(228, 255, 351, 27);
+		pnlThongTin.add(txtSDT);
 		txtSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSDT.setColumns(10);
 
 		lblSoDienThoai = new JLabel("Số Điện Thoại :");
 		lblSoDienThoai.setBounds(80, 256, 99, 25);
-		panel.add(lblSoDienThoai);
+		pnlThongTin.add(lblSoDienThoai);
 		lblSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtNamSinh = new JTextField();
-		txtNamSinh.setBounds(210, 205, 369, 27);
-		panel.add(txtNamSinh);
+		txtNamSinh.setBounds(228, 205, 351, 27);
+		pnlThongTin.add(txtNamSinh);
 		txtNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtNamSinh.setColumns(10);
 
 		lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(80, 306, 59, 25);
-		panel.add(lblEmail);
+		pnlThongTin.add(lblEmail);
 		lblEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtEmail = new JTextField();
-		txtEmail.setBounds(210, 305, 369, 27);
-		panel.add(txtEmail);
+		txtEmail.setBounds(228, 305, 351, 27);
+		pnlThongTin.add(txtEmail);
 		txtEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtEmail.setColumns(10);
 
@@ -230,11 +237,11 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblKhachHang.setHorizontalAlignment(SwingConstants.CENTER);
 		lblKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		lblKhachHang.setBounds(0, 34, 672, 61);
-		panel.add(lblKhachHang);
+		pnlThongTin.add(lblKhachHang);
 
 		btnChinhSua = new JButton("Chỉnh Sửa");
 		btnChinhSua.setBounds(425, 411, 120, 35);
-		panel.add(btnChinhSua);
+		pnlThongTin.add(btnChinhSua);
 		btnChinhSua.setFocusable(false);
 		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
@@ -243,22 +250,24 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		btnThem = new JButton("Thêm");
 		btnThem.setBounds(279, 411, 120, 35);
-		panel.add(btnThem);
+		pnlThongTin.add(btnThem);
 		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtSLDatPhong = new JTextField();
+		txtSLDatPhong.setBackground(Color.WHITE);
+		txtSLDatPhong.setEditable(false);
 		txtSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSLDatPhong.setColumns(10);
-		txtSLDatPhong.setBounds(210, 355, 369, 27);
-		panel.add(txtSLDatPhong);
+		txtSLDatPhong.setBounds(228, 355, 351, 27);
+		pnlThongTin.add(txtSLDatPhong);
 
 		lblSLDatPhong = new JLabel("Số lượng đặt phòng:");
 		lblSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblSLDatPhong.setBounds(80, 356, 129, 25);
-		panel.add(lblSLDatPhong);
+		pnlThongTin.add(lblSLDatPhong);
 
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
@@ -267,7 +276,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setBounds(133, 411, 120, 35);
-		panel.add(btnLamMoi);
+		pnlThongTin.add(btnLamMoi);
 
 		controller = new QuanLyKhachHangController(this);
 		btnThem.addActionListener(controller);
@@ -282,16 +291,16 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private void loadData() {
 		tblKhachHang.removeAll();
 		tblKhachHang.setRowSelectionAllowed(false);
-		cmbmodeltableKhachHang.setRowCount(0);
+		tblmdelKhachHang.setRowCount(0);
 		list = new ArrayList<>();
 		list = quanLyKhachHangDAO.duyetDanhSach();
+
 		int stt = 1;
 		for (KhachHangEntity khachHangEntity : list) {
-			cmbmodeltableKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKH(), khachHangEntity.getHoTen(),
-					khachHangEntity.getSdt(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
-					khachHangEntity.getSlDatPhong() });
+			tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
+					khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
+					khachHangEntity.getSoLanDatPhong() });
 		}
-
 	}
 
 	public void hienThiThongTin() {
@@ -299,29 +308,13 @@ public class GD_QuanLyKhachHang extends JPanel {
 		list = quanLyKhachHangDAO.duyetDanhSach();
 		int row = tblKhachHang.getSelectedRow();
 		if (row >= 0) {
-			txtMaKH.setText(list.get(row).getMaKH());
+			txtMaKH.setText(list.get(row).getMaKhachHang());
 			txtTenKH.setText(list.get(row).getHoTen());
-			txtNamSinh.setText(String.valueOf(list.get(row).getNamSinh()));
+			txtSDT.setText(list.get(row).getSoDienThoai());
 			txtEmail.setText(list.get(row).getEmail());
-			txtSDT.setText(list.get(row).getSdt());
-			txtSLDatPhong.setText(String.valueOf(list.get(row).getSlDatPhong()));
+			txtNamSinh.setText(String.valueOf(list.get(row).getNamSinh()));
+			txtSLDatPhong.setText(String.valueOf(list.get(row).getSoLanDatPhong()));
 		}
-	}
-
-	public void chonChucNangLamMoi() {
-		txtEmail.setText("");
-		txtMaKH.setText("");
-//		txtMaKhachHang.setText("");
-		txtNamSinh.setText("");
-		txtSDT.setText("");
-		txtSLDatPhong.setText("");
-		txtSLDen.setText("");
-		txtSLTu.setText("");
-		txtSoDienThoai.setText("");
-		txtTenKH.setText("");
-		txtTenKhachHang.setText("");
-		tblKhachHang.setRowSelectionAllowed(false);
-		loadData();
 	}
 
 	public void chonChucNangThem() {
@@ -330,112 +323,179 @@ public class GD_QuanLyKhachHang extends JPanel {
 			String sdt = txtSDT.getText();
 			String email = txtEmail.getText();
 			int namSinh = Integer.parseInt(txtNamSinh.getText());
-			int sLDatPhong = Integer.parseInt(txtSLDatPhong.getText());
-			KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, sLDatPhong);
-			khachHangEntity = quanLyKhachHangDAO.themKhachHang(khachHangEntity);
+			int slDatPhong = Integer.parseInt(txtSLDatPhong.getText());
+			KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, slDatPhong);
+			khachHangEntity = quanLyKhachHangDAO.them(khachHangEntity);
 			loadData();
 		}
 	}
 
-//	
-	public void chonChucNangTimKiem() {
+	private boolean kiemTraDuLieuThem() {
+		String tenKH = txtTenKH.getText();
+		String sdt = txtSDT.getText();
+		String email = txtEmail.getText();
+		String namSinh = txtNamSinh.getText();
+		String slDatPhong = txtSLDatPhong.getText();
+		list = new ArrayList<>();
+		list = quanLyKhachHangDAO.duyetDanhSach();
 
-//		String maKhachHang = txtMaKhachHang.getText().trim();
-//		String tenKH = txtTenKhachHang.getText().trim();
-//		String sdt = txtSoDienThoai.getText().trim();
-//		int slTu = 0, slDen = -1;
-//		if(txtSLTu.getText().trim().length() > 0) {
-//			slTu = Integer.parseInt(txtSLTu.getText().trim());
-//		}
-//		if(txtSLDen.getText().trim().length() > 0) {
-//			slDen = Integer.parseInt(txtSLDen.getText().trim());
-//		}
-//		list = new ArrayList<>();
-//		tblKhachHang.removeAll();
-//		cmbmodeltableKhachHang.setRowCount(0);
-//		//list = quanLyKhachHangDAO.timKiem(maKhachHang, tenKH, sdt, slTu, slDen);
-//		list = quanLyKhachHangDAO.timKiem(maKhachHang, tenKH, sdt, slTu, slDen);
-//		int stt = 1;
-//		for (KhachHangEntity khachHangEntity : list) {
-//			cmbmodeltableKhachHang.addRow(new Object[] {stt++,khachHangEntity.getMaKH() ,khachHangEntity.getHoTen(),khachHangEntity.getSdt(), 
-//					khachHangEntity.getEmail(),khachHangEntity.getNamSinh(),  khachHangEntity.getSlDatPhong()});
-//			}
+		// Họ Tên không được bỏ trống
+		if (!(tenKH.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Họ tên Khách Hàng không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTenKH.requestFocus();
+			return false;
+		}
+
+		// năm sinh nhập vào phải là số nguyên giới hạn độ tuổi của Khách hàng chỉ từ 18
+		if (namSinh.length() > 0) {
+			try {
+				int nam = Integer.parseInt(namSinh);
+				int tuoi = 2023 - nam;
+				if (!(tuoi >= 18 && tuoi <= 60)) {
+					JOptionPane.showMessageDialog(this, "Khách Hàng phải từ 18 ", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+
+		// sdt không được trùng
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+
+		// email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
+			}
+		}
+
+		/**
+		 * sl dat phong > 0
+		 */
+		if (slDatPhong.length() > 0) {
+			try {
+				int gia = Integer.parseInt(slDatPhong);
+				if (!(gia >= 0)) {
+					JOptionPane.showMessageDialog(this, "SL Đặt phòng phải từ 0", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtSLDatPhong.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "SL Đặt phòng nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSLDatPhong.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "SL Đặt phòng không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSLDatPhong.requestFocus();
+			return false;
+		}
+
+		return true;
+
 	}
 
 	public void chonChucNangChinhSua() {
 		if (kiemTraDuLieuChinhSua()) {
-			String maKH = txtMaKH.getText().trim();
-			String hoTen = txtTenKH.getText().trim();
-			String sdt = txtSDT.getText().trim();
-			String email = txtEmail.getText().trim();
-			int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
-			int sLDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
-
-			KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, sLDatPhong);
-			if (quanLyKhachHangDAO.chinhSua(khachHangEntity) != 0) {
-				JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin Khách Háng thành công");
-				chonChucNangLamMoi();
-				loadData();
+			int row = tblKhachHang.getSelectedRow();
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Chọn Khách Hàng cần chỉnh sửa");
+			} else {
+				String maKH = txtMaKH.getText().trim();
+				String hoTen = txtTenKH.getText().trim();
+				String sdt = txtSDT.getText().trim();
+				String email = txtEmail.getText().trim();
+				int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
+				int slDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
+				KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, slDatPhong);
+				if (quanLyKhachHangDAO.chinhSua(khachHangEntity) != 0) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin khách hàng thành công ", "Thông Báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					chonChucNangLamMoi();
+					loadData();
+				}
 			}
 		}
-
 	}
-
-	/*
-	 * Kiểm Tra Dư Liệu Nhập Vào
-	 */
 
 	private boolean kiemTraDuLieuChinhSua() {
 		String tenKH = txtTenKH.getText();
-		String namSinh = txtNamSinh.getText();
 		String sdt = txtSDT.getText();
 		String email = txtEmail.getText();
+		String namSinh = txtNamSinh.getText();
 		String slDatPhong = txtSLDatPhong.getText();
 		list = new ArrayList<>();
 		list = quanLyKhachHangDAO.duyetDanhSach();
-		/**
-		 * Tên Khách Hàng Không được để trống
-		 */
 
+		// Họ Tên không được bỏ trống
 		if (!(tenKH.length() > 0)) {
-			JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được để trống", "Thông báo",
+			JOptionPane.showMessageDialog(this, "Họ tên Khách Hàng không được để trống", "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
 			txtTenKH.requestFocus();
 			return false;
 		}
 
-		/**
-		 * Năm Sinh
-		 */
-
+		// năm sinh nhập vào phải là số nguyên giới hạn độ tuổi của Khách hàng chỉ từ 18
 		if (namSinh.length() > 0) {
 			try {
 				int nam = Integer.parseInt(namSinh);
 				int tuoi = 2023 - nam;
-				if (!(tuoi >= 18)) {
-					JOptionPane.showMessageDialog(this, "Khách hàng phải đủ 18 tuổi trở lên", "Thông báo",
+				if (!(tuoi >= 18 && tuoi <= 60)) {
+					JOptionPane.showMessageDialog(this, "Khách Hàng phải từ 18 ", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE);
 					txtNamSinh.requestFocus();
 					return false;
 				}
 			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Năm Sinh nhập vào phải là số nguyên", "Thông báo",
+				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 				txtNamSinh.requestFocus();
 				return false;
 			}
-
 		} else {
-			JOptionPane.showMessageDialog(this, "Năm Sinh không được để trống", "Thông báo",
+			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
 			txtNamSinh.requestFocus();
 			return false;
 		}
 
-		/**
-		 * sdt phải ký tự là số, sdt của mỗi người duy nhất nên không được trùng
-		 */
-
+		// sdt không được trùng
 		if (sdt.length() > 0) {
 			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
 				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
@@ -456,10 +516,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 			return false;
 		}
 
-		/**
-		 * email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
-		 */
-
+		// email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
 		if (email.length() > 0) {
 			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
 				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
@@ -470,144 +527,63 @@ public class GD_QuanLyKhachHang extends JPanel {
 		}
 
 		/**
-		 * slDatPhong > 0
+		 * sl dat phong > 0
 		 */
 		if (slDatPhong.length() > 0) {
 			try {
-				Double sl = Double.parseDouble(slDatPhong);
-				if (!(sl >= 0)) {
-					JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng phải lớn hơn 0", "Thông báo",
+				int gia = Integer.parseInt(slDatPhong);
+				if (!(gia >= 0)) {
+					JOptionPane.showMessageDialog(this, "SL Đặt phòng phải từ 0", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE);
 					txtSLDatPhong.requestFocus();
 					return false;
 				}
 			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng nhập vào là số", "Thông báo",
+				JOptionPane.showMessageDialog(this, "SL Đặt phòng nhập vào là số", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 				txtSLDatPhong.requestFocus();
 				return false;
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng không được để trống", "Thông báo",
+			JOptionPane.showMessageDialog(this, "SL Đặt phòng không được để trống", "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
 			txtSLDatPhong.requestFocus();
 			return false;
 		}
-		return false;
+
+		return true;
 
 	}
 
-	private boolean kiemTraDuLieuThem() {
-		String tenKH = txtTenKH.getText();
-		String namSinh = txtNamSinh.getText();
-		String sdt = txtSDT.getText();
-		String email = txtEmail.getText();
-		String slDatPhong = txtSLDatPhong.getText();
+	public void chonChucNangTimKiem() {
+		String tenKH = txtTenKhachHang.getText().trim();
+		String sdt = txtSoDienThoai.getText().trim();
+
 		list = new ArrayList<>();
-		list = quanLyKhachHangDAO.duyetDanhSach();
+		tblKhachHang.removeAll();
+		tblmdelKhachHang.setRowCount(0);
+		list = quanLyKhachHangDAO.timKiem(sdt, tenKH, sdt, ALLBITS, ABORT);
+		int stt = 1;
+		for (KhachHangEntity khachHangEntity : list) {
 
-		/**
-		 * Tên Khách Hàng Không được để trống
-		 */
-
-		if (!(tenKH.length() > 0)) {
-			JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtTenKH.requestFocus();
-			return false;
+			tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
+					khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
+					khachHangEntity.getSoLanDatPhong() });
 		}
-
-		/**
-		 * Năm Sinh
-		 */
-
-		if (namSinh.length() > 0) {
-			try {
-				int nam = Integer.parseInt(namSinh);
-				int tuoi = 2023 - nam;
-				if (!(tuoi >= 18)) {
-					JOptionPane.showMessageDialog(this, "Khách hàng phải đủ 18 tuổi trở lên", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtNamSinh.requestFocus();
-					return false;
-				}
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Năm Sinh nhập vào phải là số nguyên", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtNamSinh.requestFocus();
-				return false;
-			}
-
-		} else {
-			JOptionPane.showMessageDialog(this, "Năm Sinh không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtNamSinh.requestFocus();
-			return false;
-		}
-
-		/**
-		 * sdt phải đủ 12 ký tự là số, sdt của mỗi người duy nhất nên không được trùng
-		 */
-
-		if (sdt.length() > 0) {
-			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtSDT.requestFocus();
-			return false;
-		}
-
-		/**
-		 * email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
-		 */
-
-		if (email.length() > 0) {
-			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
-				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtEmail.requestFocus();
-				return false;
-			}
-		}
-
-		/**
-		 * slDatPhong > 0
-		 */
-		if (slDatPhong.length() > 0) {
-			try {
-				Double sl = Double.parseDouble(slDatPhong);
-				if (!(sl >= 0)) {
-					JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng phải lớn hơn 0", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtSLDatPhong.requestFocus();
-					return false;
-				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng nhập vào là số", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSLDatPhong.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Số Lượng đặt phòng không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtSLDatPhong.requestFocus();
-			return false;
-		}
-		return false;
-
 	}
 
+	public void chonChucNangLamMoi() {
+		txtEmail.setText("");
+		txtMaKH.setText("");
+		txtNamSinh.setText("");
+		txtSDT.setText("");
+		txtSLDatPhong.setText("");
+		txtSoLanDatPhongTu.setText("");
+		txtSoLanDatPhongDen.setText("");
+		txtSoDienThoai.setText("");
+		txtTenKH.setText("");
+		txtTenKhachHang.setText("");
+		tblKhachHang.setRowSelectionAllowed(false);
+		loadData();
+	}
 }

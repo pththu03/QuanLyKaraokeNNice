@@ -8,14 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import entity.DichVuEntity;
 import util.ConnectDB;
 
 public class QuanLyDichVuDAO {
-
-	DichVuEntity dichVuEntity;
 
 	public QuanLyDichVuDAO() {
 
@@ -25,176 +21,189 @@ public class QuanLyDichVuDAO {
 		List<DichVuEntity> list = new ArrayList<>();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
-		Statement statemant = null;
-
-		try {
-			String query = "SELECT * FROM DichVu";
-			statemant = connect.createStatement();
-			result = statemant.executeQuery(query);
-			while (result.next()) {
-				String maDV = result.getString(1);
-				String tenDV = result.getString(2);
-				String loaiDV = result.getString(3);
-				double gia = result.getDouble(4);
-				dichVuEntity = new DichVuEntity(maDV, tenDV, loaiDV, gia);
-				list.add(dichVuEntity);
-
+		Statement statement = null;
+		if (connect != null) {
+			try {
+				String query = "SELECT * FROM DichVu";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while (result.next()) {
+					String maDV = result.getString(1);
+					String tenDV = result.getString(2);
+					String loaiDV = result.getString(3);
+					double gia = result.getDouble(4);
+					DichVuEntity dichVuEntity = new DichVuEntity(maDV, tenDV, loaiDV, gia);
+					list.add(dichVuEntity);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			ConnectDB.closeConnect(connect);
-			ConnectDB.closeStatement(statemant);
-			ConnectDB.closeResultSet(result);
 		}
 		return list;
-
 	}
 
-	public DichVuEntity themDichVu(DichVuEntity dichVuEntity) {
+	public DichVuEntity them(DichVuEntity dichVuEntity) {
 		DichVuEntity dichVuEntity2 = null;
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
 		PreparedStatement statement = null;
+
 		if (connect != null) {
 			try {
 				String query = "INSERT INTO DichVu " + "([TenDV], [LoaiDV], [Gia])" + "VALUES (?, ?, ?)";
 				statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-				statement.setString(1, dichVuEntity.getTenDV());
-				statement.setString(2, dichVuEntity.getLoaiDV());
+				statement.setString(1, dichVuEntity.getTenDichVu());
+				statement.setString(2, dichVuEntity.getLoaiDichVu());
 				statement.setDouble(3, dichVuEntity.getGia());
 				statement.executeUpdate();
 				result = statement.getGeneratedKeys();
 				while (result.next()) {
 					dichVuEntity2 = new DichVuEntity();
-					dichVuEntity2.setLoaiDV(result.getString(1));
+					dichVuEntity2.setMaDichVu(result.getString(1));
 				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				ConnectDB.closeConnect(connect);
-				ConnectDB.closePreStatement(statement);
-				ConnectDB.closeResultSet(result);
-			}
-		}
-		return dichVuEntity2;
-	}
-
-	public int chonChucNangChinhSua(DichVuEntity dichVuEntity) {
-		Connection connect = ConnectDB.getConnect();
-		PreparedStatement statement = null;
-
-		if (connect != null) {
-			try {
-				String query = "UPDATE DichVu\r\n SET TenDV = ?, LoaiDV = ?, " + "Gia = ? " + "MaDV = ?\r\n"
-						+ "Where MaDV LIKE ?";
-				statement = connect.prepareStatement(query);
-				statement.setString(1, dichVuEntity.getTenDV());
-				statement.setString(2, dichVuEntity.getLoaiDV());
-				statement.setDouble(3, dichVuEntity.getGia());
-				statement.setString(4, dichVuEntity.getMaDV());
-				return statement.executeUpdate();
 
 			} catch (SQLException e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			} finally {
-
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+				ConnectDB.closeResultSet(result);
 			}
-			ConnectDB.closeConnect(connect);
-			ConnectDB.closePreStatement(statement);
 		}
-		return 0;
+
+		return dichVuEntity2;
+
 	}
 
-	public DichVuEntity timTheoMa(String maDichVu) {
-		DichVuEntity dichVuKQ = new DichVuEntity();
+	public int xoa(String maDV) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "DELETE FROM DichVu\r\n" + "WHERE MaDV = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maDV);
+				statement.executeUpdate();
+				return 1;
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+
+		return 0;
+
+	}
+
+	public int chinhSua(DichVuEntity dichVuEntity) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "UPDATE DichVu \r\n" + "SET TenDV = ?, LoaiDV = ?, Gia = ?\r\n" + "where MaDV LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, dichVuEntity.getTenDichVu());
+				statement.setString(2, dichVuEntity.getLoaiDichVu());
+				statement.setDouble(3, dichVuEntity.getGia());
+				statement.setString(4, dichVuEntity.getMaDichVu());
+				return statement.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return 0;
+
+	}
+
+	public DichVuEntity timTheoMa(String maDV) {
+		DichVuEntity dichVuEntity = new DichVuEntity();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "SELECT MaDV, TenDv, loaiDV,Gia \r\n" + "FROM DichVu WHERE MaDV LIKE ?";
+				String query = "SELECT MaDV,LoaiDV, Gia\r\n" + "FROM DichVu WHERE MaDV LIKE ?";
 				statement = connect.prepareStatement(query);
-				statement.setString(1, maDichVu);
+				statement.setString(1, maDV);
 				result = statement.executeQuery();
 				while (result.next()) {
-					String tenDV = result.getString(2);
-					String loaiDV = result.getString(3);
-					double gia = result.getDouble(4);
-					dichVuKQ = new DichVuEntity(maDichVu, tenDV, loaiDV, gia);
-
+					String maDV1 = result.getString(1);
+					String loaiDV = result.getString(2);
+					double gia = result.getDouble(3);
+					dichVuEntity = new DichVuEntity(maDV1, loaiDV, gia);
 				}
+
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
 				ConnectDB.closeResultSet(result);
 				ConnectDB.closePreStatement(statement);
 			}
-
 		}
-		return dichVuKQ;
+
+		return dichVuEntity;
+
 	}
 
-	public List<DichVuEntity> timKiem(String maDichVu, String loaiDV, Double giaTu, Double giaDen) {
-		List<DichVuEntity> list = new ArrayList<>();
+	/**
+	 * Lỗi 1: giaDichVu truyền vào là kiểu Double, giaTien trong CSDL phải so sánh với kiểu
+	 * double. Vậy nên gọi hàm doubleValue() để lấy giá trị ra là kiểu double.
+	 * 
+	 * Lỗi 2: Trước đó không có dấu cách giữa chữ DichVu và chữ WHERE
+	 * 
+	 * @param loaiDV
+	 * @param giaTu
+	 * @param giaDen
+	 * @return
+	 */
+	public List<DichVuEntity> timKiem(String loaiDV, Double giaTu, Double giaDen) {
+		List<DichVuEntity> list = new ArrayList<DichVuEntity>();
 		Connection connect = ConnectDB.getConnect();
 		Statement statement = null;
 		ResultSet result = null;
 
 		if (connect != null) {
 			try {
-				StringBuilder query = new StringBuilder("SELECT * FROM DichVu");
-				if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null && giaDen != null) {
-					query.append(String.format(
-							" WHERE MaNV LIKE '%%%s%%' AND Gia >= %f AND Gia <= %f AND LoaiDV LIKE N'%%%s%%'", maDichVu,
-							loaiDV, giaTu, giaDen));
-					// MaDV + LoaiDV + Gia tu, Gia den
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(
-							String.format(" WHERE MaNV LIKE '%%%s%%' AND LoaiDV LIKE N'%%%s%%'", maDichVu, loaiDV));
-					// MaDV + LoaiDV
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%'  AND Gia >= %f AND Gia <= %f", maDichVu,
-							giaTu, giaDen));
-					// MaDV + Gia tu, Gia den
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(String.format(" WHERE LoaiDV LIKE N'%%%s%%' AND Gia >= %f AND Gia <= %f", loaiDV,
-							giaTu, giaDen));
-					// Loai dv + gia
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' ", maDichVu));
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(String.format(" WHERE  Gia >= %f AND Gia <= %f", giaTu, giaDen));
-				} else if (!maDichVu.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && giaTu != null
-						&& giaDen != null) {
-					query.append(String.format(" WHERE LoaiDV LIKE N'%%%s%%'", loaiDV));
-				} else if (!loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu == null && giaDen == null)) {
-					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%'", loaiDV));
-				} else if (!loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
-					query.append(String.format("WHERE Gia >= %f AND Gia <= %f", giaTu, giaDen));
-				}
+				StringBuilder query = new StringBuilder("SELECT * FROM DichVu ");
+				if (!loaiDV.equalsIgnoreCase("Tất cả") && (giaTu != null && giaDen != null)) {
+					// loạiDV + gia
+					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%' AND (Gia >= %f AND Gia <= %f)", loaiDV,
+							giaTu.doubleValue(), giaDen.doubleValue()));
 
+				} else if (!loaiDV.equalsIgnoreCase("Tất cả") && (giaTu == null && giaDen == null)) {
+					// loaiDV
+					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%'", loaiDV));
+				} else if (loaiDV.equalsIgnoreCase("Tất cả") && (giaTu != null && giaDen != null)) {
+					// gia
+					query.append(
+							String.format("WHERE Gia >= %f AND Gia <= %f", giaTu.doubleValue(), giaDen.doubleValue()));
+				}
 				statement = connect.createStatement();
 				result = statement.executeQuery(query.toString());
 				while (result.next()) {
-					String MaDV = result.getString(1);
-					String TenDV = result.getString(2);
+					String maDichVu = result.getString(1);
+					String tenDichVu = result.getString(2);
 					String loaiDichVu = result.getString(3);
 					double gia = result.getDouble(4);
-					DichVuEntity dichVuEntity = new DichVuEntity(MaDV, TenDV, loaiDichVu, gia);
+					DichVuEntity dichVuEntity = new DichVuEntity(maDichVu, tenDichVu, loaiDichVu, gia);
 					list.add(dichVuEntity);
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
 				ConnectDB.closeResultSet(result);
@@ -206,53 +215,12 @@ public class QuanLyDichVuDAO {
 
 	}
 
-	public int xoaDichVu(int maDichVu) {
-		Connection connect = getConnection();
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-
-		if (connect != null) {
-			try {
-				String query = "DELETE FROM DichVu WHERE MaDV = ?";
-				preparedStatement = connect.prepareStatement(query);
-				preparedStatement.setInt(1, maDichVu);
-
-				return preparedStatement.executeUpdate();
-
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null,
-						"CÆ¡ sá»Ÿ dá»¯ liá»‡u hiá»‡n Ä‘ang lá»—i. Vui lÃ²ng thá»­ láº¡i sau!");
-				e.printStackTrace();
-			} finally {
-				if (connect != null) {
-					try {
-						connect.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-				if (preparedStatement != null) {
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-				if (resultSet != null) {
-					try {
-						resultSet.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return 0;
-	}
-
-	private Connection getConnection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public List<DichVuEntity> timKiemTheoDatDichVu( String tenDV ,String loaiDV, Double GiaDichVu , Double GiaDen){
+//		List<DichVuEntity> list = new ArrayList<DichVuEntity>();
+//		Connection connect = ConnectDB.getConnect();
+//		Statement statement = null;
+//		ResultSet result = null;
+//		return list;
+//	}
 
 }

@@ -205,7 +205,7 @@ public class GD_DoiMatKhau extends JDialog {
 	public void chonChucNangDoiMK() {
 		if (trungKhopMK()) {
 			String mkMoi = new String(txtMatKhauMoi.getPassword());
-			if (quanLyNhanVienDAO.capNhatMatKhau(mkMoi, nhanVienEntity.getSdt())) {
+			if (quanLyNhanVienDAO.capNhatMatKhau(mkMoi, nhanVienEntity.getSoDienThoai())) {
 				JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 				chonChucNangThoat();

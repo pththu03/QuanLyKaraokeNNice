@@ -4,52 +4,52 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class PhieuPhanCongEntity {
-	private String maPPC;
-	private String maNV;
-	private String maCT;
+	private String maPhieuPhanCong;
+	private String maNhanVien;
+	private String maCaTruc;
 	private Date ngay;
 
 	public PhieuPhanCongEntity() {
 		super();
 	}
 
-	public PhieuPhanCongEntity(String maNV, String maCT, Date ngay) {
+	public PhieuPhanCongEntity(String maNhanVien, String maCaTruc, Date ngay) {
 		super();
-		this.maNV = maNV;
-		this.maCT = maCT;
+		this.maNhanVien = maNhanVien;
+		this.maCaTruc = maCaTruc;
 		this.ngay = ngay;
 	}
 
-	public PhieuPhanCongEntity(String maPPC, String maNV, String maCT, Date ngay) {
+	public PhieuPhanCongEntity(String maPhieuPhanCong, String maNhanVien, String maCaTruc, Date ngay) {
 		super();
-		this.maPPC = maPPC;
-		this.maNV = maNV;
-		this.maCT = maCT;
+		this.maPhieuPhanCong = maPhieuPhanCong;
+		this.maNhanVien = maNhanVien;
+		this.maCaTruc = maCaTruc;
 		this.ngay = ngay;
 	}
 
-	public String getMaPPC() {
-		return maPPC;
+	public String getMaPhieuPhanCong() {
+		return maPhieuPhanCong;
 	}
 
-	public void setMaPPC(String maPPC) {
-		this.maPPC = maPPC;
+	public void setMaPhieuPhanCong(String maPhieuPhanCong) {
+		this.maPhieuPhanCong = maPhieuPhanCong;
 	}
 
-	public String getMaNV() {
-		return maNV;
+	public String getMaNhanVien() {
+		return maNhanVien;
 	}
 
-	public void setMaNV(String maNV) {
-		this.maNV = maNV;
+	public void setMaNhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
 	}
 
-	public String getMaCT() {
-		return maCT;
+	public String getMaCaTruc() {
+		return maCaTruc;
 	}
 
-	public void setMaCT(String maCT) {
-		this.maCT = maCT;
+	public void setMaCaTruc(String maCaTruc) {
+		this.maCaTruc = maCaTruc;
 	}
 
 	public Date getNgay() {
@@ -62,7 +62,7 @@ public class PhieuPhanCongEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maPPC);
+		return Objects.hash(maPhieuPhanCong);
 	}
 
 	@Override
@@ -72,12 +72,13 @@ public class PhieuPhanCongEntity {
 		if (obj == null)
 			return false;
 		PhieuPhanCongEntity other = (PhieuPhanCongEntity) obj;
-		return Objects.equals(maPPC, other.maPPC);
+		return Objects.equals(maPhieuPhanCong, other.maPhieuPhanCong);
 	}
 
 	@Override
 	public String toString() {
-		return "PhieuPhanCongEntity [maPPC=" + maPPC + ", maNV=" + maNV + ", maCT=" + maCT + ", ngay=" + ngay + "]";
+		return "PhieuPhanCongEntity [maPhieuPhanCong=" + maPhieuPhanCong + ", maNhanVien=" + maNhanVien + ", maCaTruc="
+				+ maCaTruc + ", ngay=" + ngay + "]";
 	}
 
 }

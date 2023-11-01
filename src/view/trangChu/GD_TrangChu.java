@@ -237,7 +237,7 @@ public class GD_TrangChu extends JFrame {
 		lblTenNhanVien.setBounds(10, 5, 253, 22);
 		pnlNguoiDung.add(lblTenNhanVien);
 
-		lblChucVu = new JLabel(nhanVienEntity.getQuyen());
+		lblChucVu = new JLabel(nhanVienEntity.getChucVu());
 		lblChucVu.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblChucVu.setFont(new Font("Segoe UI", Font.ITALIC, 12));
 		lblChucVu.setBounds(74, 28, 189, 16);
@@ -300,7 +300,7 @@ public class GD_TrangChu extends JFrame {
 	}
 
 	private void kiemTraQuyen() {
-		if (nhanVienEntity.getQuyen().equals("Quản lí")) {
+		if (nhanVienEntity.getChucVu().equals("Quản lí")) {
 			mniTrangChu.setEnabled(true);
 			mniPhong.setEnabled(true);
 			mniDichVu.setEnabled(true);
@@ -314,7 +314,7 @@ public class GD_TrangChu extends JFrame {
 			mniLapHoaDon.setEnabled(true);
 			mniThongKe.setEnabled(true);
 			btnNguoiDung.setEnabled(true);
-		} else if (nhanVienEntity.getQuyen().equals("Tiếp tân")) {
+		} else if (nhanVienEntity.getChucVu().equals("Tiếp tân")) {
 			mniTrangChu.setEnabled(true);
 			mniPhong.setEnabled(true);
 			mniDichVu.setEnabled(true);

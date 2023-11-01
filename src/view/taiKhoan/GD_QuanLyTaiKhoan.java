@@ -237,13 +237,13 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 	}
 
 	private void loadData() {
-		txtMaNV.setText(nhanVienEntity.getMaNV());
+		txtMaNV.setText(nhanVienEntity.getMaNhanVien());
 		txtHoVaTen.setText(nhanVienEntity.getHoTen());
 		txtEmail.setText(nhanVienEntity.getEmail());
-		txtChucVu.setText(nhanVienEntity.getQuyen());
+		txtChucVu.setText(nhanVienEntity.getChucVu());
 		txtCCCD.setText(nhanVienEntity.getCCCD());
 		txtNamSinh.setText(String.valueOf(nhanVienEntity.getNamSinh()));
-		txtSoDienThoai.setText(nhanVienEntity.getSdt());
+		txtSoDienThoai.setText(nhanVienEntity.getSoDienThoai());
 	}
 
 	private void lamMoi() {
@@ -264,7 +264,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 			String email = txtEmail.getText().trim();
 
 			nhanVienEntity = new NhanVienEntity(maNV, nhanVienEntity.getHoTen(), sdt, email, nhanVienEntity.getCCCD(),
-					"", nhanVienEntity.getNamSinh(), nhanVienEntity.getMucLuong(), nhanVienEntity.getQuyen(),
+					"", nhanVienEntity.getNamSinh(), nhanVienEntity.getMucLuong(), nhanVienEntity.getChucVu(),
 					nhanVienEntity.isTrangThai());
 			if (quanLyNhanVienDAO.chinhSua(nhanVienEntity) != 0) {
 				JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin nhân viên thành công");

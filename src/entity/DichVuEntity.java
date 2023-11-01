@@ -3,44 +3,52 @@ package entity;
 import java.util.Objects;
 
 public class DichVuEntity {
-	private String maDV;
-	private String tenDV;
-	private String loaiDV;
+	private String maDichVu;
+	private String tenDichVu;
+	private String loaiDichVu;
 	private double gia;
 
 	public DichVuEntity() {
 		super();
 	}
 
-	public DichVuEntity(String maDV, String tenDV, String loaiDV, double gia) {
+	public DichVuEntity(String maDichVu, String tenDichVu, String loaiDichVu, double gia) {
 		super();
-		this.maDV = maDV;
-		this.tenDV = tenDV;
-		this.loaiDV = loaiDV;
+		this.maDichVu = maDichVu;
+		this.tenDichVu = tenDichVu;
+		this.loaiDichVu = loaiDichVu;
 		this.gia = gia;
 	}
 
-	public DichVuEntity(String tenDV, String loaiDV, double gia) {
+	public DichVuEntity(String tenDichVu, String loaiDichVu, double gia) {
 		super();
-		this.tenDV = tenDV;
-		this.loaiDV = loaiDV;
+		this.tenDichVu = tenDichVu;
+		this.loaiDichVu = loaiDichVu;
 		this.gia = gia;
 	}
 
-	public String getTenDV() {
-		return tenDV;
+	public String getMaDichVu() {
+		return maDichVu;
 	}
 
-	public void setTenDV(String tenDV) {
-		this.tenDV = tenDV;
+	public void setMaDichVu(String maDichVu) {
+		this.maDichVu = maDichVu;
 	}
 
-	public String getLoaiDV() {
-		return loaiDV;
+	public String getTenDichVu() {
+		return tenDichVu;
 	}
 
-	public void setLoaiDV(String loaiDV) {
-		this.loaiDV = loaiDV;
+	public void setTenDichVu(String tenDichVu) {
+		this.tenDichVu = tenDichVu;
+	}
+
+	public String getLoaiDichVu() {
+		return loaiDichVu;
+	}
+
+	public void setLoaiDichVu(String loaiDichVu) {
+		this.loaiDichVu = loaiDichVu;
 	}
 
 	public double getGia() {
@@ -51,13 +59,9 @@ public class DichVuEntity {
 		this.gia = gia;
 	}
 
-	public String getMaDV() {
-		return maDV;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(maDV);
+		return Objects.hash(maDichVu);
 	}
 
 	@Override
@@ -67,12 +71,13 @@ public class DichVuEntity {
 		if (obj == null)
 			return false;
 		DichVuEntity other = (DichVuEntity) obj;
-		return Objects.equals(maDV, other.maDV);
+		return Objects.equals(maDichVu, other.maDichVu);
 	}
 
 	@Override
 	public String toString() {
-		return "DichVu [maDV=" + maDV + ", tenDV=" + tenDV + ", loaiDV=" + loaiDV + ", gia=" + gia + "]";
+		return "DichVu [maDichVu=" + maDichVu + ", tenDichVu=" + tenDichVu + ", loaiDichVu=" + loaiDichVu + ", gia="
+				+ gia + "]";
 	}
 
 }

@@ -161,8 +161,8 @@ public class GD_QuanLyCaTruc extends JPanel {
 
 		int stt = 1;
 		for (CaTrucEntity caTrucEntity : list) {
-			tblmodelDanhSachPhong.addRow(new Object[] { stt++, caTrucEntity.getMaCT(), caTrucEntity.getTenCT(),
-					TimeFormatter.format(caTrucEntity.getGioBD()), TimeFormatter.format(caTrucEntity.getGioKT()) });
+			tblmodelDanhSachPhong.addRow(new Object[] { stt++, caTrucEntity.getMaCaTruc(), caTrucEntity.getTenCaTruc(),
+					TimeFormatter.format(caTrucEntity.getGioBatDau()), TimeFormatter.format(caTrucEntity.getGioKetThuc()) });
 		}
 	}
 
@@ -171,10 +171,10 @@ public class GD_QuanLyCaTruc extends JPanel {
 		list = quanLyCaTrucDAO.duyetDanhSach();
 		int row = tblDsCaTruc.getSelectedRow();
 		if (row >= 0) {
-			txtMaCaTruc.setText(list.get(row).getMaCT());
-			txtCaTruc.setText(list.get(row).getTenCT());
-			txtGioBD.setText(TimeFormatter.format(list.get(row).getGioBD()));
-			txtGioKT.setText(TimeFormatter.format(list.get(row).getGioKT()));
+			txtMaCaTruc.setText(list.get(row).getMaCaTruc());
+			txtCaTruc.setText(list.get(row).getTenCaTruc());
+			txtGioBD.setText(TimeFormatter.format(list.get(row).getGioBatDau()));
+			txtGioKT.setText(TimeFormatter.format(list.get(row).getGioKetThuc()));
 		}
 	}
 }

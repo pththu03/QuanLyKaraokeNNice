@@ -3,43 +3,51 @@ package entity;
 import java.util.Objects;
 
 public class ChiTietDichVuEntity {
-	private String maCTDV;
-	private String maCTHD;
-	private String maDV;
+	private String maChiTietDichVu;
+	private String maChiTietHoaDon;
+	private String maDichVu;
 	private int soLuong;
 
 	public ChiTietDichVuEntity() {
 		super();
 	}
 
-	public ChiTietDichVuEntity(String maCTDV, String maCTHD, String maDV, int soLuong) {
-		this.maCTDV = maCTDV;
-		this.maCTHD = maCTHD;
-		this.maDV = maDV;
+	public ChiTietDichVuEntity(String maChiTietDichVu, String maChiTietHoaDon, String maDichVu, int soLuong) {
+		this.maChiTietDichVu = maChiTietDichVu;
+		this.maChiTietHoaDon = maChiTietHoaDon;
+		this.maDichVu = maDichVu;
 		this.soLuong = soLuong;
 	}
 
-	public ChiTietDichVuEntity(String maCTHD, String maDV, int soLuong) {
+	public ChiTietDichVuEntity(String maChiTietHoaDon, String maDichVu, int soLuong) {
 		super();
-		this.maCTHD = maCTHD;
-		this.maDV = maDV;
+		this.maChiTietHoaDon = maChiTietHoaDon;
+		this.maDichVu = maDichVu;
 		this.soLuong = soLuong;
 	}
 
-	public String getmaCTHD() {
-		return maCTHD;
+	public String getMaChiTietDichVu() {
+		return maChiTietDichVu;
 	}
 
-	public void setmaCTHD(String maCTHD) {
-		this.maCTHD = maCTHD;
+	public void setMaChiTietDichVu(String maChiTietDichVu) {
+		this.maChiTietDichVu = maChiTietDichVu;
 	}
 
-	public String getMaDV() {
-		return maDV;
+	public String getMaChiTietHoaDon() {
+		return maChiTietHoaDon;
 	}
 
-	public void setMaDV(String maDV) {
-		this.maDV = maDV;
+	public void setMaChiTietHoaDon(String maChiTietHoaDon) {
+		this.maChiTietHoaDon = maChiTietHoaDon;
+	}
+
+	public String getMaDichVu() {
+		return maDichVu;
+	}
+
+	public void setMaDichVu(String maDichVu) {
+		this.maDichVu = maDichVu;
 	}
 
 	public int getSoLuong() {
@@ -50,13 +58,9 @@ public class ChiTietDichVuEntity {
 		this.soLuong = soLuong;
 	}
 
-	public String getMaCTDV() {
-		return maCTDV;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(maCTDV);
+		return Objects.hash(maChiTietDichVu);
 	}
 
 	@Override
@@ -66,13 +70,13 @@ public class ChiTietDichVuEntity {
 		if (obj == null)
 			return false;
 		ChiTietDichVuEntity other = (ChiTietDichVuEntity) obj;
-		return Objects.equals(maCTDV, other.maCTDV);
+		return Objects.equals(maChiTietDichVu, other.maChiTietDichVu);
 	}
 
 	@Override
 	public String toString() {
-		return "ChiTietDichVuEntity [maCTDV=" + maCTDV + ", maCTHD=" + maCTHD + ", maDV=" + maDV + ", soLuong=" + soLuong
-				+ "]";
+		return "ChiTietDichVuEntity [maChiTietDichVu=" + maChiTietDichVu + ", maChiTietHoaDon=" + maChiTietHoaDon
+				+ ", maDichVu=" + maDichVu + ", soLuong=" + soLuong + "]";
 	}
 
 }

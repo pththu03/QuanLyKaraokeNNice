@@ -3,42 +3,43 @@ package entity;
 import java.util.Objects;
 
 public class KhachHangEntity {
-	private String maKH;
+	private String maKhachHang;
 	private String hoTen;
-	private String sdt;
+	private String soDienThoai;
 	private String email;
 	private int namSinh;
-	private int slDatPhong;
+	private int soLanDatPhong;
 
 	public KhachHangEntity() {
 		super();
 	}
 
-	public KhachHangEntity(String maKH, String hoTen, String sdt, String email, int namSinh, int slDatPhong) {
+	public KhachHangEntity(String maKhachHang, String hoTen, String soDienThoai, String email, int namSinh,
+			int soLanDatPhong) {
 		super();
-		this.maKH = maKH;
+		this.maKhachHang = maKhachHang;
 		this.hoTen = hoTen;
-		this.sdt = sdt;
+		this.soDienThoai = soDienThoai;
 		this.email = email;
 		this.namSinh = namSinh;
-		this.slDatPhong = slDatPhong;
+		this.soLanDatPhong = soLanDatPhong;
 	}
 
-	public KhachHangEntity(String hoTen, String sdt, String email, int namSinh, int slDatPhong) {
+	public KhachHangEntity(String hoTen, String soDienThoai, String email, int namSinh, int soLanDatPhong) {
 		super();
 		this.hoTen = hoTen;
-		this.sdt = sdt;
+		this.soDienThoai = soDienThoai;
 		this.email = email;
 		this.namSinh = namSinh;
-		this.slDatPhong = slDatPhong;
+		this.soLanDatPhong = soLanDatPhong;
 	}
 
-	public String getMaKH() {
-		return maKH;
+	public String getMaKhachHang() {
+		return maKhachHang;
 	}
 
-	public void setMaKH(String maKH) {
-		this.maKH = maKH;
+	public void setMaKhachHang(String maKhachHang) {
+		this.maKhachHang = maKhachHang;
 	}
 
 	public String getHoTen() {
@@ -49,12 +50,12 @@ public class KhachHangEntity {
 		this.hoTen = hoTen;
 	}
 
-	public String getSdt() {
-		return sdt;
+	public String getSoDienThoai() {
+		return soDienThoai;
 	}
 
-	public void setSdt(String sdt) throws Exception {
-		this.sdt = sdt;
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
 	}
 
 	public String getEmail() {
@@ -73,17 +74,17 @@ public class KhachHangEntity {
 		this.namSinh = namSinh;
 	}
 
-	public int getSlDatPhong() {
-		return slDatPhong;
+	public int getSoLanDatPhong() {
+		return soLanDatPhong;
 	}
 
-	public void setSlDatPhong(int slDatPhong) {
-		this.slDatPhong = slDatPhong;
+	public void setSoLanDatPhong(int soLanDatPhong) {
+		this.soLanDatPhong = soLanDatPhong;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maKH, sdt);
+		return Objects.hash(maKhachHang, soDienThoai);
 	}
 
 	@Override
@@ -93,13 +94,13 @@ public class KhachHangEntity {
 		if (obj == null)
 			return false;
 		KhachHangEntity other = (KhachHangEntity) obj;
-		return Objects.equals(maKH, other.maKH) || Objects.equals(sdt, other.sdt);
+		return Objects.equals(maKhachHang, other.maKhachHang) || Objects.equals(soDienThoai, other.soDienThoai);
 	}
 
 	@Override
 	public String toString() {
-		return "KhachHangEntity [maKH=" + maKH + ", hoTen=" + hoTen + ", sdt=" + sdt + ", email=" + email + ", namSinh="
-				+ namSinh + ", slDatPhong=" + slDatPhong + "]";
+		return "KhachHangEntity [maKhachHang=" + maKhachHang + ", hoTen=" + hoTen + ", soDienThoai=" + soDienThoai
+				+ ", email=" + email + ", namSinh=" + namSinh + ", soLanDatPhong=" + soLanDatPhong + "]";
 	}
 
 }

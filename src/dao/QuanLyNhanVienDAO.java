@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import entity.NhanVienEntity;
 import util.ConnectDB;
 import util.PasswordHasher;
@@ -40,13 +42,13 @@ public class QuanLyNhanVienDAO {
 					String password = result.getString(6);
 					int namSinh = result.getInt(7);
 					double mucLuong = result.getDouble(8);
-					String quyen = result.getString(9);
+					String ChucVu = result.getString(9);
 					boolean trangThai = false;
 					if (result.getString(10).equalsIgnoreCase("Đang làm việc")) {
 						trangThai = true;
 					}
 					nhanVienEntity = new NhanVienEntity(maNV, hoTen, sdt, email, CCCD, password, namSinh, mucLuong,
-							quyen, trangThai);
+							ChucVu, trangThai);
 					list.add(nhanVienEntity);
 				}
 			} catch (SQLException e) {
@@ -67,7 +69,7 @@ public class QuanLyNhanVienDAO {
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "SELECT MaNV, HoTen, SDT, Email, CCCD, Password, NamSinh, MucLuong, Quyen, TrangThai \r\n"
+				String query = "SELECT MaNV, HoTen, SDT, Email, CCCD, Password, NamSinh, MucLuong, ChucVu, TrangThai \r\n"
 						+ "FROM NhanVien WHERE MaNV LIKE ?";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, maNhanVien);
@@ -89,7 +91,7 @@ public class QuanLyNhanVienDAO {
 							chucVu, trangThai);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -101,117 +103,116 @@ public class QuanLyNhanVienDAO {
 		return nhanVienKetQua;
 	}
 
-	public List<NhanVienEntity> timKiem(String maNhanVien, String hoTen, int namSinh, String chucVu) {
-		List<NhanVienEntity> list = new ArrayList<>();
+	public List<NhanVienEntity> tim(String hoTen, String soDienThoai, String chucVu, String trangThai) {
+		List<NhanVienEntity> listNhanvien = new ArrayList<>();
 		Connection connect = ConnectDB.getConnect();
 		Statement statement = null;
 		ResultSet result = null;
 
 		if (connect != null) {
-			try {
-				StringBuilder query = new StringBuilder("SELECT * FROM NhanVien");
-				if (!maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0 && !chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + HoTen + NamSinh + ChucVu
-					query.append(String.format(
-							" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%s%%'",
-							maNhanVien, hoTen, namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + HoTen + NamSinh
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND NamSinh = %d",
-							maNhanVien, hoTen, namSinh));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + HoTen + ChucVu
-					query.append(
-							String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND Quyen LIKE N'%%%s%%'",
-									maNhanVien, hoTen, chucVu));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + NamSinh + ChucVu
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%%s%%'",
-							maNhanVien, namSinh, chucVu));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// HoTen + NamSinh + ChucVu
-					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND NamSinh = %d AND Quyen LIKE N'%%%s%%'",
-							hoTen, namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + Hoten
-					query.append(
-							String.format(" WHERE MaNV LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%'", maNhanVien, hoTen));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + NamSinh
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%' AND NamSinh = %d", maNhanVien, namSinh));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV + ChucVu
-					query.append(
-							String.format(" WHERE MaNV LIKE '%%%s%%' AND Quyen LIKE N'%%%s%%'", maNhanVien, chucVu));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && namSinh >= 0
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// HoTen + NamSinh
-					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND NamSinh = %d", hoTen, namSinh));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// HoTen + ChucVu
-					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%' AND Quyen LIKE N'%%%s%%'", hoTen, chucVu));
-				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// NamSinh + ChucVu
-					query.append(String.format(" WHERE NamSinh = %d AND Quyen LIKE N'%%%s%%'", namSinh, chucVu));
-				} else if (!maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// MaNV
-					query.append(String.format(" WHERE MaNV LIKE '%%%s%%'", maNhanVien));
-				} else if (maNhanVien.equals("") && !hoTen.equals("") && !(namSinh >= 0)
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// Hoten
-					query.append(String.format(" WHERE HoTen LIKE N'%%%s%%'", hoTen));
-				} else if (maNhanVien.equals("") && hoTen.equals("") && namSinh >= 0
-						&& chucVu.equalsIgnoreCase("Tất cả")) {
-					// NamSinh
-					query.append(String.format(" WHERE NamSinh = %d ", namSinh));
-				} else if (maNhanVien.equals("") && hoTen.equals("") && !(namSinh >= 0)
-						&& !chucVu.equalsIgnoreCase("Tất cả")) {
-					// ChucVu
-					query.append(String.format(" WHERE Quyen LIKE N'%%%s%%'", chucVu));
-				}
 
+			try {
+				StringBuilder query = new StringBuilder("SELECT * FROM NhanVien ");
+				if (!hoTen.equals("") && !soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// HoTen + SDT + ChucVu + trangthai
+					query.append(String.format(
+							"WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s' AND ChucVu LIKE N'%s' AND TrangThai LIKE N'%s'",
+							hoTen, soDienThoai, chucVu, trangThai));
+				} else if (!hoTen.equals("") && !soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// Hoten + SDT + ChucVu
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s' AND ChucVu LIKE N'%s'",
+							hoTen, soDienThoai, chucVu));
+				} else if (!hoTen.equals("") && !soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// hoten + sdt + trangthai
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s' AND TrangThai LIKE N'%s'",
+							hoTen, soDienThoai, trangThai));
+				} else if (!hoTen.equals("") && soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// hoten + chucvu + trangthai
+					query.append(
+							String.format("WHERE HoTen LIKE N'%%%s%%' AND ChucVu LIKE N'%s' AND TrangThai LIKE N'%s'",
+									hoTen, chucVu, trangThai));
+				} else if (hoTen.equals("") && !soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// sdt + chucvu + trangthai
+					query.append(String.format("WHERE SDT LIKE '%s' AND ChucVu LIKE N'%s' AND TrangThai LIKE N'%s'",
+							soDienThoai, chucVu, trangThai));
+				} else if (!hoTen.equals("") && !soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// hoten + sdt
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s'", hoTen, soDienThoai));
+				} else if (!hoTen.equals("") && soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// hoten + chucvu
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND ChucVu LIKE N'%s' ", hoTen, chucVu));
+				} else if (!hoTen.equals("") && soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// hoten + trangthai
+					query.append(
+							String.format("WHERE HoTen LIKE N'%%%s%%' AND TrangThai LIKE N'%s'", hoTen, trangThai));
+				} else if (hoTen.equals("") && !soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// sdt + chucvu
+					query.append(String.format("WHERE SDT LIKE '%s' AND ChucVu LIKE N'%s' ", soDienThoai, chucVu));
+				} else if (hoTen.equals("") && !soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// sdt + trangthai
+					query.append(String.format("WHERE SDT LIKE '%s' AND TrangThai LIKE N'%s'", soDienThoai, trangThai));
+				} else if (hoTen.equals("") && soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// chucvu + trangthai
+					query.append(String.format("WHERE ChucVu LIKE N'%s' AND TrangThai LIKE N'%s'", chucVu, trangThai));
+				} else if (!hoTen.equals("") && soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// hoten
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%'", hoTen));
+				} else if (hoTen.equals("") && !soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// sdt
+					query.append(String.format("WHERE SDT LIKE '%s'", soDienThoai));
+				} else if (hoTen.equals("") && soDienThoai.equals("") && !chucVu.equals("Tất cả")
+						&& trangThai.equals("Tất cả")) {
+					// chucvu
+					query.append(String.format("WHERE ChucVu LIKE N'%s'", chucVu));
+				} else if (hoTen.equals("") && soDienThoai.equals("") && chucVu.equals("Tất cả")
+						&& !trangThai.equals("Tất cả")) {
+					// trangthai
+					query.append(String.format("WHERE TrangThai LIKE N'%s'", trangThai));
+				}
 				statement = connect.createStatement();
 				result = statement.executeQuery(query.toString());
 				while (result.next()) {
 					String maNV = result.getString(1);
-					String hoTenNV = result.getString(2);
+					String hoten = result.getString(2);
 					String sdt = result.getString(3);
 					String email = result.getString(4);
-					String cccd = result.getString(5);
+					String CCCD = result.getString(5);
 					String password = result.getString(6);
-					int namSinhNV = result.getInt(7);
+					int namSinh = result.getInt(7);
 					double mucLuong = result.getDouble(8);
-					String quyen = result.getString(9);
-					boolean trangThai = false;
+					String ChucVu = result.getString(9);
+					boolean trangthai = false;
 					if (result.getString(10).equalsIgnoreCase("Đang làm việc")) {
-						trangThai = true;
+						trangthai = true;
 					}
-
-					NhanVienEntity nhanVienEntity = new NhanVienEntity(maNV, hoTenNV, sdt, email, cccd, password,
-							namSinhNV, mucLuong, quyen, trangThai);
-					list.add(nhanVienEntity);
+					NhanVienEntity nhanVienEntity = new NhanVienEntity(maNV, hoten, sdt, email, CCCD, password, namSinh,
+							mucLuong, ChucVu, trangthai);
+					listNhanvien.add(nhanVienEntity);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi Cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
-				ConnectDB.closeResultSet(result);
 				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
 			}
 		}
 
-		return list;
+		return listNhanvien;
 	}
 
 	public NhanVienEntity them(NhanVienEntity nhanVienEntity) {
@@ -223,31 +224,30 @@ public class QuanLyNhanVienDAO {
 		if (connect != null) {
 			try {
 				String query = "INSERT INTO NhanVien "
-						+ "([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [Quyen], [TrangThai])"
+						+ "([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])"
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				String trangThai = "Đã nghỉ";
 				statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, nhanVienEntity.getHoTen());
-				statement.setString(2, nhanVienEntity.getSdt());
+				statement.setString(2, nhanVienEntity.getSoDienThoai());
 				statement.setString(3, nhanVienEntity.getEmail());
 				statement.setString(4, nhanVienEntity.getCCCD());
 				statement.setString(5, nhanVienEntity.getPassword());
 				statement.setInt(6, nhanVienEntity.getNamSinh());
 				statement.setDouble(7, nhanVienEntity.getMucLuong());
-				statement.setString(8, nhanVienEntity.getQuyen());
+				statement.setString(8, nhanVienEntity.getChucVu());
 				if (nhanVienEntity.isTrangThai()) {
 					trangThai = "Đang làm việc";
 				}
 				statement.setString(9, trangThai);
 				statement.executeUpdate();
-
 				result = statement.getGeneratedKeys();
 				while (result.next()) {
 					nhanVienEntity1 = new NhanVienEntity();
-					nhanVienEntity1.setMaNV(result.getString(1));
+					nhanVienEntity1.setMaNhanVien(result.getString(1));
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -272,47 +272,45 @@ public class QuanLyNhanVienDAO {
 				statement.setString(2, sdt);
 				n = statement.executeUpdate();
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
-
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
 			}
-			ConnectDB.closeConnect(connect);
-			ConnectDB.closePreStatement(statement);
 		}
 		return n > 0;
 	}
 
 	public int chinhSua(NhanVienEntity nhanVienEntity) {
-
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 
 		if (connect != null) {
 			try {
 				String query = "UPDATE NhanVien\r\n SET HoTen = ?, SDT = ?, " + "Email = ?, NamSinh = ?, MucLuong = ?, "
-						+ "Quyen = ?, TrangThai = ?\r\n" + "Where MaNV LIKE ?";
+						+ "ChucVu = ?, TrangThai = ?\r\n" + "Where MaNV LIKE ?";
 				String trangThai = "Đã nghỉ";
 				if (nhanVienEntity.isTrangThai()) {
 					trangThai = "Đang làm việc";
 				}
 				statement = connect.prepareStatement(query);
 				statement.setString(1, nhanVienEntity.getHoTen());
-				statement.setString(2, nhanVienEntity.getSdt());
+				statement.setString(2, nhanVienEntity.getSoDienThoai());
 				statement.setString(3, nhanVienEntity.getEmail());
 				statement.setInt(4, nhanVienEntity.getNamSinh());
 				statement.setDouble(5, nhanVienEntity.getMucLuong());
-				statement.setString(6, nhanVienEntity.getQuyen());
+				statement.setString(6, nhanVienEntity.getChucVu());
 				statement.setString(7, trangThai);
-				statement.setString(8, nhanVienEntity.getMaNV());
+				statement.setString(8, nhanVienEntity.getMaNhanVien());
 				return statement.executeUpdate();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
-
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
 			}
-			ConnectDB.closeConnect(connect);
-			ConnectDB.closePreStatement(statement);
 		}
 
 		return 0;
