@@ -6,11 +6,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
+import java.time.LocalDate;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -255,9 +258,9 @@ public class GD_QuanLyHoaDon extends JPanel {
 		pnlQuanLiHoaDon.add(pnlTimKiem);
 		pnlTimKiem.setLayout(null);
 
-		lblTimKiemBangTenNV = new JLabel("Nhân viên:");
+		lblTimKiemBangTenNV = new JLabel("Tên nhân viên:");
 		lblTimKiemBangTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTimKiemBangTenNV.setBounds(125, 46, 100, 30);
+		lblTimKiemBangTenNV.setBounds(103, 46, 111, 30);
 		pnlTimKiem.add(lblTimKiemBangTenNV);
 
 		txtTimKiemBangTenNV = new JTextField();
@@ -266,9 +269,9 @@ public class GD_QuanLyHoaDon extends JPanel {
 		pnlTimKiem.add(txtTimKiemBangTenNV);
 		txtTimKiemBangTenNV.setColumns(10);
 
-		lblTimKiemBangTenKH = new JLabel("Khách hàng:");
+		lblTimKiemBangTenKH = new JLabel("Tên khách hàng:");
 		lblTimKiemBangTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTimKiemBangTenKH.setBounds(125, 96, 100, 30);
+		lblTimKiemBangTenKH.setBounds(103, 96, 111, 30);
 		pnlTimKiem.add(lblTimKiemBangTenKH);
 
 		txtTimKiemBangTenKH = new JTextField();
@@ -279,7 +282,7 @@ public class GD_QuanLyHoaDon extends JPanel {
 
 		lblTimKiemBangNgayLapHD = new JLabel("Ngày lập HD:");
 		lblTimKiemBangNgayLapHD.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTimKiemBangNgayLapHD.setBounds(125, 146, 100, 30);
+		lblTimKiemBangNgayLapHD.setBounds(103, 146, 111, 30);
 		pnlTimKiem.add(lblTimKiemBangNgayLapHD);
 
 		btnTimKiem = new JButton("Tìm kiếm");
@@ -293,14 +296,16 @@ public class GD_QuanLyHoaDon extends JPanel {
 
 		lblDen = new JLabel("Đến:");
 		lblDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblDen.setBounds(125, 198, 100, 30);
+		lblDen.setBounds(103, 198, 111, 30);
 		pnlTimKiem.add(lblDen);
 
 		chonNgayLapTu = new JDateChooser();
+		chonNgayLapTu.setDateFormatString("dd/MM/yyyy");
 		chonNgayLapTu.setBounds(224, 146, 323, 30);
 		pnlTimKiem.add(chonNgayLapTu);
 
 		chonNgayLapDen = new JDateChooser();
+		chonNgayLapDen.setDateFormatString("dd/MM/yyyy");
 		chonNgayLapDen.setBounds(224, 198, 323, 30);
 		pnlTimKiem.add(chonNgayLapDen);
 
@@ -324,6 +329,16 @@ public class GD_QuanLyHoaDon extends JPanel {
 		scrDsHoaDon = new JScrollPane(tblHoaDon);
 		scrDsHoaDon.setBounds(10, 80, 674, 557);
 		pnlDsHoaDon.add(scrDsHoaDon);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblHoaDon.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblHoaDon.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		tblHoaDon.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		tblHoaDon.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
 		btnXemChiTietHoaDon = new JButton("Xem chi tiết hóa đơn");
 		btnXemChiTietHoaDon.setIcon(new ImageIcon(GD_QuanLyHoaDon.class.getResource("/images/iconNhinMK.png")));
@@ -350,8 +365,6 @@ public class GD_QuanLyHoaDon extends JPanel {
 		tblmodelHoaDon.setRowCount(0);
 		listHoaDon = new ArrayList<HoaDonEntity>();
 		listHoaDon = quanLyHoaDonDAO.duyetDanhSach();
-		NhanVienEntity nhanVienEntity = null;
-		KhachHangEntity khachHangEntity = null;
 
 		int stt = 1;
 		for (HoaDonEntity hoaDonEntity : listHoaDon) {
@@ -359,13 +372,10 @@ public class GD_QuanLyHoaDon extends JPanel {
 			if (hoaDonEntity.isTrangThai()) {
 				trangThai = "Đã thanh toán";
 			}
-			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
-			khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
-			String ngayLapHD = "NULL";
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+			String ngayLapHD = DateFormatter.format(hoaDonEntity.getNgayLap());
 			String gioLapHD = "NULL";
-			if (hoaDonEntity.getNgayLap() != null) {
-				ngayLapHD = DateFormatter.format(hoaDonEntity.getNgayLap());
-			}
 			if (hoaDonEntity.getGioLap() != null) {
 				gioLapHD = TimeFormatter.format(hoaDonEntity.getGioLap());
 			}
@@ -378,70 +388,30 @@ public class GD_QuanLyHoaDon extends JPanel {
 		listHoaDon = new ArrayList<HoaDonEntity>();
 		listHoaDon = quanLyHoaDonDAO.duyetDanhSach();
 		int row = tblHoaDon.getSelectedRow();
-		NhanVienEntity nhanVienEntity = null;
-		KhachHangEntity khachHangEntity = null;
 
 		if (row >= 0) {
 			txtMaHD.setText(listHoaDon.get(row).getMaHoaDon());
-			txtMaKH.setText(listHoaDon.get(row).getMaHoaDon());
-			txtMaNV.setText(listHoaDon.get(row).getMaHoaDon());
-			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(listHoaDon.get(row).getMaNhanVien());
+			txtMaKH.setText(listHoaDon.get(row).getMaKhachHang());
+			txtMaNV.setText(listHoaDon.get(row).getMaNhanVien());
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(listHoaDon.get(row).getMaNhanVien());
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(listHoaDon.get(row).getMaKhachHang());
 			txtTenNV.setText(nhanVienEntity.getHoTen());
-			khachHangEntity = quanLyKhachHangDAO.timTheoMa(listHoaDon.get(row).getMaKhachHang());
 			txtTenKH.setText(khachHangEntity.getHoTen());
 			if (listHoaDon.get(row).isTrangThai()) {
 				cmbTrangThai.setSelectedIndex(1);
 			} else {
 				cmbTrangThai.setSelectedIndex(2);
-				;
-			}
-			txtNgayLapHD.setText(DateFormatter.format(listHoaDon.get(row).getNgayLap()));
-			txtGioLapHD.setText(TimeFormatter.format(listHoaDon.get(row).getGioLap()));
-		}
-	}
 
-	/**
-	 * Tìm kiếm
-	 */
-	public void chonChucNangTimKiem() {
-		if (kiemTraDuLieuTim()) {
-			String tenNV = txtTimKiemBangTenNV.getText().trim();
-			String tenKH = txtTimKiemBangTenKH.getText().trim();
-			String ngayLapTu = null;
-			String ngayLapDen = null;
+				String ngayLap = DateFormatter.format(listHoaDon.get(row).getNgayLap());
+				String gioLap = "NULL";
 
-			if (chonNgayLapTu.getDate() != null && chonNgayLapDen.getDate() != null
-					&& chonNgayLapTu.getDate().before(chonNgayLapDen.getDate())) {
-				ngayLapTu = chonNgayLapTu.getDate().toString();
-				ngayLapDen = chonNgayLapDen.getDate().toString();
-			}
-
-			NhanVienEntity nhanVienEntity = null;
-			listHoaDon = new ArrayList<HoaDonEntity>();
-			tblHoaDon.removeAll();
-			tblmodelHoaDon.setRowCount(0);
-			// listHoaDon = quanLyHoaDonDAO.
-			int stt = 1;
-			for (HoaDonEntity hoaDonEntity : listHoaDon) {
-				String trangThai = "Chưa thanh toán";
-				if (hoaDonEntity.isTrangThai()) {
-					trangThai = "Đã thanh toán";
+				if (listHoaDon.get(row).getGioLap() != null) {
+					gioLap = TimeFormatter.format(listHoaDon.get(row).getGioLap());
 				}
-				tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), nhanVienEntity.getHoTen(),
-						hoaDonEntity.getMaKhachHang(), DateFormatter.format(hoaDonEntity.getNgayLap()),
-						TimeFormatter.format(hoaDonEntity.getGioLap()), trangThai });
+				txtNgayLapHD.setText(ngayLap);
+				txtGioLapHD.setText(gioLap);
 			}
 		}
-	}
-
-	private boolean kiemTraDuLieuTim() {
-		if (chonNgayLapTu.getDate() != null && chonNgayLapDen.getDate() != null
-				&& chonNgayLapTu.getDate().before(chonNgayLapDen.getDate())) {
-			JOptionPane.showMessageDialog(this, "Ngày lập hóa đơn nhỏ nhất phải trước ngày lập hóa đơn lớn nhất");
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
@@ -461,8 +431,12 @@ public class GD_QuanLyHoaDon extends JPanel {
 		chonNgayLapTu.removeAll();
 		txtTimKiemBangTenNV.setText("");
 		txtTimKiemBangTenKH.setText("");
+		loadData();
 	}
 
+	/**
+	 * 
+	 */
 	public void chonChucNangXemChiTietHoaDon() {
 		int row = tblHoaDon.getSelectedRow();
 		if (row >= 0) {
@@ -475,4 +449,89 @@ public class GD_QuanLyHoaDon extends JPanel {
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn");
 		}
 	}
+
+	/**
+	 * Tìm kiếm
+	 */
+	public void chonChucNangTimKiem() {
+		if (kiemTraDuLieuTim()) {
+			String tenNV = txtTimKiemBangTenNV.getText().trim();
+			String tenKH = txtTimKiemBangTenKH.getText().trim();
+			Date ngayLapTu = null;
+			Date ngayLapDen = null;
+
+			if (chonNgayLapTu.getDate() != null && chonNgayLapDen.getDate() != null
+					&& chonNgayLapTu.getDate().before(chonNgayLapDen.getDate())) {
+				ngayLapTu = chonNgayLapTu.getDate();
+				ngayLapDen = chonNgayLapDen.getDate();
+			}
+
+			listHoaDon = new ArrayList<HoaDonEntity>();
+			tblHoaDon.removeAll();
+			tblmodelHoaDon.setRowCount(0);
+			listHoaDon = quanLyHoaDonDAO.timKiem(tenNV, tenKH, ngayLapTu, ngayLapDen);
+
+			int stt = 1;
+			for (HoaDonEntity hoaDonEntity : listHoaDon) {
+				String trangThai = "Chưa thanh toán";
+
+				if (hoaDonEntity.isTrangThai()) {
+					trangThai = "Đã thanh toán";
+				}
+
+				NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
+				KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+				String ngayLapHD = "";
+				String gioLapHD = "";
+
+				if (hoaDonEntity.getNgayLap() != null) {
+					ngayLapHD = DateFormatter.format(hoaDonEntity.getNgayLap());
+				}
+
+				if (hoaDonEntity.getGioLap() != null) {
+					gioLapHD = TimeFormatter.format(hoaDonEntity.getGioLap());
+				}
+
+				tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), nhanVienEntity.getHoTen(),
+						khachHangEntity.getHoTen(), ngayLapHD, gioLapHD, trangThai });
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	private boolean kiemTraDuLieuTim() {
+
+		if (txtTimKiemBangTenKH.getText().equals("") && txtTimKiemBangTenNV.getText().equals("")
+				&& chonNgayLapTu.getDate() == null && chonNgayLapDen.getDate() == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu tìm");
+			return false;
+
+		}
+		if (chonNgayLapTu.getDate() != null) {
+			if (chonNgayLapDen.getDate() == null) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày lập hóa đơn lớn nhất");
+				return false;
+			}
+			if (chonNgayLapTu.getDate().after(new Date(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+					LocalDate.now().getDayOfMonth()))) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày lập hóa đơn nhỏ nhất trước ngày hôm nay");
+				return false;
+			}
+			if (chonNgayLapDen.getDate().after(new Date(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+					LocalDate.now().getDayOfMonth()))) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày lập hóa đơn lớn nhất trước ngày hôm nay");
+				return false;
+			}
+			if (chonNgayLapTu.getDate().after(chonNgayLapDen.getDate())) {
+				JOptionPane.showMessageDialog(this, "Ngày lập hóa đơn nhỏ nhất phải trước ngày lập hóa đơn lớn nhất");
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

@@ -85,4 +85,11 @@ public class PhongEntity {
 		return Objects.equals(maPhong, other.maPhong) || soPhong == other.soPhong;
 	}
 
+	@Override
+	public String toString() {
+		return "PhongEntity [maPhong=" + maPhong + ", soPhong=" + soPhong + ", loaiPhong=" + loaiPhong + ", trangThai="
+				+ trangThai + ", sucChua=" + sucChua + "]";
+	}
+
+	
 }

@@ -18,26 +18,31 @@ public class DatPhongController implements ActionListener, MouseListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o.equals(giaoDienDatPhong.radDatPhongCho)) {
-			giaoDienDatPhong.chonRButtonDatPhongCho();
-		} else if (o.equals(giaoDienDatPhong.radDatPhongNgay)) {
+		String action = e.getActionCommand();
+		if (action.equals("Đặt phòng trước")) {
+			giaoDienDatPhong.chonRButtonDatPhongTruoc();
+		} else if (action.equals("Đặt phòng ngay")) {
 			giaoDienDatPhong.chonRButtonDatPhongNgay();
 		} else if (o.equals(giaoDienDatPhong.btnTimKiemPhong)) {
 			giaoDienDatPhong.chonChucNangTimKiemPhong();
-		} else if (o.equals(giaoDienDatPhong.btnLamMoi)) {
+		} else if (action.equals("Làm mới")) {
 			giaoDienDatPhong.chonChucNangLamMoi();
 		} else if (o.equals(giaoDienDatPhong.btnTimKiemKhachHang)) {
 			giaoDienDatPhong.chonChucNangTimKiemSDTKhachHang();
-		} else if (o.equals(giaoDienDatPhong.btnDatPhong)) {
+		} else if (action.equals("Đặt phòng")) {
 			giaoDienDatPhong.chonChucNangDatPhong();
-		} else if (o.equals(giaoDienDatPhong.btnDoiPhong)) {
+		} else if (action.equals("Đổi phòng")) {
 			giaoDienDatPhong.chonChucNangDoiPhong();
-		} else if (o.equals(giaoDienDatPhong.btnHuyPhong)) {
-			giaoDienDatPhong.chonChucNangHuyPhong();
-		} else if (o.equals(giaoDienDatPhong.btnChonPhong)) {
+		} else if (action.equals("Kiểm tra")) {
+			giaoDienDatPhong.chonChucNangKiemTra();
+		} else if (action.equals("Xác nhận đổi")) {
+			giaoDienDatPhong.chonChucNangXacNhanDoiPhong();
+		} else if (action.equals("Xóa đã chọn")) {
+			giaoDienDatPhong.chonChucNangXoaPhongDaChon();
+		} else if (action.equals("Chọn phòng")) {
 			giaoDienDatPhong.chonChucNangChonPhong();
-		} else if (o.equals(giaoDienDatPhong.btnNhanPhong)) {
-			giaoDienDatPhong.chonChucNangNhanPhong();
+		} else if (action.equals("Hủy đặt trước")) {
+			giaoDienDatPhong.chonChucNangHuyPhongDatTruoc();
 		}
 	}
 

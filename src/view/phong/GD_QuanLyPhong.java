@@ -13,6 +13,7 @@ import java.awt.SystemColor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controller.QuanLyPhongController;
@@ -37,6 +38,7 @@ public class GD_QuanLyPhong extends JPanel {
 	private JPanel pnlPhong;
 	private JPanel pnlDsPhong;
 	private JPanel pnlTimKiem;
+	private JPanel pnlChuThich;
 	// JLable
 	private JLabel lblAnhTrangThai;
 	private JLabel lblVIP;
@@ -68,8 +70,8 @@ public class GD_QuanLyPhong extends JPanel {
 	private JTextField txtTimBangTrangThai;
 	private JTextField txtTimKiemBangLoaiPhong;
 	// JTable
-	private JTable tblDanhSachPhong;
-	private DefaultTableModel tblmodelDanhSachPhong;
+	private JTable tblPhong;
+	private DefaultTableModel tblmodelPhong;
 	// JScrollPane
 	private JScrollPane scrDanhSachPhong;
 	// JComboBox
@@ -84,7 +86,7 @@ public class GD_QuanLyPhong extends JPanel {
 
 	private QuanLyPhongController controller;
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-	private List<PhongEntity> list;
+	private List<PhongEntity> listPhong;
 
 	public GD_QuanLyPhong() {
 		setLayout(null);
@@ -114,7 +116,7 @@ public class GD_QuanLyPhong extends JPanel {
 		pnlPhong.add(lblMaPhong);
 
 		txtMaPhong = new JTextField();
-		txtMaPhong.setBackground(new Color(255, 255, 255));
+		txtMaPhong.setBackground(Color.WHITE);
 		txtMaPhong.setEnabled(false);
 		txtMaPhong.setDisabledTextColor(Color.BLACK);
 		txtMaPhong.setSelectedTextColor(Color.BLACK);
@@ -146,6 +148,8 @@ public class GD_QuanLyPhong extends JPanel {
 		pnlPhong.add(lblSucChua);
 
 		txtSucChua = new JTextField();
+		txtSucChua.setBackground(Color.WHITE);
+		txtSucChua.setEditable(false);
 		txtSucChua.setBounds(120, 356, 302, 30);
 		pnlPhong.add(txtSucChua);
 		txtSucChua.setColumns(10);
@@ -172,6 +176,7 @@ public class GD_QuanLyPhong extends JPanel {
 		String[] colsLoaiPhong = { "", "Thường", "VIP" };
 		cmbmodelLoaiPhong = new DefaultComboBoxModel<>(colsLoaiPhong);
 		cmbLoaiPhong = new JComboBox<String>(cmbmodelLoaiPhong);
+		cmbLoaiPhong.setBackground(Color.WHITE);
 		cmbLoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		cmbLoaiPhong.setBounds(121, 240, 301, 30);
 		pnlPhong.add(cmbLoaiPhong);
@@ -266,15 +271,25 @@ public class GD_QuanLyPhong extends JPanel {
 		lblDanhSachPhong.setBounds(0, 11, 694, 40);
 		pnlDsPhong.add(lblDanhSachPhong);
 
-		String[] colsPhong = { "STT", "Mã phòng", "Số phòng", "Loại phòng", "Trạng thái", "Sức chứa" };
-		tblmodelDanhSachPhong = new DefaultTableModel(colsPhong, 0);
-		tblDanhSachPhong = new JTable(tblmodelDanhSachPhong);
-		tblDanhSachPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		scrDanhSachPhong = new JScrollPane(tblDanhSachPhong);
+		String[] colsPhong = { "STT", "Mã phòng", "Số phòng", "Loại phòng", "Sức chứa", "Trạng thái" };
+		tblmodelPhong = new DefaultTableModel(colsPhong, 0);
+		tblPhong = new JTable(tblmodelPhong);
+		tblPhong.setAutoCreateRowSorter(true);
+		tblPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		scrDanhSachPhong = new JScrollPane(tblPhong);
 		scrDanhSachPhong.setBounds(10, 65, 674, 547);
 		pnlDsPhong.add(scrDanhSachPhong);
 
-		JPanel pnlChuThich = new JPanel();
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblPhong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblPhong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		tblPhong.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		tblPhong.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+
+		tblPhong.getColumnModel().getColumn(0).setPreferredWidth(40);
+
+		pnlChuThich = new JPanel();
 		pnlChuThich.setBounds(0, 622, 1365, 72);
 		pnlQuanLiPhong.add(pnlChuThich);
 		pnlChuThich.setLayout(null);
@@ -324,57 +339,63 @@ public class GD_QuanLyPhong extends JPanel {
 		btnLamMoi.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
 
-		tblDanhSachPhong.addMouseListener(controller);
+		tblPhong.addMouseListener(controller);
 		loadData();
 	}
 
+	/**
+	 * loadData lên table
+	 */
 	private void loadData() {
-		tblDanhSachPhong.removeAll();
-		tblDanhSachPhong.setRowSelectionAllowed(false);
-		tblmodelDanhSachPhong.setRowCount(0);
-		list = new ArrayList<PhongEntity>();
-		list = quanLyPhongDAO.duyetDanhSach();
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+		listPhong = new ArrayList<PhongEntity>();
+		listPhong = quanLyPhongDAO.duyetDanhSach();
 
 		int stt = 1;
-		for (PhongEntity phongEntity : list) {
-			tblmodelDanhSachPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
-					phongEntity.getLoaiPhong(), phongEntity.getTrangThai(), phongEntity.getSucChua() });
+		for (PhongEntity phongEntity : listPhong) {
+			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
+					phongEntity.getLoaiPhong(), phongEntity.getSucChua(), phongEntity.getTrangThai() });
 		}
 	}
 
+	/**
+	 * Hiển thị thông tin
+	 */
 	public void hienThiThongTin() {
-		list = new ArrayList<PhongEntity>();
-		list = quanLyPhongDAO.duyetDanhSach();
-		int row = tblDanhSachPhong.getSelectedRow();
+		listPhong = new ArrayList<PhongEntity>();
+		listPhong = quanLyPhongDAO.duyetDanhSach();
+		int row = tblPhong.getSelectedRow();
 		if (row >= 0) {
-			txtMaPhong.setText(list.get(row).getMaPhong());
-			txtSoPhong.setText(String.valueOf(list.get(row).getSoPhong()));
-			if (list.get(row).getLoaiPhong().equals("Thường")) {
+			txtMaPhong.setText(listPhong.get(row).getMaPhong());
+			txtSoPhong.setText(String.valueOf(listPhong.get(row).getSoPhong()));
+			if (listPhong.get(row).getLoaiPhong().equals("Thường")) {
 				cmbLoaiPhong.setSelectedIndex(1);
 				lblVIP.setVisible(false);
 			} else {
 				cmbLoaiPhong.setSelectedIndex(2);
 				lblVIP.setVisible(true);
 			}
-			if (list.get(row).getTrangThai().equals("Trống")) {
+			txtSucChua.setText(String.valueOf(listPhong.get(row).getSucChua()));
+			if (listPhong.get(row).getTrangThai().equals("Trống")) {
 				cmbTrangThai.setSelectedIndex(1);
 				lblAnhTrangThai.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongTrong2.png")));
-			} else if (list.get(row).getTrangThai().equals("Chờ")) {
+			} else if (listPhong.get(row).getTrangThai().equals("Chờ")) {
 				cmbTrangThai.setSelectedIndex(2);
 				lblAnhTrangThai.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongCho2.png")));
-			} else if (list.get(row).getTrangThai().equals("Đang sử dụng")) {
+			} else if (listPhong.get(row).getTrangThai().equals("Đang sử dụng")) {
 				cmbTrangThai.setSelectedIndex(3);
 				lblAnhTrangThai
 						.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDangSuDung2.png")));
 			} else {
 				cmbTrangThai.setSelectedIndex(4);
 			}
-			txtSucChua.setText(String.valueOf(list.get(row).getSucChua()));
 		}
 	}
 
 	/**
-	 * Làm mới
+	 * Chọn chức năng làm mới
 	 */
 	public void chonChucNangLamMoi() {
 		cmbLoaiPhong.setSelectedIndex(0);
@@ -391,7 +412,7 @@ public class GD_QuanLyPhong extends JPanel {
 	}
 
 	/**
-	 * Tìm kiếm
+	 * Chọn chức năng tìm kiếm
 	 */
 	public void chonChucNangTimKiem() {
 		if (kiemTraDuLieuTim()) {
@@ -410,26 +431,32 @@ public class GD_QuanLyPhong extends JPanel {
 				soPhong = -1;
 			}
 
-			list = new ArrayList<>();
-			tblDanhSachPhong.removeAll();
-			tblmodelDanhSachPhong.setRowCount(0);
-			list = quanLyPhongDAO.timKiem(soPhong, loaiPhong, trangThai, sucChua);
+			listPhong = new ArrayList<>();
+			tblPhong.removeAll();
+			tblmodelPhong.setRowCount(0);
+			listPhong = quanLyPhongDAO.timKiem(soPhong, loaiPhong, trangThai, sucChua);
 			int stt = 1;
-			for (PhongEntity phongEntity : list) {
-				tblmodelDanhSachPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
-						phongEntity.getLoaiPhong(), phongEntity.getTrangThai(), phongEntity.getSucChua() });
+			for (PhongEntity phongEntity : listPhong) {
+				tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
+						phongEntity.getLoaiPhong(), phongEntity.getSucChua(), phongEntity.getTrangThai() });
 			}
 		} else {
 			return;
 		}
 	}
 
+	/**
+	 * Kiểm tra dữ liệu nhập vào để tìm kiếm
+	 * 
+	 * @return
+	 */
 	private boolean kiemTraDuLieuTim() {
 		String soPhong = txtTimKiemBangSoPhong.getText().trim();
 		String sucChua = txtTimKiemBangSucChua.getText().trim();
 		String loaiPhong = txtTimKiemBangLoaiPhong.getText().trim();
 		String trangThai = txtTimBangTrangThai.getText().trim();
 
+		// soPhong
 		if (soPhong.isEmpty() && loaiPhong.isEmpty() && trangThai.isEmpty() && sucChua.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Hãy nhập dữ liệu cần tìm", "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -442,12 +469,14 @@ public class GD_QuanLyPhong extends JPanel {
 			txtTimKiemBangSoPhong.requestFocus();
 		}
 
+		// loaiPhong
 		if (loaiPhong.length() > 0 && !(loaiPhong.equalsIgnoreCase("VIP") || loaiPhong.equalsIgnoreCase("Thường"))) {
 			JOptionPane.showMessageDialog(this, "Không có loại phòng " + loaiPhong, "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
 			txtTimKiemBangLoaiPhong.requestFocus();
 		}
 
+		// trangThai
 		if (trangThai.length() > 0 && !(trangThai.equalsIgnoreCase("Chờ") || trangThai.equalsIgnoreCase("Trống")
 				|| trangThai.equalsIgnoreCase("Đang sử dụng"))) {
 			JOptionPane.showMessageDialog(this, "Không có trạng thái phòng " + trangThai, "Thông báo",
@@ -455,6 +484,7 @@ public class GD_QuanLyPhong extends JPanel {
 			txtTimBangTrangThai.requestFocus();
 		}
 
+		// sucChua
 		if (sucChua.length() > 0) {
 			try {
 				int sc = Integer.parseInt(sucChua);

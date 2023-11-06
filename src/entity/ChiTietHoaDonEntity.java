@@ -32,6 +32,14 @@ public class ChiTietHoaDonEntity {
 		this.gioTraPhong = gioTraPhong;
 	}
 
+	public ChiTietHoaDonEntity(String maChiTietHoaDon, String maHoaDon, String maPhong, LocalTime gioNhanPhong) {
+		super();
+		this.maChiTietHoaDon = maChiTietHoaDon;
+		this.maHoaDon = maHoaDon;
+		this.maPhong = maPhong;
+		this.gioNhanPhong = gioNhanPhong;
+	}
+
 	public ChiTietHoaDonEntity(String maHoaDon, String maPhong, LocalTime gioNhanPhong) {
 		super();
 		this.maHoaDon = maHoaDon;

@@ -60,7 +60,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-		
+
 		pnlTaiKhoan = new JPanel();
 		pnlTaiKhoan.setBackground(new Color(230, 230, 250));
 		pnlTaiKhoan.setBounds(0, 0, 1365, 694);
@@ -227,15 +227,9 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		loadData();
 	}
 
-	public void chonChucNangDangXuat() {
-		if (JOptionPane.showConfirmDialog(this, "Thông báo", "Xác nhận đăng xuất?",
-				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-			new GD_DangNhap().setVisible(true);
-			JFrame manHinhCha = (JFrame) this.getTopLevelAncestor();
-			manHinhCha.dispose();
-		}
-	}
-
+	/**
+	 * loadData lên table
+	 */
 	private void loadData() {
 		txtMaNV.setText(nhanVienEntity.getMaNhanVien());
 		txtHoVaTen.setText(nhanVienEntity.getHoTen());
@@ -246,6 +240,9 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtSoDienThoai.setText(nhanVienEntity.getSoDienThoai());
 	}
 
+	/**
+	 * Chọn chức năng làm mới
+	 */
 	private void lamMoi() {
 		txtMaNV.setText("");
 		txtHoVaTen.setText("");
@@ -256,6 +253,28 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtEmail.setText("");
 	}
 
+	/**
+	 * Chọn chức năng đổi mật khẩu
+	 */
+	public void chonChucNangDoiMatKhau() {
+		new GD_DoiMatKhau(nhanVienEntity).setVisible(true);
+	}
+
+	/**
+	 * Chọn chức năng đăng xuất
+	 */
+	public void chonChucNangDangXuat() {
+		if (JOptionPane.showConfirmDialog(this, "Thông báo", "Xác nhận đăng xuất?",
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+			new GD_DangNhap().setVisible(true);
+			JFrame manHinhCha = (JFrame) this.getTopLevelAncestor();
+			manHinhCha.dispose();
+		}
+	}
+
+	/**
+	 * Chọn chức năng chỉnh sửa
+	 */
 	public void chonChucNangChinhSua() {
 		if (kiemTraDuLieuSDT() && kiemTraDuLieuEmail() == false || kiemTraDuLieuSDT() == false && kiemTraDuLieuEmail()
 				|| kiemTraDuLieuSDT() && kiemTraDuLieuEmail()) {
@@ -266,7 +285,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 			nhanVienEntity = new NhanVienEntity(maNV, nhanVienEntity.getHoTen(), sdt, email, nhanVienEntity.getCCCD(),
 					"", nhanVienEntity.getNamSinh(), nhanVienEntity.getMucLuong(), nhanVienEntity.getChucVu(),
 					nhanVienEntity.isTrangThai());
-			if (quanLyNhanVienDAO.chinhSua(nhanVienEntity) != 0) {
+			if (quanLyNhanVienDAO.chinhSua(nhanVienEntity)) {
 				JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin nhân viên thành công");
 				lamMoi();
 				loadData();
@@ -277,6 +296,11 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		}
 	}
 
+	/**
+	 * Kiểm tra dữ liệu Số điện thoại nhập vào khi chỉnh sửa
+	 * 
+	 * @return
+	 */
 	private boolean kiemTraDuLieuSDT() {
 		String sdt = txtSoDienThoai.getText();
 		if (sdt.length() > 0) {
@@ -295,6 +319,11 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		return true;
 	}
 
+	/**
+	 * Kiểm tra dữ liệu email nhập vào khi chỉnh sửa
+	 * 
+	 * @return
+	 */
 	private boolean kiemTraDuLieuEmail() {
 		String email = txtEmail.getText();
 		if (email.length() > 0) {
@@ -306,9 +335,5 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 			}
 		}
 		return true;
-	}
-
-	public void chonChucNangDoiMatKhau() {
-		new GD_DoiMatKhau(nhanVienEntity).setVisible(true);
 	}
 }

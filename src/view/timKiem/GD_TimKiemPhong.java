@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controller.TimKiemPhongController;
@@ -23,12 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.JComboBox;
 
 public class GD_TimKiemPhong extends JFrame {
 	/**
@@ -56,18 +59,22 @@ public class GD_TimKiemPhong extends JFrame {
 	private JTextField txtSoPhong;
 	private JTextField txtSucChua;
 	// JTable
-	private JTable tblBangThongTin;
-	private DefaultTableModel tblmodelBangThongTin;
+	private JTable tblPhong;
+	private DefaultTableModel tblmodelPhong;
 	// JCrollPane
 	private JScrollPane scrBangThongTin;
+	// JButton
 	public JButton btnTimKiem;
 	public JButton btnLamMoi;
 
+	private JComboBox<String> cmbSucChua;
+	private JComboBox<String> cmbLoaiPhong;
+	private DefaultComboBoxModel<String> cmbmodelSucChua;
+	private DefaultComboBoxModel<String> cmbmodelLoaiPhong;
+
 	private TimKiemPhongController controller;
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-	private List<PhongEntity> list;
-	private JTextField txtTimBangLoaiPhong;
-	private JTextField txtTimBangSucChua;
+	private List<PhongEntity> listPhong;
 
 	public GD_TimKiemPhong() {
 		setResizable(false);
@@ -114,26 +121,14 @@ public class GD_TimKiemPhong extends JFrame {
 		lblTimBangLoaiPhong = new JLabel("Loại phòng:");
 		lblTimBangLoaiPhong.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTimBangLoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTimBangLoaiPhong.setBounds(50, 37, 88, 25);
+		lblTimBangLoaiPhong.setBounds(50, 39, 88, 25);
 		pnlTimKiem.add(lblTimBangLoaiPhong);
-
-		txtTimBangLoaiPhong = new JTextField();
-		txtTimBangLoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTimBangLoaiPhong.setBounds(131, 37, 219, 25);
-		pnlTimKiem.add(txtTimBangLoaiPhong);
-		txtTimBangLoaiPhong.setColumns(10);
 
 		lblTimBangSucChua = new JLabel("Sức chứa:");
 		lblTimBangSucChua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTimBangSucChua.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTimBangSucChua.setBounds(50, 85, 88, 25);
 		pnlTimKiem.add(lblTimBangSucChua);
-
-		txtTimBangSucChua = new JTextField();
-		txtTimBangSucChua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTimBangSucChua.setBounds(131, 85, 219, 25);
-		pnlTimKiem.add(txtTimBangSucChua);
-		txtTimBangSucChua.setColumns(10);
 
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconLamMoi3.png")));
@@ -143,6 +138,18 @@ public class GD_TimKiemPhong extends JFrame {
 		btnLamMoi.setBounds(127, 129, 100, 35);
 		pnlTimKiem.add(btnLamMoi);
 		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+		String[] colsLoaiPhong = { "Tất cả", "Thường", "VIP" };
+		cmbmodelLoaiPhong = new DefaultComboBoxModel<>(colsLoaiPhong);
+		cmbLoaiPhong = new JComboBox<String>(cmbmodelLoaiPhong);
+		cmbLoaiPhong.setBounds(133, 36, 200, 30);
+		pnlTimKiem.add(cmbLoaiPhong);
+
+		String[] colsSucChua = { "Tất cả", "10 người", "20 người" };
+		cmbmodelSucChua = new DefaultComboBoxModel<>(colsSucChua);
+		cmbSucChua = new JComboBox<String>(cmbmodelSucChua);
+		cmbSucChua.setBounds(133, 82, 200, 30);
+		pnlTimKiem.add(cmbSucChua);
 
 		pnlChiTietThongTin = new JPanel();
 		pnlChiTietThongTin.setBackground(new Color(255, 192, 203));
@@ -223,14 +230,23 @@ public class GD_TimKiemPhong extends JFrame {
 		pnlTimKiemPhong.add(pnlBangThongTin);
 		pnlBangThongTin.setLayout(null);
 
-		String[] cols = { "STT", "Số phòng", "Loại phòng", "Trạng thái", "Sức chứa" };
-		tblmodelBangThongTin = new DefaultTableModel(cols, 0);
-		tblBangThongTin = new JTable(tblmodelBangThongTin);
-		scrBangThongTin = new JScrollPane(tblBangThongTin);
+		String[] cols = { "STT", "Số phòng", "Loại phòng", "Sức chứa", "Trạng thái" };
+		tblmodelPhong = new DefaultTableModel(cols, 0);
+		tblPhong = new JTable(tblmodelPhong);
+		tblPhong.setAutoCreateRowSorter(true);
+		scrBangThongTin = new JScrollPane(tblPhong);
 		scrBangThongTin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		scrBangThongTin.setBorder(new EmptyBorder(0, 0, 0, 0));
 		scrBangThongTin.setBounds(10, 50, 418, 356);
 		pnlBangThongTin.add(scrBangThongTin);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblPhong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblPhong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		tblPhong.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+
+		tblPhong.getColumnModel().getColumn(0).setPreferredWidth(40);
 
 		lblDsPhong = new JLabel("Danh sách phòng");
 		lblDsPhong.setHorizontalAlignment(SwingConstants.CENTER);
@@ -241,35 +257,39 @@ public class GD_TimKiemPhong extends JFrame {
 		controller = new TimKiemPhongController(this);
 		btnTimKiem.addActionListener(controller);
 		btnLamMoi.addActionListener(controller);
-		tblBangThongTin.addMouseListener(controller);
+		tblPhong.addMouseListener(controller);
 		loadData();
 	}
 
+	/**
+	 * loadData lên table
+	 */
 	private void loadData() {
-		tblBangThongTin.removeAll();
-		tblBangThongTin.setRowSelectionAllowed(false);
-		tblmodelBangThongTin.setRowCount(0);
-		list = new ArrayList<PhongEntity>();
-		list = quanLyPhongDAO.duyetDanhSach();
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+		listPhong = new ArrayList<PhongEntity>();
+		listPhong = quanLyPhongDAO.duyetDanhSach();
 
 		int stt = 1;
-		for (PhongEntity phongEntity : list) {
+		for (PhongEntity phongEntity : listPhong) {
 			phongEntity = quanLyPhongDAO.timTheoMa(phongEntity.getMaPhong());
-			if (phongEntity.getTrangThai().equals("Trống")) {
-				tblmodelBangThongTin.addRow(new Object[] { stt++, phongEntity.getSoPhong(), phongEntity.getLoaiPhong(),
-						phongEntity.getTrangThai(), phongEntity.getSucChua() });
-			}
+			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getSoPhong(), phongEntity.getLoaiPhong(),
+					phongEntity.getSucChua() + " người", phongEntity.getTrangThai() });
 		}
 	}
 
+	/**
+	 * Hiển thị thông tin
+	 */
 	public void hienThiThongTin() {
-		list = new ArrayList<PhongEntity>();
-		list = quanLyPhongDAO.duyetDanhSach();
-		int row = tblBangThongTin.getSelectedRow();
+		listPhong = new ArrayList<PhongEntity>();
+		listPhong = quanLyPhongDAO.duyetDanhSach();
+		int row = tblPhong.getSelectedRow();
 		if (row >= 0) {
-			txtSoPhong.setText(tblmodelBangThongTin.getValueAt(row, 1).toString());
-			txtSucChua.setText(tblmodelBangThongTin.getValueAt(row, 4).toString());
-			if (tblmodelBangThongTin.getValueAt(row, 2).toString().equalsIgnoreCase("Thường")) {
+			txtSoPhong.setText(tblmodelPhong.getValueAt(row, 1).toString());
+			txtSucChua.setText(tblmodelPhong.getValueAt(row, 3).toString());
+			if (tblmodelPhong.getValueAt(row, 2).toString().equalsIgnoreCase("Thường")) {
 				lblVIP.setVisible(false);
 			} else {
 				lblVIP.setVisible(true);
@@ -277,67 +297,39 @@ public class GD_TimKiemPhong extends JFrame {
 		}
 	}
 
+	/**
+	 * Chọn chức năng làm mới
+	 */
 	public void chonChucNangLamMoi() {
 		txtSoPhong.setText("");
 		txtSucChua.setText("");
-		txtTimBangLoaiPhong.setText("");
-		txtTimBangSucChua.setText("");
+		cmbLoaiPhong.setSelectedIndex(0);
+		cmbSucChua.setSelectedIndex(0);
+
 		loadData();
 	}
 
+	/**
+	 * Chọn chức năng tìm kiếm
+	 */
 	public void chonChucNangTimKiem() {
-		if (kiemTraDuLieuTim()) {
-			int sucChua;
-			String loaiPhong = txtTimBangLoaiPhong.getText().trim();
-
-			if (txtTimBangSucChua.getText().trim().matches("\\d+")) {
-				sucChua = Integer.parseInt(txtTimBangSucChua.getText().trim());
-			} else {
-				sucChua = -1;
-			}
-
-			list = new ArrayList<PhongEntity>();
-			tblBangThongTin.removeAll();
-			tblmodelBangThongTin.setRowCount(0);
-			list = quanLyPhongDAO.timKiemCuaKH(loaiPhong, sucChua);
-			int stt = 1;
-			for (PhongEntity phongEntity : list) {
-				if (phongEntity.getTrangThai().equals("Trống")) {
-					tblmodelBangThongTin
-							.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
-									phongEntity.getLoaiPhong(), phongEntity.getTrangThai(), phongEntity.getSucChua() });
-				}
-			}
-		}
-	}
-
-	private boolean kiemTraDuLieuTim() {
-		String sucChua = txtTimBangSucChua.getText().trim();
-		String loaiPhong = txtTimBangLoaiPhong.getText().trim();
-
-		if (loaiPhong.length() > 0 && !(loaiPhong.equalsIgnoreCase("VIP") || loaiPhong.equalsIgnoreCase("Thường"))) {
-			JOptionPane.showMessageDialog(this, "Không có loại phòng " + loaiPhong, "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtTimBangLoaiPhong.requestFocus();
+		String loaiPhong = cmbLoaiPhong.getSelectedItem().toString().trim();
+		int sucChua = 0;
+		if (cmbSucChua.getSelectedIndex() == 1) {
+			sucChua = 10;
+		} else if (cmbSucChua.getSelectedIndex() == 2) {
+			sucChua = 20;
 		}
 
-		if (sucChua.length() > 0) {
-			try {
-				int sc = Integer.parseInt(sucChua);
-				if (!(sc == 10 || sc == 20)) {
-					JOptionPane.showMessageDialog(this, "Sức chứa của 1 phòng là 10 hoặc 20 người", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtTimBangSucChua.requestFocus();
-					return false;
-				}
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Sức chứa nhập vào  là số nguyên", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtTimBangSucChua.requestFocus();
-				return false;
-			}
+		listPhong = new ArrayList<PhongEntity>();
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+		listPhong = quanLyPhongDAO.timKiemCuaKH(loaiPhong, sucChua);
+		int stt = 1;
+		for (PhongEntity phongEntity : listPhong) {
+			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getSoPhong(), phongEntity.getLoaiPhong(),
+					phongEntity.getSucChua() + " người", phongEntity.getTrangThai() });
 		}
-
-		return true;
 	}
 }

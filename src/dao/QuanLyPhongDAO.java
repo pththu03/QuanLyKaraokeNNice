@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import entity.PhongEntity;
 import util.ConnectDB;
 
@@ -44,6 +46,7 @@ public class QuanLyPhongDAO {
 				list.add(phongEntity);
 			}
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 			e.printStackTrace();
 		} finally {
 			ConnectDB.closeConnect(connect);
@@ -74,6 +77,7 @@ public class QuanLyPhongDAO {
 					phongKq = new PhongEntity(mPhong, soPhong, loaiPhong, trangThai, sucChua);
 				}
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -170,6 +174,7 @@ public class QuanLyPhongDAO {
 					list.add(phongEntity);
 				}
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -190,13 +195,13 @@ public class QuanLyPhongDAO {
 		if (connect != null) {
 			try {
 				StringBuilder query = new StringBuilder("SELECT * FROM Phong");
-				if (!loaiPhong.equals("") && sucChua >= 0) {
+				if (!loaiPhong.equals("Tất cả") && sucChua >= 0) {
 					// loaiPhong + sucChua
 					query.append(String.format(" WHERE LoaiPhong LIKE N'%%%s%%' AND SucChua = %d", loaiPhong, sucChua));
-				} else if (!loaiPhong.equals("") && sucChua == -1) {
+				} else if (!loaiPhong.equals("Tất cả") && sucChua == 0) {
 					// loaiPhong
 					query.append(String.format(" WHERE LoaiPhong LIKE N'%%%s%%'", loaiPhong));
-				} else if (loaiPhong.equals("") && sucChua >= 0) {
+				} else if (loaiPhong.equals("Tất cả") && sucChua >= 0) {
 					// sucChua
 					query.append(String.format(" WHERE SucChua = '%d'", sucChua));
 				}
@@ -212,6 +217,7 @@ public class QuanLyPhongDAO {
 					list.add(phongEntity);
 				}
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -222,4 +228,28 @@ public class QuanLyPhongDAO {
 
 		return list;
 	}
+
+	public boolean capNhatTrangThai(String maPhong, String trangThai) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "UPDATE Phong\r\n" + "SET TrangThai = ?\r\n" + "WHERE MaPhong = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, trangThai);
+				statement.setString(2, maPhong);
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+			}
+
+		}
+		return false;
+	}
+
 }

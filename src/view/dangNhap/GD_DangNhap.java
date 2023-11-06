@@ -171,7 +171,7 @@ public class GD_DangNhap extends JFrame {
 	}
 
 	public void chonChucNangThoat() {
-		if (JOptionPane.showConfirmDialog(null, "Thông báo", "Xác nhận tắt màn hình?",
+		if (JOptionPane.showConfirmDialog(null, "Xác nhận tắt màn hình?", "Thông báo",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			this.dispose();
 		}

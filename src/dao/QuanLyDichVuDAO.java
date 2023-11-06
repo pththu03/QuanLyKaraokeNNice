@@ -160,11 +160,6 @@ public class QuanLyDichVuDAO {
 	}
 
 	/**
-	 * Lỗi 1: giaDichVu truyền vào là kiểu Double, giaTien trong CSDL phải so sánh với kiểu
-	 * double. Vậy nên gọi hàm doubleValue() để lấy giá trị ra là kiểu double.
-	 * 
-	 * Lỗi 2: Trước đó không có dấu cách giữa chữ DichVu và chữ WHERE
-	 * 
 	 * @param loaiDV
 	 * @param giaTu
 	 * @param giaDen
@@ -179,15 +174,15 @@ public class QuanLyDichVuDAO {
 		if (connect != null) {
 			try {
 				StringBuilder query = new StringBuilder("SELECT * FROM DichVu ");
-				if (!loaiDV.equalsIgnoreCase("Tất cả") && (giaTu != null && giaDen != null)) {
-					// loạiDV + gia
+				if (!loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
+					// loáº¡iDV + gia
 					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%' AND (Gia >= %f AND Gia <= %f)", loaiDV,
 							giaTu.doubleValue(), giaDen.doubleValue()));
 
-				} else if (!loaiDV.equalsIgnoreCase("Tất cả") && (giaTu == null && giaDen == null)) {
+				} else if (!loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu == null && giaDen == null)) {
 					// loaiDV
 					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%'", loaiDV));
-				} else if (loaiDV.equalsIgnoreCase("Tất cả") && (giaTu != null && giaDen != null)) {
+				} else if (loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
 					// gia
 					query.append(
 							String.format("WHERE Gia >= %f AND Gia <= %f", giaTu.doubleValue(), giaDen.doubleValue()));
@@ -214,13 +209,64 @@ public class QuanLyDichVuDAO {
 		return list;
 
 	}
-
-//	public List<DichVuEntity> timKiemTheoDatDichVu( String tenDV ,String loaiDV, Double GiaDichVu , Double GiaDen){
-//		List<DichVuEntity> list = new ArrayList<DichVuEntity>();
-//		Connection connect = ConnectDB.getConnect();
-//		Statement statement = null;
-//		ResultSet result = null;
-//		return list;
-//	}
+	
+	public List<DichVuEntity> timKiemDichVu(String tenDV,String loaiDV, Double giaTu, Double giaDen) {
+		List<DichVuEntity> listTimKiem = new ArrayList<DichVuEntity>();
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+		
+		if(connect != null) {
+			try {
+				StringBuilder query = new StringBuilder("SELECT * FROM DichVu ");
+				if (!tenDV.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
+					// TÃªn dv + loáº¡iDV + gia
+					query.append(String.format("WHERE TenDV LIKE N'%%%s%%' AND LoaiDV LIKE N'%%%s%%' AND (Gia >= %f AND Gia <= %f)",tenDV ,loaiDV,
+					giaTu.doubleValue(), giaDen.doubleValue()));
+				} else if(!tenDV.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu == null && giaDen == null)) {
+					query.append(String.format("WHERE TenDV LIKE N'%%%s%%' AND LoaiDV LIKE N'%%%s%%'", tenDV,loaiDV));
+					//TenDV + LoaiDV
+				} else if(!tenDV.equals("") && loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
+					query.append(String.format("WHERE TenDV LIKE N'%%%s%%' AND (Gia >= %f AND Gia <= %f)",tenDV ,
+					giaTu.doubleValue(), giaDen.doubleValue()));
+					//TenDv + Gia 
+				} else if(tenDV.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
+					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%' AND (Gia >= %f AND Gia <= %f)",loaiDV ,
+					giaTu.doubleValue(), giaDen.doubleValue()));
+					// loaidv + gia
+				} else if(tenDV.equals("") && !loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu == null && giaDen == null)) {
+					query.append(String.format("WHERE LoaiDV LIKE N'%%%s%%'",loaiDV
+					));
+					// loaiDV
+				} else if(tenDV.equals("") && loaiDV.equalsIgnoreCase("Táº¥t cáº£") && (giaTu != null && giaDen != null)) {
+					query.append(String.format("WHERE Gia >= %f AND Gia <= %f",giaTu.doubleValue(), giaDen.doubleValue()));
+					// gia
+				} 
+				
+				statement = connect.createStatement();
+				result = statement.executeQuery(query.toString());
+				while (result.next()) {
+					String maDichVu = result.getString(1);
+					String tenDichVu = result.getString(2);
+					String loaiDichVu = result.getString(3);
+					double gia = result.getDouble(4);
+					DichVuEntity dichVuEntity = new DichVuEntity(maDichVu, tenDichVu, loaiDichVu, gia);
+					listTimKiem.add(dichVuEntity);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closeStatement(statement);
+			}
+		}
+		
+		return listTimKiem;
+	
+	}
+	
+	
+	
 
 }

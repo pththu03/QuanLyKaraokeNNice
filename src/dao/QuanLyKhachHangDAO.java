@@ -147,8 +147,8 @@ public class QuanLyKhachHangDAO {
 		return khachhangKq;
 	}
 
-	public List<KhachHangEntity> timKiem(String maKhachHang, String hoTen, String soDienThoai, int slTu, int slDen) {
-		List<KhachHangEntity> list = new ArrayList<>();
+	public List<KhachHangEntity> timKiem( String hoTen, String soDienThoai, int slTu, int slDen) {
+		List<KhachHangEntity> listKhachHang = new ArrayList<>();
 		Connection connect = ConnectDB.getConnect();
 		Statement statement = null;
 		ResultSet result = null;
@@ -156,80 +156,47 @@ public class QuanLyKhachHangDAO {
 		if (connect != null) {
 			try {
 				StringBuilder query = new StringBuilder("SELECT * FROM KhachHang");
-				if (!maKhachHang.equals("") && !hoTen.equals("") && !soDienThoai.equals("")
-						&& (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format(
-							"WHERE MaKH LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND SDT LIKE '%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							maKhachHang, hoTen, soDienThoai, slTu, slDen));
-					// MaKH + TenKH + SDT + slTu + slDen
-				} else if (!maKhachHang.equals("") && !hoTen.equals("") && !soDienThoai.equals("")) {
-					query.append(
-							String.format("WHERE MaKH LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND SDT LIKE '%%%s%%'",
-									maKhachHang, hoTen, soDienThoai));
-					// MaKH + TenKH + SDT
-				} else if (!maKhachHang.equals("") && !hoTen.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format(
-							"WHERE MaKH LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							maKhachHang, hoTen, slTu, slDen));
-					// MaKH + TenKH + (SlTu + SlDen)
-				} else if (!maKhachHang.equals("") && !soDienThoai.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format(
-							"WHERE MaKH LIKE '%%%s%%' AND SDT LIKE '%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							maKhachHang, soDienThoai, slTu, slDen));
-					// MaKH + SDT + (SlTu + SlDen)
-				} else if (!hoTen.equals("") && !soDienThoai.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format(
-							"WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							hoTen, soDienThoai, slTu, slDen));
-					// HoTen + SDT + (SlTu + SlDen)
-				} else if (!maKhachHang.equals("") && !hoTen.equals("")) {
-					query.append(
-							String.format("WHERE MaKH LIKE '%%%s%%' AND HoTen LIKE N'%%%s%%'", maKhachHang, hoTen));
-					// MaKH + HoTen
-				} else if (!maKhachHang.equals("") && !soDienThoai.equals("")) {
-					query.append(
-							String.format("WHERE MaKH LIKE '%%%s%%' AND SDT LIKE '%%%s%%'", maKhachHang, soDienThoai));
-					// MaKH + SDT
-				} else if (!maKhachHang.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format("WHERE MaKH LIKE '%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							maKhachHang, slTu, slDen));
-					// MaKH + (SlTu + SlDen)
-				} else if (!hoTen.equals("") && !soDienThoai.equals("")) {
-					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%%%s%%'", hoTen, soDienThoai));
-					// HoTen + SDT
-				} else if (!hoTen.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							hoTen, slTu, slDen));
-					// HoTen + (SlTu + SlDen)
-				} else if (!soDienThoai.equals("") && (slTu >= 0 && slDen >= 0)) {
-					query.append(String.format("WHERE SDT LIKE '%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
-							soDienThoai, slTu, slDen));
-					// SDT + (SlTu + SlDen)
-				} else if (!maKhachHang.equals("")) {
-					query.append(String.format("WHERE MaKH LIKE '%%%s%%'", maKhachHang));
-					// MaKH
-				} else if (!hoTen.equals("")) {
-					query.append(String.format("WHERE HoTen LIKE N'%%%s%%'", hoTen));
-					// HoTen
-				} else if (!soDienThoai.equals("")) {
-					query.append(String.format("WHERE SDT LIKE '%%%s%%'", soDienThoai));
-					// SDT
-				} else if ((slTu >= 0 && slDen >= 0)) {
-					query.append(String.format("WHERE SLDatPhong >= %d AND SLDatPhong <= %d", slTu, slDen));
-					// (SlTu + SlDen)
-				}
-
+				if (!hoTen.equals("") && !soDienThoai.equals("")&& (slTu >= 0 && slDen > 0)) {
+					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s' AND SLDatPhong >= %d AND SLDatPhong <= %d",
+					hoTen, soDienThoai, slTu, slDen));
+					//  TenKH + SDT + (slTu + slDen)
+				} 
+//				else if(!hoTen.equals("") && !soDienThoai.equals("")&& (slTu == -1 && slDen == -1)) {
+//					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SDT LIKE '%s'",
+//					hoTen, soDienThoai));
+//					//  TenKH + SDT 
+//				} else if(!hoTen.equals("") && soDienThoai.equals("")&& (slTu >= 0 && slDen > 0)) {
+//					query.append(String.format("WHERE HoTen LIKE N'%%%s%%' AND SLDatPhong >= %d AND SLDatPhong <= %d",
+//					hoTen, slTu, slDen));
+//					//  TenKH + (slTu + slDen)
+//				} else if(hoTen.equals("") && !soDienThoai.equals("")&& (slTu >= 0 && slDen > 0)) {
+//					query.append(String.format("WHERE SDT LIKE '%s' AND SLDatPhong >= %d AND SLDatPhong <= %d",
+//					soDienThoai, slTu, slDen));
+//					//  SDT + (slTu + slDen)
+//				} else if(!hoTen.equals("") && soDienThoai.equals("")&& (slTu == -1 && slDen == -1)) {
+//					query.append(String.format("WHERE HoTen LIKE N'%%%s%%'",
+//						hoTen));
+//					//  TenKH
+//				} else if(hoTen.equals("") && !soDienThoai.equals("")&& (slTu == -1 && slDen == -1)) {
+//					query.append(String.format("WHERE SDT LIKE '%s'",
+//					soDienThoai));
+//					//  SDT
+//				} else if(hoTen.equals("") && soDienThoai.equals("")&& (slTu >= 0 && slDen > 0)) {
+//					query.append(String.format("WHERE SLDatPhong >= %d AND SLDatPhong <= %d",
+//					soDienThoai));
+//					//  (slTu + slDen)
+//				} 
 				statement = connect.createStatement();
 				result = statement.executeQuery(query.toString());
 				while (result.next()) {
 					String maKH = result.getString(1);
-					String TenKH = result.getString(2);
+					String tenKH = result.getString(2);
 					String sdt = result.getString(3);
 					String email = result.getString(4);
 					int namSinh = result.getInt(5);
 					int slDatPhong = result.getInt(6);
-					KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, TenKH, sdt, email, namSinh, slDatPhong);
-					list.add(khachHangEntity);
+					KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, tenKH, sdt, email, namSinh, slDatPhong);
+					listKhachHang.add(khachHangEntity);
 				}
 
 			} catch (Exception e) {
@@ -242,7 +209,7 @@ public class QuanLyKhachHangDAO {
 			}
 		}
 
-		return list;
+		return listKhachHang;
 
 	}
 

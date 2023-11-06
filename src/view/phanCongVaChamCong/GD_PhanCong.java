@@ -3,6 +3,7 @@ package view.phanCongVaChamCong;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -78,7 +79,7 @@ public class GD_PhanCong extends JPanel {
 	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
 	private PhanCongDAO phanCongDAO = new PhanCongDAO();
 	private QuanLyCaTrucDAO quanLyCaTrucDAO = new QuanLyCaTrucDAO();
-	private List<PhieuPhanCongEntity> list;
+	private List<PhieuPhanCongEntity> listPhieuPhanCong;
 	private List<NhanVienEntity> listNhanVien;
 	private List<CaTrucEntity> listCaTruc;
 
@@ -127,6 +128,7 @@ public class GD_PhanCong extends JPanel {
 		pnlChiTietPhanCong.add(lblNgay);
 
 		dchNgay = new JDateChooser();
+		dchNgay.setDateFormatString("dd/MM/yyyy");
 		dchNgay.setBounds(170, 261, 422, 30);
 		pnlChiTietPhanCong.add(dchNgay);
 
@@ -221,10 +223,21 @@ public class GD_PhanCong extends JPanel {
 		String[] cols = { "STT", "Mã PC", "Họ và tên", "Ca trực", "Ngày" };
 		tblmodelPhanCong = new DefaultTableModel(cols, 0);
 		tblPhanCong = new JTable(tblmodelPhanCong);
+		tblPhanCong.setAutoCreateRowSorter(true);
 		tblPhanCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		scrPhanCong = new JScrollPane(tblPhanCong);
 		scrPhanCong.setBounds(10, 77, 674, 606);
 		pnlBangPhanCong.add(scrPhanCong);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblPhanCong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblPhanCong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		tblPhanCong.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+		
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		tblPhanCong.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 
 		lblDsPhanCong = new JLabel("Danh sách phân công");
 		lblDsPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
@@ -244,63 +257,74 @@ public class GD_PhanCong extends JPanel {
 
 	}
 
+	/**
+	 * loadData lên table
+	 */
 	private void loadData() {
 		tblPhanCong.removeAll();
 		tblPhanCong.setRowSelectionAllowed(false);
 		tblmodelPhanCong.setRowCount(0);
-		list = new ArrayList<PhieuPhanCongEntity>();
-		list = phanCongDAO.duyetDanhSach();
+		listPhieuPhanCong = new ArrayList<PhieuPhanCongEntity>();
+		listPhieuPhanCong = phanCongDAO.duyetDanhSach();
 		NhanVienEntity nhanVienEntity = null;
 		CaTrucEntity caTrucEntity = null;
 
 		int stt = 1;
-		for (PhieuPhanCongEntity phieuPhanCongEntity : list) {
+		for (PhieuPhanCongEntity phieuPhanCongEntity : listPhieuPhanCong) {
 			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(phieuPhanCongEntity.getMaNhanVien());
 			caTrucEntity = quanLyCaTrucDAO.timTheoMa(phieuPhanCongEntity.getMaCaTruc());
-			tblmodelPhanCong.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPhieuPhanCong(), nhanVienEntity.getHoTen(),
-					caTrucEntity.getTenCaTruc(), DateFormatter.format(phieuPhanCongEntity.getNgay()) });
+			tblmodelPhanCong
+					.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPhieuPhanCong(), nhanVienEntity.getHoTen(),
+							caTrucEntity.getTenCaTruc(), DateFormatter.format(phieuPhanCongEntity.getNgay()) });
 		}
 	}
 
+	/**
+	 * loadcmbMaNV
+	 */
 	private void loadcmbMaNV() {
 		cmbMaNV.removeAll();
-//		cmbmodelMaNV.removeAllElements();
 		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
 		for (NhanVienEntity nhanVienEntity : listNhanVien) {
 			cmbMaNV.addItem(nhanVienEntity.getMaNhanVien());
 		}
 	}
 
+	/**
+	 * loadcmbMaCT
+	 */
 	private void loadcmbMaCT() {
 		cmbMaCaTruc.removeAll();
-//		cmbmodelCaTruc.removeAllElements();
 		listCaTruc = quanLyCaTrucDAO.duyetDanhSach();
 		for (CaTrucEntity caTrucEntity : listCaTruc) {
 			cmbMaCaTruc.addItem(caTrucEntity.getMaCaTruc());
 		}
 	}
 
+	/**
+	 * Hiển thị thông tin
+	 */
 	public void hienThiThongTin() {
-		list = new ArrayList<PhieuPhanCongEntity>();
-		list = phanCongDAO.duyetDanhSach();
+		listPhieuPhanCong = new ArrayList<PhieuPhanCongEntity>();
+		listPhieuPhanCong = phanCongDAO.duyetDanhSach();
 		int row = tblPhanCong.getSelectedRow();
 		NhanVienEntity nhanVienEntity = null;
 		CaTrucEntity caTrucEntity = null;
 
 		if (row >= 0) {
-			txtMaPC.setText(list.get(row).getMaPhieuPhanCong());
-			dchNgay.setDate(list.get(row).getNgay());
-			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(list.get(row).getMaNhanVien());
+			txtMaPC.setText(listPhieuPhanCong.get(row).getMaPhieuPhanCong());
+			dchNgay.setDate(listPhieuPhanCong.get(row).getNgay());
+			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(listPhieuPhanCong.get(row).getMaNhanVien());
 			txtTenNV.setText(nhanVienEntity.getHoTen());
 			cmbmodelMaNV.setSelectedItem(nhanVienEntity.getMaNhanVien());
-			cmbmodelCaTruc.setSelectedItem(list.get(row).getMaCaTruc());
-			caTrucEntity = quanLyCaTrucDAO.timTheoMa(list.get(row).getMaCaTruc());
+			cmbmodelCaTruc.setSelectedItem(listPhieuPhanCong.get(row).getMaCaTruc());
+			caTrucEntity = quanLyCaTrucDAO.timTheoMa(listPhieuPhanCong.get(row).getMaCaTruc());
 			txtCaTruc.setText(caTrucEntity.getTenCaTruc());
 		}
 	}
 
 	/**
-	 * Làm mới
+	 * Chọn chức năng làm mới
 	 */
 	public void chonChucNangLamMoi() {
 		txtMaPC.setText("");
@@ -312,18 +336,50 @@ public class GD_PhanCong extends JPanel {
 		loadData();
 	}
 
+	/**
+	 * CHọn chức năng thêm
+	 */
 	public void chonChucNangThem() {
 		if (kiemTraDuLieuThem()) {
 			String maNV = cmbMaNV.getSelectedItem().toString();
 			String maCT = cmbMaCaTruc.getSelectedItem().toString();
 			java.sql.Date sqlDate = new java.sql.Date(dchNgay.getDate().getTime());
 			PhieuPhanCongEntity phieuPhanCongEntity = new PhieuPhanCongEntity(maNV, maCT, sqlDate);
-			phieuPhanCongEntity = phanCongDAO.them(phieuPhanCongEntity);
-			loadData();
+
+			if (phanCongDAO.them(phieuPhanCongEntity)) {
+				JOptionPane.showMessageDialog(this, "Thêm thành công");
+				chonChucNangLamMoi();
+				loadData();
+			}
+
 		}
 	}
 
+	/**
+	 * Chọn chức năng xóa
+	 */
+	public void chonChucNangXoa() {
+		int row = tblPhanCong.getSelectedRow();
+		if (row == -1) {
+			JOptionPane.showMessageDialog(this, "Chọn dòng cần xóa");
+		} else {
+			if (phanCongDAO.xoa(txtMaPC.getText())) {
+				tblmodelPhanCong.removeRow(row);
+				JOptionPane.showMessageDialog(this, "Xóa phân công thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		chonChucNangLamMoi();
+	}
+
+	/**
+	 * Kiểm tra dữ liệu thêm
+	 * 
+	 * @return
+	 */
 	private boolean kiemTraDuLieuThem() {
+
+		// dchNgay
 		Date ngayHienTai = new Date(System.currentTimeMillis());
 		if (dchNgay.getDate() == null) {
 			JOptionPane.showMessageDialog(this, "Hãy chọn ngày phân công", "Thông báo",
@@ -338,12 +394,14 @@ public class GD_PhanCong extends JPanel {
 			return false;
 		}
 
+		// cmbMaNV
 		if (cmbMaNV.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 			cmbMaNV.requestFocus();
 			return false;
 		}
 
+		// cmbMaCaTruc
 		if (cmbMaCaTruc.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(this, "Hãy chọn ca trực cho nhân viên", "Thông báo",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -354,20 +412,4 @@ public class GD_PhanCong extends JPanel {
 		return true;
 	}
 
-	/**
-	 * Xóa
-	 */
-	public void chonChucNangXoa() {
-		int row = tblPhanCong.getSelectedRow();
-		if (row == -1) {
-			JOptionPane.showMessageDialog(this, "Chọn dòng cần xóa");
-		} else {
-			if (phanCongDAO.xoa(txtMaPC.getText()) != 0) {
-				tblmodelPhanCong.removeRow(row);
-				JOptionPane.showMessageDialog(this, "Xóa phân công thành công", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		}
-		chonChucNangLamMoi();
-	}
 }

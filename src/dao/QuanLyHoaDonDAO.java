@@ -7,11 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import entity.HoaDonEntity;
 import util.ConnectDB;
+import util.DateFormatter;
 
 public class QuanLyHoaDonDAO {
 	HoaDonEntity hoaDonEntity;
@@ -21,7 +25,7 @@ public class QuanLyHoaDonDAO {
 	}
 
 	public List<HoaDonEntity> duyetDanhSach() {
-		List<HoaDonEntity> list = new ArrayList<HoaDonEntity>();
+		List<HoaDonEntity> listHoaDon = new ArrayList<HoaDonEntity>();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
 		Statement statement = null;
@@ -34,29 +38,22 @@ public class QuanLyHoaDonDAO {
 				String maHD = result.getString(1);
 				String maKH = result.getString(2);
 				String maNV = result.getString(3);
-				Date ngayLapHD = null;
-				if (result.getDate(4) != null) {
-					ngayLapHD = result.getDate(4);
-				}
-				Time gioLapHD = null;
-				if (result.getTime(5) != null) {
-					gioLapHD = result.getTime(5);
-				}
+				LocalDate ngayLapHD = result.getDate(4).toLocalDate();
 				boolean trangThai = false;
 				if (result.getString(6).equalsIgnoreCase("Đã thanh toán")) {
 					trangThai = true;
 				}
-				System.out.println(result.getString(6));
-				if (ngayLapHD != null && gioLapHD != null) {
-					hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD.toLocalDate(), gioLapHD.toLocalTime(),
+				if (result.getTime(5) != null) {
+					hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, result.getTime(5).toLocalTime(),
 							trangThai);
 				} else {
-					hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, trangThai);
+					hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, trangThai);
 				}
 
-				list.add(hoaDonEntity);
+				listHoaDon.add(hoaDonEntity);
 			}
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 			e.printStackTrace();
 		} finally {
 			ConnectDB.closeConnect(connect);
@@ -64,7 +61,7 @@ public class QuanLyHoaDonDAO {
 			ConnectDB.closeResultSet(result);
 		}
 
-		return list;
+		return listHoaDon;
 	}
 
 	public HoaDonEntity timTheoMa(String maHD) {
@@ -82,27 +79,20 @@ public class QuanLyHoaDonDAO {
 				while (result.next()) {
 					String maKH = result.getString(2);
 					String maNV = result.getString(3);
-					Date ngayLapHD = null;
-					if (result.getDate(4) != null) {
-						ngayLapHD = result.getDate(4);
-					}
-					Time gioLapHD = null;
-					if (result.getTime(5) != null) {
-						gioLapHD = result.getTime(5);
-					}
+					LocalDate ngayLapHD = result.getDate(4).toLocalDate();
 					boolean trangThai = false;
 					if (result.getString(6).equalsIgnoreCase("Đã thanh toán")) {
 						trangThai = true;
 					}
-					if (ngayLapHD != null && gioLapHD != null) {
-						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD.toLocalDate(),
-								gioLapHD.toLocalTime(), trangThai);
+					if (result.getTime(5) != null) {
+						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, result.getTime(5).toLocalTime(),
+								trangThai);
 					} else {
-						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, trangThai);
+						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, trangThai);
 					}
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -113,4 +103,127 @@ public class QuanLyHoaDonDAO {
 
 		return hoaDonEntity;
 	}
+
+	public List<HoaDonEntity> timKiem(String tenNhanVien, String tenKhachHang, java.util.Date ngayLapTu,
+			java.util.Date ngayLapDen) {
+		List<HoaDonEntity> listHoaDon = new ArrayList<>();
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				StringBuilder query = new StringBuilder(
+						"SELECT MaHD, h.MaNV, h.MaKH, NgayLapHD, GioLapHD, h.TrangThai \r\n"
+								+ "FROM HoaDon h JOIN KhachHang k \r\n" + "	ON h.MaKH = k.MaKH JOIN NhanVien nv\r\n"
+								+ "	ON h.MaNV = nv.MaNV ");
+				if (!tenNhanVien.equals("") && !tenKhachHang.equals("") && (ngayLapTu != null && ngayLapDen != null)) {
+					// tenNhanVien + tenKhachHang + ngayLap
+					query.append(String.format(
+							"WHERE nv.HoTen LIKE N'%%%s%%' AND k.HoTen LIKE N'%%%s%%' AND (NgayLapHD BETWEEN '%s' AND '%s')",
+							tenNhanVien, tenKhachHang, DateFormatter.formatSql(ngayLapTu),
+							DateFormatter.formatSql(ngayLapDen)));
+				} else if (!tenNhanVien.equals("") && tenKhachHang.equals("")
+						&& (ngayLapTu != null && ngayLapDen != null)) {
+					// tenNhanVien + ngayLap
+					query.append(String.format("WHERE nv.HoTen LIKE N'%%%s%%' AND (NgayLapHD BETWEEN '%s' AND '%s')",
+							tenNhanVien, DateFormatter.formatSql(ngayLapTu), DateFormatter.formatSql(ngayLapDen)));
+				} else if (tenNhanVien.equals("") && !tenKhachHang.equals("")
+						&& (ngayLapTu != null && ngayLapDen != null)) {
+					// tenKhachHang + ngayLap
+					query.append(String.format("WHERE k.HoTen LIKE N'%%%s%%' AND (NgayLapHD BETWEEN '%s' AND '%s')",
+							tenKhachHang, DateFormatter.formatSql(ngayLapTu), DateFormatter.formatSql(ngayLapDen)));
+				} else if (!tenNhanVien.equals("") && !tenKhachHang.equals("")
+						&& (ngayLapTu == null && ngayLapDen == null)) {
+					// ten NhanVien + tenKhachHang
+					query.append(String.format("WHERE nv.HoTen LIKE N'%%%s%%' AND k.HoTen LIKE N'%%%s%%'", tenNhanVien,
+							tenKhachHang));
+				} else if (!tenNhanVien.equals("") && tenKhachHang.equals("")
+						&& (ngayLapTu == null && ngayLapDen == null)) {
+					// tenNhanVien
+					query.append(String.format("WHERE nv.HoTen LIKE N'%%%s%%'", tenNhanVien));
+				} else if (tenNhanVien.equals("") && !tenKhachHang.equals("")
+						&& (ngayLapTu == null && ngayLapDen == null)) {
+					// tenKhachHang
+					query.append(String.format("WHERE k.HoTen LIKE N'%%%s%%' ", tenKhachHang));
+				} else if (tenNhanVien.equals("") && tenKhachHang.equals("")
+						&& (ngayLapTu != null && ngayLapDen != null)) {
+					// ngayLap
+					query.append(String.format("WHERE (NgayLapHD BETWEEN '%s' AND '%s')",
+							DateFormatter.formatSql(ngayLapTu), DateFormatter.formatSql(ngayLapDen)));
+				}
+				statement = connect.createStatement();
+				result = statement.executeQuery(query.toString());
+				while (result.next()) {
+					String maHoaDon = result.getString(1);
+					String maNhanVien = result.getString(2);
+					String maKhachHang = result.getString(3);
+					LocalDate ngayLapHD = result.getDate(4).toLocalDate();
+					boolean trangThai = false;
+					if (result.getString(6).equalsIgnoreCase("Đã thanh toán")) {
+						trangThai = true;
+					}
+					if (result.getTime(5) != null) {
+						hoaDonEntity = new HoaDonEntity(maHoaDon, maNhanVien, maKhachHang, ngayLapHD,
+								result.getTime(5).toLocalTime(), trangThai);
+					} else {
+						hoaDonEntity = new HoaDonEntity(maHoaDon, maNhanVien, maKhachHang, ngayLapHD, trangThai);
+					}
+
+					listHoaDon.add(hoaDonEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+
+		}
+		return listHoaDon;
+	}
+
+	@SuppressWarnings("deprecation")
+	public HoaDonEntity them(HoaDonEntity hoaDonEntity) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement preStatement = null;
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String queryInsert = "INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, TrangThai)\r\n"
+						+ "VALUES (?, ?, ?, ?)\r\n";
+				preStatement = connect.prepareStatement(queryInsert);
+				preStatement.setString(1, hoaDonEntity.getMaKhachHang());
+				preStatement.setString(2, hoaDonEntity.getMaNhanVien());
+				preStatement.setString(3, DateFormatter.formatSql(hoaDonEntity.getNgayLap()));
+				preStatement.setString(4, "Chưa thanh toán");
+
+				if (preStatement.executeUpdate() > 0) {
+					String querySelect = "SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC";
+					statement = connect.createStatement();
+					result = statement.executeQuery(querySelect);
+					while (result.next()) {
+						hoaDonEntity.setMaHoaDon(result.getString(1));
+						System.out.println(DateFormatter.formatSql(hoaDonEntity.getNgayLap()));
+					}
+				}
+
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closePreStatement(preStatement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+
+		return hoaDonEntity;
+	}
+
 }

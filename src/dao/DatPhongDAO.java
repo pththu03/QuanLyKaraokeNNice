@@ -5,12 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.HoaDonEntity;
+import javax.swing.JOptionPane;
+
+import entity.ChiTietHoaDonEntity;
 import entity.PhongEntity;
 import util.ConnectDB;
+import util.DateFormatter;
 
 public class DatPhongDAO {
 	public DatPhongDAO() {
@@ -108,7 +113,7 @@ public class DatPhongDAO {
 					list.add(phongEntity);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -120,24 +125,76 @@ public class DatPhongDAO {
 		return list;
 	}
 
-	public HoaDonEntity themHoaDon(HoaDonEntity hoaDonEntity) {
+	/**
+	 * Đổi phòng
+	 */
+
+	public boolean doiPhong(String maPhongCu, String maPhongMoi) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "UPDATE ChiTietHoaDon \r\n" + "SET MaPhong = ?\r\n"
+						+ "FROM ChiTietHoaDon c JOIN Phong p \r\n" + "	ON c.MaPhong = p.MaPhong JOIN HoaDon hd\r\n"
+						+ "	ON c.MaHD = hd.MaHD\r\n" + "WHERE p.MaPhong = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maPhongMoi);
+				statement.setString(2, maPhongCu);
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * chức năng hủy phòng
+	 * 
+	 * @param maPhong
+	 * @return
+	 */
+	public ChiTietHoaDonEntity timKiem(String maPhong) {
+		ChiTietHoaDonEntity chiTietHoaDonEntity = null;
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 		ResultSet result = null;
 
 		if (connect != null) {
 			try {
-
-				String query = "INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) "
-						+ "VALUES (?, ?, ?, ?, ?)";
+				String query = "SELECT MaCTHD, CTHD.MaHD, P.MaPhong, GioBD FROM ChiTietHoaDon CTHD JOIN HoaDon HD\r\n"
+						+ "	ON CTHD.MaHD = HD.MaHD JOIN Phong P\r\n" + "	ON CTHD.MaPhong = P.MaPhong\r\n"
+						+ "WHERE P.MaPhong = ? AND NgayLapHD = ? AND P.TrangThai = ?\r\n" + "";
 				statement = connect.prepareStatement(query);
+				statement.setString(1, maPhong);
+				statement.setString(2, DateFormatter.formatSql(LocalDate.now()));
+				statement.setString(3, "Đặt trước");
+				result = statement.executeQuery();
+
+				while (result.next()) {
+					String maChiTietHoaDon = result.getString(1);
+					String maHoaDon = result.getString(2);
+					String maPhong1 = result.getString(3);
+					LocalTime gioNhanPhong = result.getTime(4).toLocalTime();
+					chiTietHoaDonEntity = new ChiTietHoaDonEntity(maChiTietHoaDon, maHoaDon, maPhong1, gioNhanPhong);
+				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closePreStatement(statement);
 			}
 		}
 
-		return hoaDonEntity;
+		return chiTietHoaDonEntity;
 	}
 
 }

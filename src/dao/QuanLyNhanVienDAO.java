@@ -215,10 +215,8 @@ public class QuanLyNhanVienDAO {
 		return listNhanvien;
 	}
 
-	public NhanVienEntity them(NhanVienEntity nhanVienEntity) {
-		NhanVienEntity nhanVienEntity1 = null;
+	public boolean them(NhanVienEntity nhanVienEntity) {
 		Connection connect = ConnectDB.getConnect();
-		ResultSet result = null;
 		PreparedStatement statement = null;
 
 		if (connect != null) {
@@ -227,7 +225,7 @@ public class QuanLyNhanVienDAO {
 						+ "([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])"
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				String trangThai = "Đã nghỉ";
-				statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				statement = connect.prepareStatement(query);
 				statement.setString(1, nhanVienEntity.getHoTen());
 				statement.setString(2, nhanVienEntity.getSoDienThoai());
 				statement.setString(3, nhanVienEntity.getEmail());
@@ -240,29 +238,23 @@ public class QuanLyNhanVienDAO {
 					trangThai = "Đang làm việc";
 				}
 				statement.setString(9, trangThai);
-				statement.executeUpdate();
-				result = statement.getGeneratedKeys();
-				while (result.next()) {
-					nhanVienEntity1 = new NhanVienEntity();
-					nhanVienEntity1.setMaNhanVien(result.getString(1));
-				}
+				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
 				ConnectDB.closePreStatement(statement);
-				ConnectDB.closeResultSet(result);
 			}
 		}
 
-		return nhanVienEntity1;
+		return false;
 	}
 
 	public boolean capNhatMatKhau(String mkMoi, String sdt) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
-		int n = -1;
+
 		String query = "UPDATE NhanVien\r\n" + "SET Password = ?\r\n" + "WHERE SDT = ?";
 		if (connect != null) {
 			try {
@@ -270,7 +262,7 @@ public class QuanLyNhanVienDAO {
 				mkMoi = PasswordHasher.hashPassword(mkMoi);
 				statement.setString(1, mkMoi);
 				statement.setString(2, sdt);
-				n = statement.executeUpdate();
+				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
@@ -279,10 +271,10 @@ public class QuanLyNhanVienDAO {
 				ConnectDB.closePreStatement(statement);
 			}
 		}
-		return n > 0;
+		return false;
 	}
 
-	public int chinhSua(NhanVienEntity nhanVienEntity) {
+	public boolean chinhSua(NhanVienEntity nhanVienEntity) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 
@@ -303,7 +295,7 @@ public class QuanLyNhanVienDAO {
 				statement.setString(6, nhanVienEntity.getChucVu());
 				statement.setString(7, trangThai);
 				statement.setString(8, nhanVienEntity.getMaNhanVien());
-				return statement.executeUpdate();
+				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
@@ -313,6 +305,6 @@ public class QuanLyNhanVienDAO {
 			}
 		}
 
-		return 0;
+		return false;
 	}
 }

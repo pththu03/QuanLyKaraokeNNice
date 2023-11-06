@@ -471,8 +471,11 @@ public class GD_QuanLyNhanVien extends JPanel {
 			boolean trangThai = true;
 			NhanVienEntity nhanVienEntity = new NhanVienEntity(hoTen, sdt, email, cccd, password, namSinh, mucLuong,
 					quyen, trangThai);
-			nhanVienEntity = quanLyNhanVienDAO.them(nhanVienEntity);
-			loadData();
+			if (quanLyNhanVienDAO.them(nhanVienEntity)) {
+				JOptionPane.showMessageDialog(this, "Thêm thành công");
+				chonChucNangLamMoi();
+				loadData();
+			}
 		}
 	}
 
@@ -523,7 +526,7 @@ public class GD_QuanLyNhanVien extends JPanel {
 			}
 			NhanVienEntity nhanVienEntity = new NhanVienEntity(maNV, hoTen, sdt, email, "", "", namSinh, mucLuong,
 					chucVu, trangThai);
-			if (quanLyNhanVienDAO.chinhSua(nhanVienEntity) != 0) {
+			if (quanLyNhanVienDAO.chinhSua(nhanVienEntity)) {
 				JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin nhân viên thành công");
 				chonChucNangLamMoi();
 				loadData();

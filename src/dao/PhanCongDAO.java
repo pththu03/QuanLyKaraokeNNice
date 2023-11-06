@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import entity.PhieuPhanCongEntity;
 import util.ConnectDB;
 
@@ -54,10 +56,8 @@ public class PhanCongDAO {
 	 * @param phieuPhanCongEntity
 	 * @return
 	 */
-	public PhieuPhanCongEntity them(PhieuPhanCongEntity phieuPhanCongEntity) {
-		PhieuPhanCongEntity phieuPhanCongEntity2 = null;
+	public boolean them(PhieuPhanCongEntity phieuPhanCongEntity) {
 		Connection connect = ConnectDB.getConnect();
-		ResultSet result = null;
 		PreparedStatement statement = null;
 
 		try {
@@ -67,21 +67,16 @@ public class PhanCongDAO {
 			statement.setString(1, phieuPhanCongEntity.getMaNhanVien());
 			statement.setString(2, phieuPhanCongEntity.getMaCaTruc());
 			statement.setDate(3, phieuPhanCongEntity.getNgay());
-			statement.executeUpdate();
-			result = statement.getGeneratedKeys();
-			while (result.next()) {
-				phieuPhanCongEntity2 = new PhieuPhanCongEntity();
-				phieuPhanCongEntity2.setMaPhieuPhanCong(result.getString(1));
-			}
+			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 			e.printStackTrace();
 		} finally {
 			ConnectDB.closeConnect(connect);
 			ConnectDB.closePreStatement(statement);
-			ConnectDB.closeResultSet(result);
 		}
 
-		return phieuPhanCongEntity2;
+		return false;
 	}
 
 	/**
@@ -90,7 +85,7 @@ public class PhanCongDAO {
 	 * @param maPPC
 	 * @return
 	 */
-	public int xoa(String maPPC) {
+	public boolean xoa(String maPPC) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 
@@ -99,7 +94,7 @@ public class PhanCongDAO {
 				String query = "DELETE FROM PhieuPhanCong\r\n" + "WHERE MaPPC = ?";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, maPPC);
-				return statement.executeUpdate();
+				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
@@ -107,10 +102,16 @@ public class PhanCongDAO {
 				ConnectDB.closePreStatement(statement);
 			}
 		}
-		return 0;
+		return false;
 	}
 
-	public PhieuPhanCongEntity timTheoMa(String maCT) {
+	/**
+	 * Tìm kiếm bằng maCT
+	 * 
+	 * @param maCT
+	 * @return
+	 */
+	public PhieuPhanCongEntity timTheoMaCT(String maCT) {
 		PhieuPhanCongEntity phieuPhanCongKQ = new PhieuPhanCongEntity();
 		Connection connect = ConnectDB.getConnect();
 		ResultSet result = null;
@@ -127,6 +128,35 @@ public class PhanCongDAO {
 					String maCTr = result.getString(3);
 					Date ngay = result.getDate(4);
 					phieuPhanCongKQ = new PhieuPhanCongEntity(maPPC, maNV, maCTr, ngay);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return phieuPhanCongKQ;
+	}
+
+	public PhieuPhanCongEntity timTheoMaPPC(String maPPC) {
+		PhieuPhanCongEntity phieuPhanCongKQ = new PhieuPhanCongEntity();
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "SELECT MaPPC, MaNV, MaCT, Ngay\r\n" + "FROM PhieuPhanCong\r\n" + "WHERE MaPPC LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maPPC);
+				result = statement.executeQuery();
+				while (result.next()) {
+					String mPPC = result.getString(1);
+					String maNV = result.getString(2);
+					String maCTr = result.getString(3);
+					Date ngay = result.getDate(4);
+					phieuPhanCongKQ = new PhieuPhanCongEntity(mPPC, maNV, maCTr, ngay);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

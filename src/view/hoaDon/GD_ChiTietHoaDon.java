@@ -161,9 +161,13 @@ public class GD_ChiTietHoaDon extends JFrame {
 		int stt = 1;
 		for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
 			PhongEntity phongEntity = quanLyPhongDAO.timTheoMa(chiTietHoaDonEntity.getMaPhong());
+			String gioTraPhong = "NULL";
+			if (chiTietHoaDonEntity.getGioTraPhong() != null) {
+				gioTraPhong = TimeFormatter.format(chiTietHoaDonEntity.getGioTraPhong());
+			}
 			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getSoPhong(), phongEntity.getLoaiPhong(),
 					phongEntity.getSucChua(), TimeFormatter.format(chiTietHoaDonEntity.getGioNhanPhong()),
-					TimeFormatter.format(chiTietHoaDonEntity.getGioTraPhong()) });
+					gioTraPhong });
 		}
 	}
 

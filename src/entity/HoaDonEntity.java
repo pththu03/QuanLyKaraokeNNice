@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -36,12 +37,35 @@ public class HoaDonEntity {
 		this.trangThai = trangThai;
 	}
 
+	public HoaDonEntity(String maNhanVien, String maKhachHang, LocalDate ngayLap) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.maKhachHang = maKhachHang;
+		this.ngayLap = ngayLap;
+	}
+
+	public HoaDonEntity(String maHoaDon, String maNhanVien, String maKhachHang, LocalDate ngayLapHD,
+			boolean trangThai) {
+		super();
+		this.maHoaDon = maHoaDon;
+		this.maNhanVien = maNhanVien;
+		this.maKhachHang = maKhachHang;
+		this.ngayLap = ngayLapHD;
+		this.trangThai = trangThai;
+	}
+
 	public HoaDonEntity(String maHoaDon, String maNhanVien, String maKhachHang, boolean trangThai) {
 		super();
 		this.maHoaDon = maHoaDon;
 		this.maNhanVien = maNhanVien;
 		this.maKhachHang = maKhachHang;
 		this.trangThai = trangThai;
+	}
+
+	public HoaDonEntity(String maNhanVien, String maKhachHang) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.maKhachHang = maKhachHang;
 	}
 
 	public String getMaHoaDon() {

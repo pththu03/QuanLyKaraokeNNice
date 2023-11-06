@@ -2,10 +2,12 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import view.datDichVu.GD_DatDichVu;
 
-public class DatDichVuController implements ActionListener {
+public class DatDichVuController implements ActionListener , MouseListener{
 
 	private GD_DatDichVu giaoDienDatDichVu;
 
@@ -17,7 +19,7 @@ public class DatDichVuController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(giaoDienDatDichVu.btnTimKiem)) {
-			giaoDienDatDichVu.chonChucNangTimKiem();
+			giaoDienDatDichVu.chonChucNangTim();
 		} else if (o.equals(giaoDienDatDichVu.btnLamMoi)) {
 			giaoDienDatDichVu.chonChucNangLamMoi();
 		} else if (o.equals(giaoDienDatDichVu.btnThem)) {
@@ -27,10 +29,39 @@ public class DatDichVuController implements ActionListener {
 		} else if (o.equals(giaoDienDatDichVu.btnChinhSua)) {
 			giaoDienDatDichVu.chonChucNangChinhSua();
 		} else if (o.equals(giaoDienDatDichVu.btnHuy)) {
-			giaoDienDatDichVu.chonChucNangHuy();
+			giaoDienDatDichVu.chonChucNangHuyDichVu();
 		} else if (o.equals(giaoDienDatDichVu.btnDat)) {
 			giaoDienDatDichVu.chonChucNangDat();
-		}
+		} 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		giaoDienDatDichVu.hienThiThongTin();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

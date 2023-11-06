@@ -558,11 +558,12 @@ public class GD_QuanLyKhachHang extends JPanel {
 	public void chonChucNangTimKiem() {
 		String tenKH = txtTenKhachHang.getText().trim();
 		String sdt = txtSoDienThoai.getText().trim();
-
+		int soluongTu = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
+		int soluongDen = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
 		list = new ArrayList<>();
 		tblKhachHang.removeAll();
 		tblmdelKhachHang.setRowCount(0);
-		list = quanLyKhachHangDAO.timKiem(sdt, tenKH, sdt, ALLBITS, ABORT);
+		list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
 		int stt = 1;
 		for (KhachHangEntity khachHangEntity : list) {
 

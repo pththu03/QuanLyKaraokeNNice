@@ -519,12 +519,14 @@ INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
 GO
 
 INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (206, 'VIP', N'Đang sử dụng', 20)
+	VALUES (206, 'VIP', N'Trống', 20)
 GO
 
 INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (207, 'VIP', N'Chờ', 20)
+	VALUES (207, 'VIP', N'Trống', 20)
 GO
+
+
 -- CA TRỰC
 INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
 	VALUES (N'Ca 1', '08:00:00', '13:00:00')
@@ -697,27 +699,47 @@ AS
 GO
 
 
+CREATE TRIGGER deleteChiTietHoaDon
+ON [dbo].[ChiTietHoaDon]
+AFTER DELETE 
+AS
+	DECLARE @MaPhong varchar(7)
+	SELECT @MaPhong = DELETED.MaPhong FROM DELETED
+	IF NOT EXISTS (SELECT * FROM Phong WHERE Phong.MaPhong = @MaPhong)
+		ROLLBACK
+
+	UPDATE Phong
+	SET TrangThai = N'Trống'
+	WHERE MaPhong = @MaPhong
+GO
+
 
 SELECT *FROM KhachHang
 
 SELECT *FROM NhanVien
 SELECT *FROM Phong
 SELECT *FROM KhachHang
-delete from ChiTietHoaDon
-delete from HoaDon
+SELECT *FROM DichVu
+WHERE LoaiDV LIKE N'Đồ uống' and Gia >= 20000 and Gia <= 50000
 
 
+--delete from ChiTietDichVu
+--delete from ChiTietHoaDon
+--delete from HoaDon
+--delete from Phong
 
-INSERT INTO HoaDon
-	(MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai)
-VALUES
-	('KH002', 'NV001', '2023-09-07', '13:00:00', N'Đã thanh toán')
-GO
+
 
 INSERT INTO HoaDon
 	(MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai)
 VALUES
 	('KH001', 'NV001', '2023-09-08', '13:00:00', N'Đã thanh toán')
+GO
+
+INSERT INTO HoaDon
+	(MaKH, MaNV, TrangThai)
+VALUES
+	('KH002', 'NV001', N'Chưa thanh toán')
 GO
 
 INSERT INTO ChiTietHoaDon
@@ -768,7 +790,47 @@ VALUES
 	('CTHD002', 'DV011', 6)
 GO
 
+SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
+FROM HoaDon h JOIN KhachHang k 
+	ON h.MaKH = k.MaKH JOIN NhanVien nv
+	ON h.MaNV = nv.MaNV
+WHERE k.HoTen LIKE N'%Thư%' AND nv.HoTen LIKE N'%Thư%' AND (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-07')
+GO
+
+SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
+FROM HoaDon h JOIN KhachHang k 
+	ON h.MaKH = k.MaKH JOIN NhanVien nv
+	ON h.MaNV = nv.MaNV
+WHERE (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-08')
+GO
+
+select * from KhachHang
+
+SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC
+
+
 
 SELECT *FROM HoaDon
 SELECT *FROM ChiTietHoaDon
+SELECT *FROM Phong
+
 SELECT *FROM ChiTietDichVu
+UPDATE Phong
+SET TrangThai = N'Trống'
+WHERE MaPhong = 'P002'
+GO
+
+UPDATE ChiTietHoaDon 
+SET MaPhong = 'P005'
+FROM ChiTietHoaDon c join Phong p 
+	ON c.MaPhong = p.MaPhong JOIN HoaDon hd
+	ON c.MaHD = hd.MaHD
+WHERE p.MaPhong = 'P001'
+
+SELECT MaCTHD, CTHD.MaHD, P.MaPhong, GioBD FROM ChiTietHoaDon CTHD JOIN HoaDon HD
+	ON CTHD.MaHD = HD.MaHD JOIN Phong P
+	ON CTHD.MaPhong = P.MaPhong
+WHERE P.MaPhong = 'P002' AND NgayLapHD = '2023-11-03' AND P.TrangThai = N'Đặt trước'
+
+DELETE FROM ChiTietHoaDon
+WHERE MaCTHD = 'CTHD002'

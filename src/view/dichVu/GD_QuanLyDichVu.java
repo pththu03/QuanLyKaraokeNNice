@@ -467,6 +467,7 @@ public class GD_QuanLyDichVu extends JPanel {
 	 * Nếu không phải số thì yêu cầu nhập số
 	 */
 	public void chonChucNangTim() {
+		if(kiemTraDuLieuTim()) {
 		String loaiDV = cmbLoaiDVTimKiem.getSelectedItem().toString().trim();
 		Double giaTu = null;
 		Double giaDen = null;
@@ -487,5 +488,65 @@ public class GD_QuanLyDichVu extends JPanel {
 					dichVuEntity.getLoaiDichVu(), MoneyFormatter.format(dichVuEntity.getGia()) });
 		}
 	}
+}
+	
+	private boolean kiemTraDuLieuTim() {
+		String giaTu = txtGiaDichVu.getText();
+		String giaDen = txtGiaDen.getText();
+		listDichVu = new ArrayList<>();
+		listDichVu = quanLyDichVuDAO.duyetDanhSach();
+		
+		if(giaTu.length() >= 0 || giaDen.length() > 0) {
+			if (giaTu.length() >= 0) {
+				try {
+					Double giaDichVuTu = Double.parseDouble(giaTu);
+					if (!(giaDichVuTu > 0)) {
+						JOptionPane.showMessageDialog(this, "Giá dịch vụ phải lớn hơn hoặc bằng 0", "Thông báo",
+								JOptionPane.INFORMATION_MESSAGE);
+						txtGiaDichVu.requestFocus();
+						return false;
+					}
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(this, "Giá dịch vụ nhập vào là số", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtGiaDichVu.requestFocus();
+					return false;
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Giá dịch vụ không được để trống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtGiaDichVu.requestFocus();
+				return false;
+			}
+			
+			
+			if (giaDen.length() > 0) {
+				try {
+					Double giaDichVuDen = Double.parseDouble(giaDen);
+					if (!(giaDichVuDen > 0)) {
+						JOptionPane.showMessageDialog(this, "Giá dịch vụ phải lớn hơn  0", "Thông báo",
+								JOptionPane.INFORMATION_MESSAGE);
+						txtGiaDichVu.requestFocus();
+						return false;
+					}
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(this, "Giá dịch vụ nhập vào là số", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtGiaDichVu.requestFocus();
+					return false;
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Giá Đến không được để trống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtGiaDichVu.requestFocus();
+				return false;
+			}
+		}
 
+		return true;
+		
+	}
+	
+	
+	
 }
