@@ -183,6 +183,9 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblMaKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtMaKH = new JTextField();
+		txtMaKH.setDisabledTextColor(Color.BLACK);
+		txtMaKH.setForeground(Color.BLACK);
+		txtMaKH.setBackground(Color.WHITE);
 		txtMaKH.setBounds(228, 105, 351, 27);
 		pnlThongTin.add(txtMaKH);
 		txtMaKH.setEnabled(false);

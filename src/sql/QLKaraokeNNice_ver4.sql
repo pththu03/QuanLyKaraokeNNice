@@ -1,4 +1,4 @@
-﻿﻿USE master
+﻿﻿USE [master]
 GO
 
 DROP DATABASE QuanLyKaraokeNNice
@@ -714,19 +714,19 @@ AS
 GO
 
 
-SELECT *FROM KhachHang
+--SELECT *FROM KhachHang
 
-SELECT *FROM NhanVien
-SELECT *FROM Phong
-SELECT *FROM KhachHang
-SELECT *FROM DichVu
-WHERE LoaiDV LIKE N'Đồ uống' and Gia >= 20000 and Gia <= 50000
+--SELECT *FROM NhanVien
+--SELECT *FROM Phong
+--SELECT *FROM KhachHang
+--SELECT *FROM DichVu
+--WHERE LoaiDV LIKE N'Đồ uống' and Gia >= 20000 and Gia <= 50000
 
 
---delete from ChiTietDichVu
---delete from ChiTietHoaDon
---delete from HoaDon
---delete from Phong
+delete from ChiTietDichVu
+delete from ChiTietHoaDon
+delete from HoaDon
+delete from Phong
 
 
 
@@ -737,10 +737,12 @@ VALUES
 GO
 
 INSERT INTO HoaDon
-	(MaKH, MaNV, TrangThai)
+	(MaKH, MaNV, NgayLapHD, TrangThai)
 VALUES
-	('KH002', 'NV001', N'Chưa thanh toán')
+	('KH002', 'NV001', '2023-09-08', N'Chưa thanh toán')
 GO
+
+
 
 INSERT INTO ChiTietHoaDon
 	(MaHD, MaPhong, GioBD, GioKT)
@@ -790,47 +792,50 @@ VALUES
 	('CTHD002', 'DV011', 6)
 GO
 
-SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
-FROM HoaDon h JOIN KhachHang k 
-	ON h.MaKH = k.MaKH JOIN NhanVien nv
-	ON h.MaNV = nv.MaNV
-WHERE k.HoTen LIKE N'%Thư%' AND nv.HoTen LIKE N'%Thư%' AND (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-07')
-GO
+--SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
+--FROM HoaDon h JOIN KhachHang k 
+--	ON h.MaKH = k.MaKH JOIN NhanVien nv
+--	ON h.MaNV = nv.MaNV
+--WHERE k.HoTen LIKE N'%Thư%' AND nv.HoTen LIKE N'%Thư%' AND (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-07')
+--GO
 
-SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
-FROM HoaDon h JOIN KhachHang k 
-	ON h.MaKH = k.MaKH JOIN NhanVien nv
-	ON h.MaNV = nv.MaNV
-WHERE (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-08')
-GO
+--SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
+--FROM HoaDon h JOIN KhachHang k 
+--	ON h.MaKH = k.MaKH JOIN NhanVien nv
+--	ON h.MaNV = nv.MaNV
+--WHERE (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-08')
+--GO
 
-select * from KhachHang
+--select * from KhachHang
 
-SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC
+--SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC
 
 
 
-SELECT *FROM HoaDon
-SELECT *FROM ChiTietHoaDon
-SELECT *FROM Phong
+--SELECT *FROM HoaDon
+--SELECT *FROM ChiTietHoaDon
+--SELECT *FROM Phong
 
-SELECT *FROM ChiTietDichVu
-UPDATE Phong
-SET TrangThai = N'Trống'
-WHERE MaPhong = 'P002'
-GO
+--SELECT *FROM ChiTietDichVu
+--UPDATE Phong
+--SET TrangThai = N'Trống'
+--WHERE MaPhong = 'P002'
+--GO
 
-UPDATE ChiTietHoaDon 
-SET MaPhong = 'P005'
-FROM ChiTietHoaDon c join Phong p 
-	ON c.MaPhong = p.MaPhong JOIN HoaDon hd
-	ON c.MaHD = hd.MaHD
-WHERE p.MaPhong = 'P001'
+--UPDATE ChiTietHoaDon 
+--SET MaPhong = 'P005'
+--FROM ChiTietHoaDon c join Phong p 
+--	ON c.MaPhong = p.MaPhong JOIN HoaDon hd
+--	ON c.MaHD = hd.MaHD
+--WHERE p.MaPhong = 'P001'
 
-SELECT MaCTHD, CTHD.MaHD, P.MaPhong, GioBD FROM ChiTietHoaDon CTHD JOIN HoaDon HD
-	ON CTHD.MaHD = HD.MaHD JOIN Phong P
-	ON CTHD.MaPhong = P.MaPhong
-WHERE P.MaPhong = 'P002' AND NgayLapHD = '2023-11-03' AND P.TrangThai = N'Đặt trước'
+--SELECT MaCTHD, CTHD.MaHD, P.MaPhong, GioBD FROM ChiTietHoaDon CTHD JOIN HoaDon HD
+--	ON CTHD.MaHD = HD.MaHD JOIN Phong P
+--	ON CTHD.MaPhong = P.MaPhong
+--WHERE P.MaPhong = 'P002' AND NgayLapHD = '2023-11-03' AND P.TrangThai = N'Đặt trước'
 
-DELETE FROM ChiTietHoaDon
-WHERE MaCTHD = 'CTHD002'
+--DELETE FROM ChiTietHoaDon
+--WHERE MaCTHD = 'CTHD002'
+
+--SELECT * FROM DichVu 
+--WHERE LoaiDV LIKE N'%Uống%' AND Gia >= '20000' AND Gia <= '60000'

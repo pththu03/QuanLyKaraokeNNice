@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controller.QuanLyDichVuController;
@@ -46,7 +47,7 @@ public class GD_QuanLyDichVu extends JPanel {
 	private JTextField txtTenDV;
 	private JTextField txtGia;
 	private JTextField txtGiaDen;
-	private JTextField txtGiaDichVu;
+	private JTextField txtGiaDichVuTu;
 
 	// JLabel
 	private JLabel lblQuanLiDichVu;
@@ -107,6 +108,9 @@ public class GD_QuanLyDichVu extends JPanel {
 		pnlThongTin.add(lblLoaiDichVu);
 
 		txtMaDV = new JTextField();
+		txtMaDV.setDisabledTextColor(Color.BLACK);
+		txtMaDV.setForeground(Color.BLACK);
+		txtMaDV.setBackground(Color.WHITE);
 		txtMaDV.setEnabled(false);
 		txtMaDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtMaDV.setBounds(216, 115, 340, 33);
@@ -178,10 +182,6 @@ public class GD_QuanLyDichVu extends JPanel {
 		pnlThongTin.add(txtGia);
 		txtGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtGia.setColumns(10);
-		btnThem.addActionListener(controller);
-		btnChinhSua.addActionListener(controller);
-		btnXoa.addActionListener(controller);
-		btnLamMoi.addActionListener(controller);
 
 		pnlChucNang = new JPanel();
 		pnlChucNang.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
@@ -196,14 +196,21 @@ public class GD_QuanLyDichVu extends JPanel {
 		scrQLDV = new JScrollPane(tblDichVu);
 		scrQLDV.setBounds(10, 79, 674, 604);
 		pnlChucNang.add(scrQLDV);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblDichVu.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblDichVu.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		tblDichVu.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 
 		JLabel lblDanhSchDch = new JLabel("Danh sách dịch vụ");
 		lblDanhSchDch.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDanhSchDch.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		lblDanhSchDch.setBounds(0, 28, 694, 40);
 		pnlChucNang.add(lblDanhSchDch);
-
-		controller = new QuanLyDichVuController(this);
 
 		pnlTimKiem = new JPanel();
 		pnlTimKiem.setBackground(new Color(204, 204, 255));
@@ -230,10 +237,6 @@ public class GD_QuanLyDichVu extends JPanel {
 		btnTim = new JButton("Tìm kiếm");
 		btnTim.setBounds(472, 161, 130, 35);
 		pnlTimKiem.add(btnTim);
-		btnTim.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnTim.setBackground(new Color(144, 238, 144));
 		btnTim.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTim.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconTimKiem1.png")));
@@ -250,11 +253,11 @@ public class GD_QuanLyDichVu extends JPanel {
 		cmbLoaiDVTimKiem.setBounds(202, 30, 399, 33);
 		pnlTimKiem.add(cmbLoaiDVTimKiem);
 
-		txtGiaDichVu = new JTextField();
-		txtGiaDichVu.setBounds(202, 95, 166, 33);
-		pnlTimKiem.add(txtGiaDichVu);
-		txtGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGiaDichVu.setColumns(10);
+		txtGiaDichVuTu = new JTextField();
+		txtGiaDichVuTu.setBounds(202, 95, 166, 33);
+		pnlTimKiem.add(txtGiaDichVuTu);
+		txtGiaDichVuTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtGiaDichVuTu.setColumns(10);
 
 		controller = new QuanLyDichVuController(this);
 		btnTim.addActionListener(controller);
@@ -263,9 +266,13 @@ public class GD_QuanLyDichVu extends JPanel {
 		btnLamMoi.addActionListener(controller);
 		btnXoa.addActionListener(controller);
 		tblDichVu.addMouseListener(controller);
+
 		loadData();
 	}
 
+	/**
+	 * 
+	 */
 	private void loadData() {
 		tblDichVu.removeAll();
 		tblDichVu.setRowSelectionAllowed(false);
@@ -281,9 +288,13 @@ public class GD_QuanLyDichVu extends JPanel {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void hienThiThongTin() {
 		listDichVu = new ArrayList<>();
 		listDichVu = quanLyDichVuDAO.duyetDanhSach();
+
 		int row = tblDichVu.getSelectedRow();
 		if (row >= 0) {
 			txtMaDV.setText(listDichVu.get(row).getMaDichVu());
@@ -291,8 +302,12 @@ public class GD_QuanLyDichVu extends JPanel {
 			txtGia.setText(String.valueOf(listDichVu.get(row).getGia()));
 			if (listDichVu.get(row).getLoaiDichVu().equalsIgnoreCase("Đồ uống")) {
 				cmbLoaiDV.setSelectedIndex(1);
-			} else {
+			} else if (listDichVu.get(row).getLoaiDichVu().equalsIgnoreCase("Món ăn")) {
 				cmbLoaiDV.setSelectedIndex(2);
+			} else if (listDichVu.get(row).getLoaiDichVu().equalsIgnoreCase("Tiệc")) {
+				cmbLoaiDV.setSelectedIndex(3);
+			} else {
+				cmbLoaiDV.setSelectedIndex(0);
 			}
 
 		}
@@ -303,14 +318,155 @@ public class GD_QuanLyDichVu extends JPanel {
 	 */
 	public void chonChucNangThem() {
 		if (kiemTraDuLieuThem()) {
-			//
-			String tenDV = txtTenDV.getText();
+			String tenDV = txtTenDV.getText().trim();
 			String loaiDV = cmbLoaiDV.getSelectedItem().toString();
 			double gia = Double.parseDouble(txtGia.getText());
 			DichVuEntity dichVuEntity = new DichVuEntity(tenDV, loaiDV, gia);
-			dichVuEntity = quanLyDichVuDAO.them(dichVuEntity);
+			if (quanLyDichVuDAO.them(dichVuEntity)) {
+				JOptionPane.showMessageDialog(this, "Thêm dịch vụ thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 			loadData();
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public void chonChucNangChinhSua() {
+		if (kiemTraDuLieuChinhSua()) {
+			int row = tblDichVu.getSelectedRow();
+			if (row >= 0) {
+				String maDV = txtMaDV.getText().trim();
+				String tenDV = txtTenDV.getText().trim();
+				String loaiDV = cmbLoaiDV.getSelectedItem().toString();
+				double gia = Double.parseDouble(txtGia.getText().trim());
+				DichVuEntity dichVuEntity = new DichVuEntity(maDV, tenDV, loaiDV, gia);
+				if (quanLyDichVuDAO.chinhSua(dichVuEntity)) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin dịch vụ thành công", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					chonChucNangLamMoi();
+					loadData();
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Chọn Dịch vụ cần chỉnh sửa");
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void chonChucNangLamMoi() {
+		txtGia.setText("");
+		txtGiaDen.setText("");
+		txtGiaDichVuTu.setText("");
+		txtMaDV.setText("");
+		txtTenDV.setText("");
+		cmbLoaiDV.setSelectedIndex(0);
+		cmbLoaiDVTimKiem.setSelectedIndex(0);
+		tblDichVu.setRowSelectionAllowed(false);
+		loadData();
+
+	}
+
+	/**
+	 * 
+	 */
+	public void chonChucNangXoa() {
+		int row = tblDichVu.getSelectedRow();
+		if (row >= 0) {
+			if (quanLyDichVuDAO.xoa(txtMaDV.getText())) {
+				tblmodelDichVu.removeRow(row);
+				JOptionPane.showMessageDialog(this, "Xóa dịch vụ thành công", "Thông Báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				chonChucNangLamMoi();
+				loadData();
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Chọn dịch vụ cần xóa");
+		}
+
+	}
+
+	/**
+	 * viết hàm kiểm tra giá trị tìm: Nếu không nhập giá ở giá từ thì không sao .Nếu
+	 * đã nhập giá ở giá từ thì phải kiểm tra có nhập giá ở txtgiaDen không. Nếu
+	 * không thì thông báo yêu cầu nhập. Kiểm tra giá nhập vào có phải là số không.
+	 * Nếu không phải số thì yêu cầu nhập số
+	 */
+	public void chonChucNangTim() {
+		if (kiemTraDuLieuTim()) {
+			String loaiDV = cmbLoaiDVTimKiem.getSelectedItem().toString().trim();
+			Double giaTu = null;
+			Double giaDen = null;
+			if (!txtGiaDichVuTu.getText().trim().equals("")) {
+				giaTu = Double.valueOf(txtGiaDichVuTu.getText().trim());
+			}
+			if (!txtGiaDen.getText().trim().equals("")) {
+				giaDen = Double.valueOf(txtGiaDen.getText().trim());
+			}
+
+			listDichVu = new ArrayList<>();
+			tblDichVu.removeAll();
+			tblmodelDichVu.setRowCount(0);
+			listDichVu = quanLyDichVuDAO.timKiem(loaiDV, giaTu, giaDen);
+			int stt = 1;
+			for (DichVuEntity dichVuEntity : listDichVu) {
+				tblmodelDichVu.addRow(new Object[] { stt++, dichVuEntity.getMaDichVu(), dichVuEntity.getTenDichVu(),
+						dichVuEntity.getLoaiDichVu(), MoneyFormatter.format(dichVuEntity.getGia()) });
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private boolean kiemTraDuLieuTim() {
+
+		if (txtGiaDichVuTu.getText().trim().length() > 0) {
+			String giaTu = txtGiaDichVuTu.getText().trim();
+			if (!giaTu.matches("[0-9]+")) {
+				JOptionPane.showMessageDialog(this, "Giá tối thiểu nhập vào phải là số");
+				txtGiaDichVuTu.requestFocus();
+				return false;
+			}
+
+			if (Double.parseDouble(giaTu) <= 0) {
+				JOptionPane.showMessageDialog(this, "Giá tổi thiểu nhập vào phải là số nguyên");
+				txtGiaDichVuTu.requestFocus();
+				return false;
+			}
+
+			if (txtGiaDen.getText().trim().length() > 0) {
+				String giaDen = txtGiaDen.getText().trim();
+				if (!giaDen.matches("[0-9]+")) {
+					JOptionPane.showMessageDialog(this, "Giá tối đa nhập vào phải là số");
+					txtGiaDen.requestFocus();
+					return false;
+				}
+
+				if (Double.parseDouble(giaDen) <= 0) {
+					JOptionPane.showMessageDialog(this, "Giá tối đa  nhập vào phải là số nguyên");
+					txtGiaDen.requestFocus();
+					return false;
+				}
+
+				if (Double.parseDouble(giaDen) < Double.parseDouble(giaTu)) {
+					JOptionPane.showMessageDialog(this, "Giá tối dâ phải lớn hơn giá tối thiểu");
+					txtGiaDen.requestFocus();
+					return false;
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập giá tối đa");
+				txtGiaDen.requestFocus();
+				return false;
+			}
+		}
+
+		return true;
+
 	}
 
 	/**
@@ -364,27 +520,10 @@ public class GD_QuanLyDichVu extends JPanel {
 		return true;
 	}
 
-	public void chonChucNangChinhSua() {
-		if (kiemTraDuLieuChinhSua()) {
-			int row = tblDichVu.getSelectedRow();
-			if (row == -1) {
-				JOptionPane.showMessageDialog(this, "Chọn Dịch vụ cần chỉnh sửa");
-			} else {
-				String maDV = txtMaDV.getText().trim();
-				String tenDV = txtTenDV.getText().trim();
-				String loaiDV = cmbLoaiDV.getSelectedItem().toString();
-				double gia = Double.parseDouble(txtGia.getText().trim());
-				DichVuEntity dichVuEntity = new DichVuEntity(maDV, tenDV, loaiDV, gia);
-				if (quanLyDichVuDAO.chinhSua(dichVuEntity) != 0) {
-					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin dịch vụ thành công", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					chonChucNangLamMoi();
-					loadData();
-				}
-			}
-		}
-	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	private boolean kiemTraDuLieuChinhSua() {
 		String tenDV = txtTenDV.getText();
 		String gia = txtGia.getText();
@@ -432,121 +571,4 @@ public class GD_QuanLyDichVu extends JPanel {
 		return true;
 	}
 
-	public void chonChucNangLamMoi() {
-		txtGia.setText("");
-		txtGiaDen.setText("");
-		txtGiaDichVu.setText("");
-		txtMaDV.setText("");
-		txtTenDV.setText("");
-		cmbLoaiDV.setSelectedIndex(0);
-		cmbLoaiDVTimKiem.setSelectedIndex(0);
-		tblDichVu.setRowSelectionAllowed(false);
-		loadData();
-
-	}
-
-	public void chonChucNangXoa() {
-		int row = tblDichVu.getSelectedRow();
-		if (row == -1) {
-			JOptionPane.showMessageDialog(this, "Chọn dịch vụ cần xóa");
-		} else {
-			if (quanLyDichVuDAO.xoa(txtMaDV.getText()) != 0) {
-				tblmodelDichVu.removeRow(row);
-				JOptionPane.showMessageDialog(this, "Xóa dịch vụ thành công", "Thông Báo",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-			chonChucNangXoa();
-		}
-
-	}
-
-	/**
-	 * viết hàm kiểm tra giá trị tìm: Nếu không nhập giá ở giá từ thì không sao .Nếu
-	 * đã nhập giá ở giá từ thì phải kiểm tra có nhập giá ở txtgiaDen không. Nếu
-	 * không thì thông báo yêu cầu nhập. Kiểm tra giá nhập vào có phải là số không.
-	 * Nếu không phải số thì yêu cầu nhập số
-	 */
-	public void chonChucNangTim() {
-		if(kiemTraDuLieuTim()) {
-		String loaiDV = cmbLoaiDVTimKiem.getSelectedItem().toString().trim();
-		Double giaTu = null;
-		Double giaDen = null;
-		if (!txtGiaDichVu.getText().trim().equals("")) {
-			giaTu = Double.valueOf(txtGiaDichVu.getText().trim());
-		}
-		if (!txtGiaDen.getText().trim().equals("")) {
-			giaDen = Double.valueOf(txtGiaDen.getText().trim());
-		}
-
-		listDichVu = new ArrayList<>();
-		tblDichVu.removeAll();
-		tblmodelDichVu.setRowCount(0);
-		listDichVu = quanLyDichVuDAO.timKiem(loaiDV, giaTu, giaDen);
-		int stt = 1;
-		for (DichVuEntity dichVuEntity : listDichVu) {
-			tblmodelDichVu.addRow(new Object[] { stt++, dichVuEntity.getMaDichVu(), dichVuEntity.getTenDichVu(),
-					dichVuEntity.getLoaiDichVu(), MoneyFormatter.format(dichVuEntity.getGia()) });
-		}
-	}
-}
-	
-	private boolean kiemTraDuLieuTim() {
-		String giaTu = txtGiaDichVu.getText();
-		String giaDen = txtGiaDen.getText();
-		listDichVu = new ArrayList<>();
-		listDichVu = quanLyDichVuDAO.duyetDanhSach();
-		
-		if(giaTu.length() >= 0 || giaDen.length() > 0) {
-			if (giaTu.length() >= 0) {
-				try {
-					Double giaDichVuTu = Double.parseDouble(giaTu);
-					if (!(giaDichVuTu > 0)) {
-						JOptionPane.showMessageDialog(this, "Giá dịch vụ phải lớn hơn hoặc bằng 0", "Thông báo",
-								JOptionPane.INFORMATION_MESSAGE);
-						txtGiaDichVu.requestFocus();
-						return false;
-					}
-				} catch (NumberFormatException e) {
-					JOptionPane.showMessageDialog(this, "Giá dịch vụ nhập vào là số", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtGiaDichVu.requestFocus();
-					return false;
-				}
-			} else {
-				JOptionPane.showMessageDialog(this, "Giá dịch vụ không được để trống", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtGiaDichVu.requestFocus();
-				return false;
-			}
-			
-			
-			if (giaDen.length() > 0) {
-				try {
-					Double giaDichVuDen = Double.parseDouble(giaDen);
-					if (!(giaDichVuDen > 0)) {
-						JOptionPane.showMessageDialog(this, "Giá dịch vụ phải lớn hơn  0", "Thông báo",
-								JOptionPane.INFORMATION_MESSAGE);
-						txtGiaDichVu.requestFocus();
-						return false;
-					}
-				} catch (NumberFormatException e) {
-					JOptionPane.showMessageDialog(this, "Giá dịch vụ nhập vào là số", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtGiaDichVu.requestFocus();
-					return false;
-				}
-			} else {
-				JOptionPane.showMessageDialog(this, "Giá Đến không được để trống", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtGiaDichVu.requestFocus();
-				return false;
-			}
-		}
-
-		return true;
-		
-	}
-	
-	
-	
 }
