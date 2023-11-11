@@ -871,6 +871,3 @@ WHERE p.SoPhong = '205' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangTha
 GO
 
 SELECT * FROM ChiTietDichVu
-
-INSERT INTO ChiTietDichVu
-	()

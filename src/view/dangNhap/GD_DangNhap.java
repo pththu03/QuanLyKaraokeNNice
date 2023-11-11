@@ -156,18 +156,18 @@ public class GD_DangNhap extends JFrame {
 	}
 
 	private boolean kiemTraDuLieuNhap() {
-		String sdt = txtSoDienThoai.getText().trim();
-		if (!(sdt.length() > 0 && sdt.matches("\\d{10}"))) {
-			JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số");
-			txtSoDienThoai.requestFocus();
+		if (!(txtSoDienThoai.getText().trim().length() > 0 && pwd.getText().trim().length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ dữ liệu");
 			return false;
+		} else {
+			String sdt = txtSoDienThoai.getText().trim();
+			if (!sdt.matches("\\d{10}")) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số");
+				txtSoDienThoai.requestFocus();
+				return false;
+			}
 		}
 
-		if (!(pwd.toString().trim().length() > 0)) {
-			JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
-			pwd.requestFocus();
-			return false;
-		}
 		return true;
 	}
 

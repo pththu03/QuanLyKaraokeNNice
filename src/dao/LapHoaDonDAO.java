@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import entity.HoaDonEntity;
 import entity.KhachHangEntity;
 import util.ConnectDB;
@@ -54,4 +52,77 @@ public class LapHoaDonDAO {
 		}
 		return listHoaDon;
 	}
+
+	public int demSoLuongPhong(String maHD) {
+		int soLuongPhong = 0;
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "select count(*) as N'So Phong' from ChiTietHoaDon\r\n" + "where MaHD LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maHD);
+				result = statement.executeQuery();
+				while (result.next()) {
+					soLuongPhong = result.getInt(1);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closeStatement(statement);
+			}
+
+		}
+		return soLuongPhong;
+	}
+
+	public double tinhTongTienDichVu(String maHD) {
+		double tongTienDichVu = 0;
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "select SUM(ctdv.SoLuong * Gia) as N'Tổng tiền'\r\n"
+						+ "from HoaDon hd join ChiTietHoaDon cthd on hd.MaHD = cthd.MaHD\r\n"
+						+ "join ChiTietDichVu ctdv on ctdv.MaCTHD = cthd.MaCTHD\r\n"
+						+ "join DichVu dv on dv.MaDV = ctdv.MaDV\r\n" + "where hd.MaHD LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maHD);
+				result = statement.executeQuery();
+				while (result.next()) {
+					tongTienDichVu = result.getDouble(1);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closeStatement(statement);
+			}
+
+		}
+		return tongTienDichVu;
+	}
+
+	/*
+	 * public boolean capNhatGioTraPhong(String maHD) { Connection connect =
+	 * ConnectDB.getConnect(); PreparedStatement statement = null;
+	 * 
+	 * if (connect != null) { try { String query = "update ChiTietHoaDon\r\n" +
+	 * "set GioKT = ?\r\n" + "where MaHD LIKE ?"; statement =
+	 * connect.prepareStatement(query); statement.setTime(1,
+	 * Time.valueOf(LocalTime.now())); statement.setString(2, maHD); return
+	 * statement.executeUpdate() > 0; } catch (SQLException e) {
+	 * JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+	 * e.printStackTrace(); } finally { ConnectDB.closeConnect(connect);
+	 * ConnectDB.closePreStatement(statement); } }
+	 * 
+	 * return false; }
+	 */
 }

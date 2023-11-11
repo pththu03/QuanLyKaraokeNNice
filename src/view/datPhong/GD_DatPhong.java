@@ -50,6 +50,8 @@ import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Component;
+import javax.swing.ComboBoxModel;
+import javax.swing.border.EtchedBorder;
 
 public class GD_DatPhong extends JPanel {
 	/**
@@ -71,9 +73,6 @@ public class GD_DatPhong extends JPanel {
 	private JLabel lblImgChuThichPhongCho;
 	private JLabel lblChuThichPhongTrong;
 	private JLabel lblImgChuThichPhongTrong;
-	private JLabel lblPhut;
-	private JLabel lblGioNhanPhong;
-	private JLabel lblGio;
 	private JLabel lblTenKhachHang;
 	private JLabel lblSDTKhachHang;
 	private JLabel lblLoaiPhong;
@@ -83,6 +82,8 @@ public class GD_DatPhong extends JPanel {
 	private JLabel lblTimKiemTheoSoPhong;
 	private JLabel lblTimKiemTheoLoaiPhong;
 	private JLabel lblTimKiemTheoTrangThai;
+	private JLabel lblPhutTraPhong;
+	private JLabel lblGioTraPhong;
 	public JLabel lblGioHienTai;
 	public JLabel lblNgayHienTai;
 
@@ -92,6 +93,8 @@ public class GD_DatPhong extends JPanel {
 	private JPanel pnlTimKiem;
 	private JPanel pnlDSTatCaPhong;
 	private JPanel pnlPhongDaChon;
+	private JPanel pnlGioNhanPhong;
+	private JPanel pnlGioTraPhong;
 
 	private JTextField txtTimKiemTheoSoPhong;
 	private JTextField txtSoPhong;
@@ -103,13 +106,17 @@ public class GD_DatPhong extends JPanel {
 	private JComboBox<String> cmbTimKiemTheoTrangThai;
 	private JComboBox<String> cmbTimKiemTheoLoaiPhong;
 	private JComboBox<String> cmbTimKiemTheoSucChua;
-	private JComboBox<Integer> cmbGio;
-	private JComboBox<Integer> cmbPhut;
+	private JComboBox<Integer> cmbGioNhanPhong;
+	private JComboBox<Integer> cmbPhutNhanPhong;
+	private JComboBox<Integer> cmbGioTraPhong;
+	private JComboBox<Integer> cmbPhutTraPhong;
 	private DefaultComboBoxModel<String> cmbmodelTrangThai;
 	private DefaultComboBoxModel<String> cmbmodelLoaiPhong;
 	private DefaultComboBoxModel<String> cmbmodelSucChua;
-	private DefaultComboBoxModel<Integer> cmbmodelGio;
-	private DefaultComboBoxModel<Integer> cmbmodelPhut;
+	private DefaultComboBoxModel<Integer> cmbmodelGioNhanPhong;
+	private DefaultComboBoxModel<Integer> cmbmodelPhutNhanPhong;
+	private DefaultComboBoxModel<Integer> cmbmodelGioTraPhong;
+	private DefaultComboBoxModel<Integer> cmbmodelPhutTraPhong;
 
 	private ButtonGroup grpDatPhong;
 	public JRadioButton radDatPhongNgay;
@@ -259,9 +266,6 @@ public class GD_DatPhong extends JPanel {
 		panel_NoiDung.add(pnlDSPhong);
 		pnlDSPhong.setLayout(null);
 
-		cmbmodelGio = new DefaultComboBoxModel<>();
-		cmbGio = new JComboBox<>(cmbmodelGio);
-
 		pnlDSTatCaPhong = new JPanel();
 		pnlDSTatCaPhong.setBorder(new TitledBorder(null, "Danh S\u00E1ch Ph\u00F2ng", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -347,14 +351,10 @@ public class GD_DatPhong extends JPanel {
 		btnHuyPhongDatTruoc.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnHuyPhongDatTruoc.setBackground(new Color(144, 238, 144));
 
-		grpDatPhong = new ButtonGroup();
-
 		Integer[] gio = new Integer[16];
 		for (int i = 0; i <= 15; i++) {
 			gio[i] = i + 8;
 		}
-
-		cmbmodelGio = new DefaultComboBoxModel<>(gio);
 
 		Integer[] phut = new Integer[12];
 		int k = 0;
@@ -363,7 +363,75 @@ public class GD_DatPhong extends JPanel {
 			k += 5;
 		}
 
-		cmbmodelPhut = new DefaultComboBoxModel<Integer>(phut);
+		pnlChiTietDatPhong = new JPanel();
+		pnlChiTietDatPhong.setBounds(672, 0, 694, 618);
+		pnlDatPhong.add(pnlChiTietDatPhong);
+		pnlChiTietDatPhong.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
+		pnlChiTietDatPhong.setBackground(new Color(255, 192, 203));
+		pnlChiTietDatPhong.setLayout(null);
+
+		pnlGioNhanPhong = new JPanel();
+		pnlGioNhanPhong.setBackground(new Color(255, 192, 203));
+		pnlGioNhanPhong.setBorder(new TitledBorder(null, "Gi\u1EDD nh\u1EADn ph\u00F2ng", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+		pnlGioNhanPhong.setBounds(50, 396, 246, 96);
+		pnlGioNhanPhong.setLayout(null);
+		pnlChiTietDatPhong.add(pnlGioNhanPhong);
+
+		cmbmodelGioNhanPhong = new DefaultComboBoxModel<>(gio);
+		cmbGioNhanPhong = new JComboBox<Integer>(cmbmodelGioNhanPhong);
+		cmbGioNhanPhong.setMaximumRowCount(4);
+		cmbGioNhanPhong.setEnabled(false);
+		cmbGioNhanPhong.setBounds(21, 18, 143, 25);
+		pnlGioNhanPhong.add(cmbGioNhanPhong);
+
+		cmbmodelPhutNhanPhong = new DefaultComboBoxModel<>(phut);
+		cmbPhutNhanPhong = new JComboBox<Integer>(cmbmodelPhutNhanPhong);
+		cmbPhutNhanPhong.setMaximumRowCount(4);
+		cmbPhutNhanPhong.setEnabled(false);
+		cmbPhutNhanPhong.setBounds(21, 60, 143, 25);
+		pnlGioNhanPhong.add(cmbPhutNhanPhong);
+
+		JLabel lblPhutNhanPhong = new JLabel("Phút");
+		lblPhutNhanPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblPhutNhanPhong.setBounds(185, 60, 40, 25);
+		pnlGioNhanPhong.add(lblPhutNhanPhong);
+
+		JLabel lblGioNhanPhong = new JLabel("Giờ");
+		lblGioNhanPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblGioNhanPhong.setBounds(185, 18, 40, 25);
+		pnlGioNhanPhong.add(lblGioNhanPhong);
+
+		pnlGioTraPhong = new JPanel();
+		pnlGioTraPhong.setLayout(null);
+		pnlGioTraPhong.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Giờ trả phòng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlGioTraPhong.setBackground(new Color(255, 192, 203));
+		pnlGioTraPhong.setBounds(363, 396, 246, 97);
+		pnlChiTietDatPhong.add(pnlGioTraPhong);
+
+		cmbmodelGioTraPhong = new DefaultComboBoxModel<>(gio);
+		cmbGioTraPhong = new JComboBox<Integer>(cmbmodelGioTraPhong);
+		cmbGioTraPhong.setMaximumRowCount(4);
+		cmbGioTraPhong.setBounds(23, 18, 144, 25);
+		pnlGioTraPhong.add(cmbGioTraPhong);
+
+		cmbmodelPhutTraPhong = new DefaultComboBoxModel<>(phut);
+		cmbPhutTraPhong = new JComboBox<Integer>(cmbmodelPhutTraPhong);
+		cmbPhutTraPhong.setMaximumRowCount(4);
+		cmbPhutTraPhong.setBounds(23, 60, 144, 25);
+		pnlGioTraPhong.add(cmbPhutTraPhong);
+
+		lblPhutTraPhong = new JLabel("Phút");
+		lblPhutTraPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblPhutTraPhong.setBounds(177, 60, 40, 25);
+		pnlGioTraPhong.add(lblPhutTraPhong);
+
+		lblGioTraPhong = new JLabel("Giờ");
+		lblGioTraPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblGioTraPhong.setBounds(177, 18, 40, 25);
+		pnlGioTraPhong.add(lblGioTraPhong);
 
 		pnlChanTrang = new JPanel();
 		pnlChanTrang.setBackground(new Color(211, 211, 211));
@@ -436,13 +504,6 @@ public class GD_DatPhong extends JPanel {
 		gioHT.start();
 		pnlChanTrang.add(lblGioHienTai);
 
-		pnlChiTietDatPhong = new JPanel();
-		pnlChiTietDatPhong.setBounds(672, 0, 694, 618);
-		pnlDatPhong.add(pnlChiTietDatPhong);
-		pnlChiTietDatPhong.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlChiTietDatPhong.setBackground(new Color(255, 192, 203));
-		pnlChiTietDatPhong.setLayout(null);
-
 		lblVIP = new JLabel("");
 		lblVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVuongMien.png")));
 		lblVIP.setBounds(471, 124, 60, 53);
@@ -458,7 +519,7 @@ public class GD_DatPhong extends JPanel {
 		txtSoPhong = new JTextField();
 		txtSoPhong.setBorder(null);
 		txtSoPhong.setEditable(false);
-		txtSoPhong.setBounds(170, 120, 200, 25);
+		txtSoPhong.setBounds(200, 120, 200, 25);
 		pnlChiTietDatPhong.add(txtSoPhong);
 		txtSoPhong.setColumns(10);
 
@@ -477,7 +538,7 @@ public class GD_DatPhong extends JPanel {
 		txtLoaiPhong = new JTextField();
 		txtLoaiPhong.setBorder(null);
 		txtLoaiPhong.setEditable(false);
-		txtLoaiPhong.setBounds(170, 170, 200, 25);
+		txtLoaiPhong.setBounds(200, 170, 200, 25);
 		pnlChiTietDatPhong.add(txtLoaiPhong);
 		txtLoaiPhong.setColumns(10);
 
@@ -490,13 +551,13 @@ public class GD_DatPhong extends JPanel {
 		txtSucChua = new JTextField();
 		txtSucChua.setBorder(null);
 		txtSucChua.setEditable(false);
-		txtSucChua.setBounds(170, 220, 200, 25);
+		txtSucChua.setBounds(200, 220, 200, 25);
 		pnlChiTietDatPhong.add(txtSucChua);
 		txtSucChua.setColumns(10);
 
 		lblImgTrangThaiPhong = new JLabel("");
 		lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhong5.png")));
-		lblImgTrangThaiPhong.setBounds(420, 135, 180, 180);
+		lblImgTrangThaiPhong.setBounds(458, 124, 180, 180);
 		pnlChiTietDatPhong.add(lblImgTrangThaiPhong);
 
 		lblSDTKhachHang = new JLabel("SĐT khách hàng:");
@@ -512,13 +573,13 @@ public class GD_DatPhong extends JPanel {
 		txtTenKhachHang = new JTextField();
 		txtTenKhachHang.setBorder(null);
 		txtTenKhachHang.setEditable(false);
-		txtTenKhachHang.setBounds(170, 270, 200, 25);
+		txtTenKhachHang.setBounds(200, 270, 200, 25);
 		pnlChiTietDatPhong.add(txtTenKhachHang);
 		txtTenKhachHang.setColumns(10);
 
 		txtSDTKhachHang = new JTextField();
 		txtSDTKhachHang.setToolTipText("Nhập SĐT khách hàng cần tìm");
-		txtSDTKhachHang.setBounds(170, 320, 200, 25);
+		txtSDTKhachHang.setBounds(200, 320, 200, 25);
 		pnlChiTietDatPhong.add(txtSDTKhachHang);
 		txtSDTKhachHang.setColumns(10);
 
@@ -527,7 +588,7 @@ public class GD_DatPhong extends JPanel {
 		btnTimKiemKhachHang.setFocusable(false);
 		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
 		btnTimKiemKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnTimKiemKhachHang.setBounds(401, 315, 120, 30);
+		btnTimKiemKhachHang.setBounds(428, 318, 120, 30);
 		pnlChiTietDatPhong.add(btnTimKiemKhachHang);
 
 		radDatPhongNgay = new JRadioButton("Đặt phòng ngay");
@@ -536,7 +597,7 @@ public class GD_DatPhong extends JPanel {
 		radDatPhongNgay.setName("");
 		radDatPhongNgay.setFocusable(false);
 		radDatPhongNgay.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		radDatPhongNgay.setBounds(170, 402, 140, 30);
+		radDatPhongNgay.setBounds(109, 538, 140, 30);
 		pnlChiTietDatPhong.add(radDatPhongNgay);
 
 		radDatPhongTruoc = new JRadioButton("Đặt phòng trước");
@@ -544,35 +605,12 @@ public class GD_DatPhong extends JPanel {
 		radDatPhongTruoc.setName("");
 		radDatPhongTruoc.setFocusable(false);
 		radDatPhongTruoc.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		radDatPhongTruoc.setBounds(340, 402, 150, 30);
+		radDatPhongTruoc.setBounds(267, 538, 150, 30);
 		pnlChiTietDatPhong.add(radDatPhongTruoc);
+
+		grpDatPhong = new ButtonGroup();
 		grpDatPhong.add(radDatPhongNgay);
 		grpDatPhong.add(radDatPhongTruoc);
-
-		lblGioNhanPhong = new JLabel("Giờ nhận phòng:");
-		lblGioNhanPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblGioNhanPhong.setBounds(94, 470, 120, 35);
-		pnlChiTietDatPhong.add(lblGioNhanPhong);
-		cmbGio = new JComboBox<Integer>(cmbmodelGio);
-		cmbGio.setEnabled(false);
-		cmbGio.setMaximumRowCount(4);
-		cmbGio.setBounds(220, 457, 170, 25);
-		pnlChiTietDatPhong.add(cmbGio);
-
-		lblGio = new JLabel("Giờ");
-		lblGio.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblGio.setBounds(409, 457, 40, 25);
-		pnlChiTietDatPhong.add(lblGio);
-		cmbPhut = new JComboBox<Integer>(cmbmodelPhut);
-		cmbPhut.setEnabled(false);
-		cmbPhut.setMaximumRowCount(4);
-		cmbPhut.setBounds(220, 499, 170, 25);
-		pnlChiTietDatPhong.add(cmbPhut);
-
-		lblPhut = new JLabel("Phút");
-		lblPhut.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblPhut.setBounds(409, 499, 40, 25);
-		pnlChiTietDatPhong.add(lblPhut);
 
 		btnDatPhong = new JButton("Đặt phòng");
 		btnDatPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconDatPhong1.png")));
@@ -580,7 +618,7 @@ public class GD_DatPhong extends JPanel {
 		btnDatPhong.setFocusable(false);
 		btnDatPhong.setBackground(new Color(144, 238, 144));
 		btnDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnDatPhong.setBounds(480, 470, 130, 40);
+		btnDatPhong.setBounds(459, 533, 140, 40);
 		pnlChiTietDatPhong.add(btnDatPhong);
 
 		controller = new DatPhongController(this);
@@ -675,16 +713,16 @@ public class GD_DatPhong extends JPanel {
 	 * 
 	 */
 	public void chonRButtonDatPhongTruoc() {
-		cmbGio.setEnabled(true);
-		cmbPhut.setEnabled(true);
+		cmbGioNhanPhong.setEnabled(true);
+		cmbPhutNhanPhong.setEnabled(true);
 	}
 
 	/**
 	 * 
 	 */
 	public void chonRButtonDatPhongNgay() {
-		cmbGio.setEnabled(false);
-		cmbPhut.setEnabled(false);
+		cmbGioNhanPhong.setEnabled(false);
+		cmbPhutNhanPhong.setEnabled(false);
 	}
 
 	/**
@@ -776,9 +814,9 @@ public class GD_DatPhong extends JPanel {
 		if (kiemTraDuLieuDatPhong()) {
 			List<PhongEntity> listPhongDuocChon = new ArrayList<>();
 			LocalTime gioNhanPhong = LocalTime.now();
+			LocalTime gioTraPhong = gioNhanPhong.plusHours(1);
 			LocalDate ngayLapHD = LocalDate.now();
 			// biến phụ để kiểm tra đúng sai
-			boolean ketqua = true;
 
 			for (int i = 0; i < tblmodelPhongDaChon.getRowCount(); i++) {
 				String maPhong = tblPhongDaChon.getValueAt(i, 1).toString();
@@ -793,62 +831,63 @@ public class GD_DatPhong extends JPanel {
 			// Nếu radPhongCho được chọn thì trạng thái phòng phải là Đặt trước
 			// Giờ nhận phòng phải sau thời điểm hiện tại ít nhất 2 giờ
 			if (radDatPhongTruoc.isSelected()) {
-				if (LocalTime.of(Integer.parseInt(cmbGio.getSelectedItem().toString()),
-						Integer.parseInt(cmbPhut.getSelectedItem().toString())).isBefore(LocalTime.now())) {
-					JOptionPane.showMessageDialog(this, "Giờ nhận phòng đặt trước phải sau giờ hiện tại");
-					ketqua = false;
+
+				if (LocalTime
+						.of(Integer.parseInt(cmbGioNhanPhong.getSelectedItem().toString()),
+								Integer.parseInt(cmbPhutNhanPhong.getSelectedItem().toString()))
+						.isBefore(LocalTime.now().plusHours(2))) {
+					JOptionPane.showMessageDialog(this, "Giờ nhận phòng đặt trước phải sau giờ hiện tại ít nhất 2 giờ");
+					return;
 				} else {
-					if (LocalTime
-							.of(Integer.parseInt(cmbGio.getSelectedItem().toString()),
-									Integer.parseInt(cmbPhut.getSelectedItem().toString()))
-							.isBefore(LocalTime.now().plusHours(2))) {
-						JOptionPane.showMessageDialog(this,
-								"Giờ nhận phòng đặt trước phải sau giờ hiện tại ít nhất 2 giờ");
-						ketqua = false;
-					} else {
-						gioNhanPhong = LocalTime.of(Integer.parseInt(cmbGio.getSelectedItem().toString()),
-								Integer.parseInt(cmbPhut.getSelectedItem().toString()));
+					gioNhanPhong = LocalTime.of(Integer.parseInt(cmbGioNhanPhong.getSelectedItem().toString()),
+							Integer.parseInt(cmbPhutNhanPhong.getSelectedItem().toString()));
+
+				}
+			}
+
+			// Kiểm tra giờ trả phòng phải sau giờ nhận phòng ít nhất 1 giờ
+			if (LocalTime
+					.of(Integer.parseInt(cmbGioTraPhong.getSelectedItem().toString()),
+							Integer.parseInt(cmbPhutTraPhong.getSelectedItem().toString()))
+					.isBefore(gioNhanPhong.plusHours(1))) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn giờ trả phòng sau giờ nhận phòng ít nhất 1 giờ");
+				return;
+			} else {
+				gioTraPhong = LocalTime.of(Integer.parseInt(cmbGioTraPhong.getSelectedItem().toString()),
+						Integer.parseInt(cmbPhutTraPhong.getSelectedItem().toString()));
+			}
+
+			// Khởi tạo hóa đơn mới với trạng tháng Chưa thanh toán
+			HoaDonEntity hoaDonEntity = new HoaDonEntity(nhanVienEntity.getMaNhanVien(),
+					khachHangEntity.getMaKhachHang(), ngayLapHD);
+			hoaDonEntity = quanLyHoaDonDAO.them(hoaDonEntity);
+			System.out.println(DateFormatter.formatSql(hoaDonEntity.getNgayLap()));
+			// Mặc định trạng thái phòng là Đang sử dụng khi đặt
+			// Nếu là chọn radDatPhongTruoc thì là Đặt trước
+			String trangThai = "Đang sử dụng";
+
+			if (gioNhanPhong.isAfter(LocalTime.now())) {
+				trangThai = "Đặt trước";
+			}
+
+			// Khởi tạo các ChiTietDatPhong
+			for (PhongEntity phongEntity : listPhongDuocChon) {
+				ChiTietHoaDonEntity chiTietHoaDonEntity = new ChiTietHoaDonEntity(hoaDonEntity.getMaHoaDon(),
+						phongEntity.getMaPhong(), gioNhanPhong, gioTraPhong);
+
+				if (quanLyChiTietHoaDonDAO.them(chiTietHoaDonEntity)) {
+					if (!quanLyPhongDAO.capNhatTrangThai(phongEntity.getMaPhong(), trangThai)) {
+						return;
 					}
+				} else {
+					return;
 				}
 			}
-
-			if (ketqua) {
-				// Khởi tạo hóa đơn mới với trạng tháng Chưa thanh toán
-				HoaDonEntity hoaDonEntity = new HoaDonEntity(nhanVienEntity.getMaNhanVien(),
-						khachHangEntity.getMaKhachHang(), ngayLapHD);
-				hoaDonEntity = quanLyHoaDonDAO.them(hoaDonEntity);
-				System.out.println(DateFormatter.formatSql(hoaDonEntity.getNgayLap()));
-				// Mặc định trạng thái phòng là Đang sử dụng khi đặt
-				// Nếu là chọn radDatPhongTruoc thì là Đặt trước
-				String trangThai = "Đang sử dụng";
-
-				if (gioNhanPhong.isAfter(LocalTime.now())) {
-					trangThai = "Đặt trước";
-				}
-
-				// Khởi tạo các ChiTietDatPhong
-				for (PhongEntity phongEntity : listPhongDuocChon) {
-					ChiTietHoaDonEntity chiTietHoaDonEntity = new ChiTietHoaDonEntity(hoaDonEntity.getMaHoaDon(),
-							phongEntity.getMaPhong(), gioNhanPhong);
-
-					if (quanLyChiTietHoaDonDAO.them(chiTietHoaDonEntity)) {
-						if (!quanLyPhongDAO.capNhatTrangThai(phongEntity.getMaPhong(), trangThai)) {
-							ketqua = false;
-							break;
-						}
-					} else {
-						ketqua = false;
-						break;
-					}
-				}
-			}
-			if (ketqua) {
-				JOptionPane.showMessageDialog(this, "Đặt phòng thành công");
-				tblPhongDaChon.removeAll();
-				tblPhongDaChon.setRowSelectionAllowed(false);
-				tblmodelPhongDaChon.setRowCount(0);
-				loadDatabase();
-			}
+			JOptionPane.showMessageDialog(this, "Đặt phòng thành công");
+			tblPhongDaChon.removeAll();
+			tblPhongDaChon.setRowSelectionAllowed(false);
+			tblmodelPhongDaChon.setRowCount(0);
+			loadDatabase();
 		}
 	}
 
@@ -877,6 +916,9 @@ public class GD_DatPhong extends JPanel {
 				tblmodelPhongDaChon.addRow(new Object[] { ++stt, maPhong, soPhong, loaiPhong, sucChua, "Tạm giữ" });
 				loadDatabase();
 			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng");
+			return;
 		}
 	}
 
@@ -970,10 +1012,15 @@ public class GD_DatPhong extends JPanel {
 	 * @return
 	 */
 	private boolean kiemTraDuLieuSoDienThoaiKhachHang() {
-		String sdt = txtSDTKhachHang.getText().trim();
-
-		if (!(sdt.length() > 0 && sdt.matches("\\d{10}"))) {
-			JOptionPane.showMessageDialog(this, "Số điện thoại phải nhập vào 10 ký số");
+		if (txtSDTKhachHang.getText().trim().length() > 0) {
+			String sdt = txtSDTKhachHang.getText().trim();
+			if (!sdt.matches("\\d{10}")) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải nhập vào 10 ký số");
+				txtSDTKhachHang.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại");
 			txtSDTKhachHang.requestFocus();
 			return false;
 		}

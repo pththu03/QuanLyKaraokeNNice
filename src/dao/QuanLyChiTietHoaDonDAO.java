@@ -67,11 +67,13 @@ public class QuanLyChiTietHoaDonDAO {
 
 		if (connect != null) {
 			try {
-				String query = "INSERT INTO ChiTietHoaDon (MaHD, MaPhong, GioBD)\r\n" + "VALUES (?, ?, ?)\r\n";
+				String query = "INSERT INTO ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT)\r\n"
+						+ "VALUES (?, ?, ?, ?)\r\n";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, chiTietHoaDonEntity.getMaHoaDon());
 				statement.setString(2, chiTietHoaDonEntity.getMaPhong());
 				statement.setTime(3, Time.valueOf(chiTietHoaDonEntity.getGioNhanPhong()));
+				statement.setTime(4, Time.valueOf(chiTietHoaDonEntity.getGioTraPhong()));
 				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
