@@ -839,3 +839,38 @@ GO
 
 --SELECT * FROM DichVu 
 --WHERE LoaiDV LIKE N'%Uống%' AND Gia >= '20000' AND Gia <= '60000'
+
+SELECT p.MaPhong, SoPhong, LoaiPhong, p.TrangThai, SucChua
+FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
+	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
+	ON cthd.MaPhong = p.MaPhong
+WHERE (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
+ORDER BY p.SoPhong ASC
+GO
+
+
+Select * from Phong
+select * from HoaDon
+select * from ChiTietHoaDon
+select * from ChiTietDichVu
+
+SELECT ctdv.MaCTDV, ctdv.MaCTHD, ctdv.MaDV, ctdv.SoLuong
+FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
+	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
+	ON cthd.MaPhong = p.MaPhong JOIN ChiTietDichVu ctdv
+	ON ctdv.MaCTHD = cthd.MaCTHD
+WHERE p.MaPhong = 'P010' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
+GO
+
+SELECT kh.HoTen
+FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
+	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
+	ON cthd.MaPhong = p.MaPhong JOIN KhachHang kh
+	ON hd.MaKH = kh.MaKH
+WHERE p.SoPhong = '205' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
+GO
+
+SELECT * FROM ChiTietDichVu
+
+INSERT INTO ChiTietDichVu
+	()

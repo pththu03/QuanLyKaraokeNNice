@@ -333,6 +333,71 @@ public class GD_QuanLyKhachHang extends JPanel {
 		}
 	}
 
+	public void chonChucNangLamMoi() {
+		txtEmail.setText("");
+		txtMaKH.setText("");
+		txtNamSinh.setText("");
+		txtSDT.setText("");
+		txtSLDatPhong.setText("");
+		txtSoLanDatPhongTu.setText("");
+		txtSoLanDatPhongDen.setText("");
+		txtSoDienThoai.setText("");
+		txtTenKH.setText("");
+		txtTenKhachHang.setText("");
+		tblKhachHang.setRowSelectionAllowed(false);
+		loadData();
+	}
+
+	public void chonChucNangChinhSua() {
+		if (kiemTraDuLieuChinhSua()) {
+			int row = tblKhachHang.getSelectedRow();
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Chọn Khách Hàng cần chỉnh sửa");
+			} else {
+				String maKH = txtMaKH.getText().trim();
+				String hoTen = txtTenKH.getText().trim();
+				String sdt = txtSDT.getText().trim();
+				String email = txtEmail.getText().trim();
+				int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
+				int slDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
+				KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, slDatPhong);
+				if (quanLyKhachHangDAO.chinhSua(khachHangEntity) != 0) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin khách hàng thành công ", "Thông Báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					chonChucNangLamMoi();
+					loadData();
+				}
+			}
+		}
+	}
+
+	public void chonChucNangTimKiem() {
+		if(kiemTraDuLieuTim()) {
+			String tenKH = txtTenKhachHang.getText().trim();
+			String sdt = txtSoDienThoai.getText().trim();
+			int soluongTu = -1, soluongDen = -1;
+			if (!txtSoLanDatPhongTu.getText().equals("")) {
+				soluongTu = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
+			}
+
+			if (!txtSoLanDatPhongDen.getText().equals("")) {
+				soluongDen = Integer.parseInt(txtSoLanDatPhongDen.getText().trim());
+			}
+
+			list = new ArrayList<>();
+			tblKhachHang.removeAll();
+			tblmdelKhachHang.setRowCount(0);
+			list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
+			int stt = 1;
+			for (KhachHangEntity khachHangEntity : list) {
+
+				tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
+						khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
+						khachHangEntity.getSoLanDatPhong() });
+			}
+		}
+	}
+
 	private boolean kiemTraDuLieuThem() {
 		String tenKH = txtTenKH.getText();
 		String sdt = txtSDT.getText();
@@ -432,29 +497,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		return true;
 
-	}
-
-	public void chonChucNangChinhSua() {
-		if (kiemTraDuLieuChinhSua()) {
-			int row = tblKhachHang.getSelectedRow();
-			if (row == -1) {
-				JOptionPane.showMessageDialog(this, "Chọn Khách Hàng cần chỉnh sửa");
-			} else {
-				String maKH = txtMaKH.getText().trim();
-				String hoTen = txtTenKH.getText().trim();
-				String sdt = txtSDT.getText().trim();
-				String email = txtEmail.getText().trim();
-				int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
-				int slDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
-				KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, slDatPhong);
-				if (quanLyKhachHangDAO.chinhSua(khachHangEntity) != 0) {
-					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin khách hàng thành công ", "Thông Báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					chonChucNangLamMoi();
-					loadData();
-				}
-			}
-		}
 	}
 
 	private boolean kiemTraDuLieuChinhSua() {
@@ -558,36 +600,49 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 	}
 
-	public void chonChucNangTimKiem() {
-		String tenKH = txtTenKhachHang.getText().trim();
-		String sdt = txtSoDienThoai.getText().trim();
-		int soluongTu = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
-		int soluongDen = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
-		list = new ArrayList<>();
-		tblKhachHang.removeAll();
-		tblmdelKhachHang.setRowCount(0);
-		list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
-		int stt = 1;
-		for (KhachHangEntity khachHangEntity : list) {
+	private boolean kiemTraDuLieuTim() {
 
-			tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
-					khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
-					khachHangEntity.getSoLanDatPhong() });
+		if (txtSoLanDatPhongTu.getText().trim().length() > 0) {
+			String soLuongTu = txtSoLanDatPhongTu.getText().trim();
+			if (!soLuongTu.matches("[0-9]+")) {
+				JOptionPane.showMessageDialog(this, "Số lượng tối thiểu nhập vào phải là số");
+				txtSoLanDatPhongTu.requestFocus();
+				return false;
+			}
+
+			if (Integer.parseInt(soLuongTu) <= 0) {
+				JOptionPane.showMessageDialog(this, "Số lượng tổi thiểu nhập vào phải là số nguyên");
+				txtSoLanDatPhongTu.requestFocus();
+				return false;
+			}
+
+			if (txtSoLanDatPhongDen.getText().trim().length() > 0) {
+				String soLuongDen = txtSoLanDatPhongDen.getText().trim();
+				if (!soLuongDen.matches("[0-9]+")) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối đa nhập vào phải là số");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+
+				if (Integer.parseInt(soLuongDen) <= 0) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối đa  nhập vào phải là số nguyên");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+
+				if (Integer.parseInt(soLuongDen) < Integer.parseInt(soLuongTu)) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối dâ phải lớn hơn Số lượng tối thiểu");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng tối đa");
+				txtSoLanDatPhongDen.requestFocus();
+				return false;
+			}
 		}
-	}
 
-	public void chonChucNangLamMoi() {
-		txtEmail.setText("");
-		txtMaKH.setText("");
-		txtNamSinh.setText("");
-		txtSDT.setText("");
-		txtSLDatPhong.setText("");
-		txtSoLanDatPhongTu.setText("");
-		txtSoLanDatPhongDen.setText("");
-		txtSoDienThoai.setText("");
-		txtTenKH.setText("");
-		txtTenKhachHang.setText("");
-		tblKhachHang.setRowSelectionAllowed(false);
-		loadData();
+		return true;
+
 	}
 }

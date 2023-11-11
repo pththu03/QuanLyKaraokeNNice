@@ -105,7 +105,7 @@ public class GD_DangNhap extends JFrame {
 		txtSoDienThoai.setColumns(10);
 
 		btnDangNhap = new JButton("Đăng Nhập\r\n");
-		btnDangNhap.setMnemonic(KeyEvent.VK_ALT_GRAPH);
+		btnDangNhap.setMnemonic(KeyEvent.VK_ENTER);
 		btnDangNhap.setFocusable(false);
 		btnDangNhap.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDangNhap.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconDangNhap1.png")));
@@ -145,6 +145,7 @@ public class GD_DangNhap extends JFrame {
 
 		pwd = new JPasswordField();
 		pwd.setBounds(166, 159, 310, 34);
+		pwd.requestFocus();
 		contentPane.add(pwd);
 
 		controller = new DangNhapController(this);

@@ -418,17 +418,13 @@ public class GD_QuanLyPhong extends JPanel {
 		if (kiemTraDuLieuTim()) {
 			String loaiPhong = txtTimKiemBangLoaiPhong.getText().trim();
 			String trangThai = txtTimBangTrangThai.getText().trim();
-			int sucChua, soPhong;
-			if (txtTimKiemBangSucChua.getText().trim().matches("\\d+")) {
+			int sucChua = -1, soPhong = -1;
+			if (txtTimKiemBangSucChua.getText().trim().matches("[0-9]+")) {
 				sucChua = Integer.parseInt(txtTimKiemBangSucChua.getText().trim());
-			} else {
-				sucChua = -1;
 			}
 
-			if (txtTimKiemBangSoPhong.getText().trim().matches("\\d+")) {
+			if (txtTimKiemBangSoPhong.getText().trim().matches("[0-9]+")) {
 				soPhong = Integer.parseInt(txtTimKiemBangSoPhong.getText().trim());
-			} else {
-				soPhong = -1;
 			}
 
 			listPhong = new ArrayList<>();
@@ -440,8 +436,6 @@ public class GD_QuanLyPhong extends JPanel {
 				tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
 						phongEntity.getLoaiPhong(), phongEntity.getSucChua(), phongEntity.getTrangThai() });
 			}
-		} else {
-			return;
 		}
 	}
 

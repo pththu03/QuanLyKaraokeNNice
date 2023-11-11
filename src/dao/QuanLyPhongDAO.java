@@ -88,6 +88,37 @@ public class QuanLyPhongDAO {
 		return phongKq;
 	}
 
+	public PhongEntity timTheoSoPhong(int soPhong) {
+		PhongEntity phongKq = new PhongEntity();
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "SELECT MaPhong, SoPhong, LoaiPhong, TrangThai, SucChua\r\n"
+						+ "FROM Phong WHERE SoPhong LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setInt(1, soPhong);
+				result = statement.executeQuery();
+				while (result.next()) {
+					String maPhong = result.getString(1);
+					String loaiPhong = result.getString(3);
+					String trangThai = result.getString(4);
+					int sucChua = result.getInt(5);
+					phongKq = new PhongEntity(maPhong, soPhong, loaiPhong, trangThai, sucChua);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return phongKq;
+	}
+
 	/**
 	 * Tìm kiếm theo 4 tiêu chí là soPhong, loaiPhong, trangThai và sucChua
 	 * 
@@ -112,7 +143,7 @@ public class QuanLyPhongDAO {
 							" WHERE LoaiPhong LIKE N'%%%s%%' AND TrangThai LIKE N'%%%s%%' AND SucChua = %d", loaiPhong,
 							trangThai, sucChua));
 				} else if (soPhong >= 0 && !loaiPhong.isEmpty() && !trangThai.isEmpty() && sucChua >= 0) {
-					// soPhong + loaiPhong + trangThai + sucChua
+					// soPhong + loaiPhong + strangThai + sucChua
 					query.append(String.format(
 							" WHERE SoPhong = %d AND LoaiPhong LIKE N'%%%s%%' AND TrangThai LIKE N'%%%s%%' AND SucChua = %d",
 							soPhong, loaiPhong, trangThai, sucChua));

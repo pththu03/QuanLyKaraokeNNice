@@ -128,17 +128,16 @@ public class QuanLyDichVuDAO {
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "SELECT MaDV,LoaiDV, Gia\r\n" + "FROM DichVu WHERE MaDV LIKE ?";
+				String query = "SELECT * FROM DichVu WHERE MaDV LIKE ?";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, maDV);
 				result = statement.executeQuery();
 				while (result.next()) {
-					String maDV1 = result.getString(1);
-					String loaiDV = result.getString(2);
-					double gia = result.getDouble(3);
-					dichVuEntity = new DichVuEntity(maDV1, loaiDV, gia);
+					String tenDichVu = result.getString(2);
+					String loaiDV = result.getString(3);
+					double gia = result.getDouble(4);
+					dichVuEntity = new DichVuEntity(maDV, tenDichVu, loaiDV, gia);
 				}
-
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();

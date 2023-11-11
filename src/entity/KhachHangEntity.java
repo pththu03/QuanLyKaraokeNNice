@@ -34,6 +34,12 @@ public class KhachHangEntity {
 		this.soLanDatPhong = soLanDatPhong;
 	}
 
+	public KhachHangEntity(String maKhachHang, String hoTen) {
+		super();
+		this.maKhachHang = maKhachHang;
+		this.hoTen = hoTen;
+	}
+
 	public String getMaKhachHang() {
 		return maKhachHang;
 	}

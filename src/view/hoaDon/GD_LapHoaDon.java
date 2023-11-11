@@ -17,9 +17,11 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controller.LapHoaDonController;
+import dao.LapHoaDonDAO;
 import dao.QuanLyHoaDonDAO;
 import dao.QuanLyKhachHangDAO;
 import entity.HoaDonEntity;
@@ -76,6 +78,7 @@ public class GD_LapHoaDon extends JPanel {
 	private List<HoaDonEntity> listHoaDon;
 	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
 	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
+	private LapHoaDonDAO lapHoaDonDAO = new LapHoaDonDAO();
 
 	public GD_LapHoaDon() {
 		setLayout(null);
@@ -138,9 +141,19 @@ public class GD_LapHoaDon extends JPanel {
 		String[] cols_DSHoaDon = { "STT", "Tên khách hàng", "Số điện thoại khách hàng", "Số lượng phòng", "Tổng tiền" };
 		tblmodelHoaDon = new DefaultTableModel(cols_DSHoaDon, 0);
 		tblHoaDon = new JTable(tblmodelHoaDon);
+		tblHoaDon.setAutoCreateRowSorter(true);
 		scrDSHoaDon = new JScrollPane(tblHoaDon);
 		scrDSHoaDon.setBounds(10, 154, 652, 451);
 		pnlDSHoaDon.add(scrDSHoaDon);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		tblHoaDon.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblHoaDon.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		tblHoaDon.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 
 		pnlChiTietLapHoaDon = new JPanel();
 		pnlChiTietLapHoaDon.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
@@ -324,8 +337,8 @@ public class GD_LapHoaDon extends JPanel {
 			hoaDonEntity = quanLyHoaDonDAO.timTheoMa(hoaDonEntity.getMaHoaDon());
 			if (hoaDonEntity.isTrangThai() == false) {
 				khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
-				tblmodelHoaDon
-						.addRow(new Object[] { stt++, khachHangEntity.getHoTen(), khachHangEntity.getSoDienThoai(), });
+				tblmodelHoaDon.addRow(
+						new Object[] { stt++, khachHangEntity.getHoTen(), khachHangEntity.getSoDienThoai(), 0, 0 });
 			}
 		}
 	}
@@ -351,6 +364,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtTienTraKhach.setText("");
 		txtTimKiemTheoSDT.setText("");
 		txtTongTien.setText("");
+		loadData();
 	}
 
 	public void chonChucNangTimKiem() {
@@ -359,7 +373,16 @@ public class GD_LapHoaDon extends JPanel {
 			listHoaDon = new ArrayList<HoaDonEntity>();
 			tblHoaDon.removeAll();
 			tblmodelHoaDon.setRowCount(0);
-
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoSoDienThoai(sdt);
+			listHoaDon = lapHoaDonDAO.timKiemHoaDon(khachHangEntity);
+			int stt = 1;
+			for (HoaDonEntity hoaDonEntity : listHoaDon) {
+				if (!hoaDonEntity.isTrangThai()) {
+					KhachHangEntity khachHangEntity1 = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+					tblmodelHoaDon.addRow(new Object[] { stt++, khachHangEntity1.getHoTen(),
+							khachHangEntity1.getSoDienThoai(), 0, 0 });
+				}
+			}
 		}
 	}
 
@@ -386,6 +409,6 @@ public class GD_LapHoaDon extends JPanel {
 	}
 
 	public void chonChucNangXemCTHD() {
-//		new GD_ChiTietHoaDon().setVisible(true);
+		new GD_ChiTietHoaDon(hoaDonEntity).setVisible(true);
 	}
 }

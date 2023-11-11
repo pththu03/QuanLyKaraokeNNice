@@ -1,6 +1,7 @@
 package util;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class TimeFormatter {
 	public static String format(LocalTime time) {
@@ -16,6 +17,10 @@ public class TimeFormatter {
 		}
 		
 		return gioHienTai + ":" + phutHienTai;
+	}
+	
+	public static int tinhSoPhut(LocalTime gio1, LocalTime gio2) {
+		return (int) gio1.until(gio2, ChronoUnit.MINUTES);
 	}
 
 }
