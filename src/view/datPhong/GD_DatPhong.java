@@ -52,6 +52,7 @@ import java.awt.GridLayout;
 import java.awt.Component;
 import javax.swing.ComboBoxModel;
 import javax.swing.border.EtchedBorder;
+import java.awt.event.KeyEvent;
 
 public class GD_DatPhong extends JPanel {
 	/**
@@ -251,6 +252,7 @@ public class GD_DatPhong extends JPanel {
 		pnlTimKiem.add(cmbTimKiemTheoSucChua);
 
 		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setMnemonic(KeyEvent.VK_R);
 		btnLamMoi.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setFocusable(false);
@@ -351,16 +353,24 @@ public class GD_DatPhong extends JPanel {
 		btnHuyPhongDatTruoc.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnHuyPhongDatTruoc.setBackground(new Color(144, 238, 144));
 
-		Integer[] gio = new Integer[16];
-		for (int i = 0; i <= 15; i++) {
-			gio[i] = i + 8;
+		Integer[] gioNhanPhong = new Integer[15];
+		for (int i = 0; i <= 14; i++) {
+			gioNhanPhong[i] = i + 8;
 		}
 
-		Integer[] phut = new Integer[12];
-		int k = 0;
-		for (int i = 0; i < 12; i++) {
-			phut[i] = k;
-			k += 5;
+		Integer[] phutNhanPhong = new Integer[60];
+		for (int i = 0; i < 60; i++) {
+			phutNhanPhong[i] = i;
+		}
+
+		Integer[] gioTraPhong = new Integer[15];
+		for (int i = 0; i <= 14; i++) {
+			gioTraPhong[i] = i + 9;
+		}
+
+		Integer[] phutTraPhong = new Integer[60];
+		for (int i = 0; i < 60; i++) {
+			phutTraPhong[i] = i;
 		}
 
 		pnlChiTietDatPhong = new JPanel();
@@ -378,14 +388,14 @@ public class GD_DatPhong extends JPanel {
 		pnlGioNhanPhong.setLayout(null);
 		pnlChiTietDatPhong.add(pnlGioNhanPhong);
 
-		cmbmodelGioNhanPhong = new DefaultComboBoxModel<>(gio);
+		cmbmodelGioNhanPhong = new DefaultComboBoxModel<>(gioNhanPhong);
 		cmbGioNhanPhong = new JComboBox<Integer>(cmbmodelGioNhanPhong);
 		cmbGioNhanPhong.setMaximumRowCount(4);
 		cmbGioNhanPhong.setEnabled(false);
 		cmbGioNhanPhong.setBounds(21, 18, 143, 25);
 		pnlGioNhanPhong.add(cmbGioNhanPhong);
 
-		cmbmodelPhutNhanPhong = new DefaultComboBoxModel<>(phut);
+		cmbmodelPhutNhanPhong = new DefaultComboBoxModel<>(phutNhanPhong);
 		cmbPhutNhanPhong = new JComboBox<Integer>(cmbmodelPhutNhanPhong);
 		cmbPhutNhanPhong.setMaximumRowCount(4);
 		cmbPhutNhanPhong.setEnabled(false);
@@ -411,13 +421,13 @@ public class GD_DatPhong extends JPanel {
 		pnlGioTraPhong.setBounds(363, 396, 246, 97);
 		pnlChiTietDatPhong.add(pnlGioTraPhong);
 
-		cmbmodelGioTraPhong = new DefaultComboBoxModel<>(gio);
+		cmbmodelGioTraPhong = new DefaultComboBoxModel<>(gioTraPhong);
 		cmbGioTraPhong = new JComboBox<Integer>(cmbmodelGioTraPhong);
 		cmbGioTraPhong.setMaximumRowCount(4);
 		cmbGioTraPhong.setBounds(23, 18, 144, 25);
 		pnlGioTraPhong.add(cmbGioTraPhong);
 
-		cmbmodelPhutTraPhong = new DefaultComboBoxModel<>(phut);
+		cmbmodelPhutTraPhong = new DefaultComboBoxModel<>(phutTraPhong);
 		cmbPhutTraPhong = new JComboBox<Integer>(cmbmodelPhutTraPhong);
 		cmbPhutTraPhong.setMaximumRowCount(4);
 		cmbPhutTraPhong.setBounds(23, 60, 144, 25);
@@ -506,7 +516,7 @@ public class GD_DatPhong extends JPanel {
 
 		lblVIP = new JLabel("");
 		lblVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVuongMien.png")));
-		lblVIP.setBounds(471, 124, 60, 53);
+		lblVIP.setBounds(506, 118, 60, 53);
 		lblVIP.setVisible(false);
 		pnlChiTietDatPhong.add(lblVIP);
 
@@ -584,6 +594,7 @@ public class GD_DatPhong extends JPanel {
 		txtSDTKhachHang.setColumns(10);
 
 		btnTimKiemKhachHang = new JButton("Tìm kiếm");
+		btnTimKiemKhachHang.setMnemonic(KeyEvent.VK_F);
 		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemKhachHang.setFocusable(false);
 		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
@@ -613,6 +624,7 @@ public class GD_DatPhong extends JPanel {
 		grpDatPhong.add(radDatPhongTruoc);
 
 		btnDatPhong = new JButton("Đặt phòng");
+		btnDatPhong.setMnemonic(KeyEvent.VK_ENTER);
 		btnDatPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconDatPhong1.png")));
 		btnDatPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnDatPhong.setFocusable(false);
@@ -776,6 +788,10 @@ public class GD_DatPhong extends JPanel {
 		cmbTimKiemTheoLoaiPhong.setSelectedIndex(0);
 		cmbTimKiemTheoSucChua.setSelectedIndex(0);
 		cmbTimKiemTheoTrangThai.setSelectedIndex(0);
+		cmbGioNhanPhong.setSelectedIndex(0);
+		cmbGioTraPhong.setSelectedIndex(0);
+		cmbPhutNhanPhong.setSelectedIndex(0);
+		cmbPhutTraPhong.setSelectedIndex(0);
 		loadDatabase();
 	}
 
@@ -830,8 +846,8 @@ public class GD_DatPhong extends JPanel {
 
 			// Nếu radPhongCho được chọn thì trạng thái phòng phải là Đặt trước
 			// Giờ nhận phòng phải sau thời điểm hiện tại ít nhất 2 giờ
-			if (radDatPhongTruoc.isSelected()) {
 
+			if (radDatPhongTruoc.isSelected()) {
 				if (LocalTime
 						.of(Integer.parseInt(cmbGioNhanPhong.getSelectedItem().toString()),
 								Integer.parseInt(cmbPhutNhanPhong.getSelectedItem().toString()))
@@ -843,6 +859,11 @@ public class GD_DatPhong extends JPanel {
 							Integer.parseInt(cmbPhutNhanPhong.getSelectedItem().toString()));
 
 				}
+			}
+
+			if (gioNhanPhong.isAfter(LocalTime.of(22, 59))) {
+				JOptionPane.showMessageDialog(this, "Không được đặt phòng từ 23:00");
+				return;
 			}
 
 			// Kiểm tra giờ trả phòng phải sau giờ nhận phòng ít nhất 1 giờ
@@ -861,7 +882,6 @@ public class GD_DatPhong extends JPanel {
 			HoaDonEntity hoaDonEntity = new HoaDonEntity(nhanVienEntity.getMaNhanVien(),
 					khachHangEntity.getMaKhachHang(), ngayLapHD);
 			hoaDonEntity = quanLyHoaDonDAO.them(hoaDonEntity);
-			System.out.println(DateFormatter.formatSql(hoaDonEntity.getNgayLap()));
 			// Mặc định trạng thái phòng là Đang sử dụng khi đặt
 			// Nếu là chọn radDatPhongTruoc thì là Đặt trước
 			String trangThai = "Đang sử dụng";
@@ -887,7 +907,7 @@ public class GD_DatPhong extends JPanel {
 			tblPhongDaChon.removeAll();
 			tblPhongDaChon.setRowSelectionAllowed(false);
 			tblmodelPhongDaChon.setRowCount(0);
-			loadDatabase();
+			chonChucNangLamMoi();
 		}
 	}
 

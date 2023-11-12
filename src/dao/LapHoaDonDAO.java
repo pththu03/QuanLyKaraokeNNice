@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -110,19 +112,25 @@ public class LapHoaDonDAO {
 		return tongTienDichVu;
 	}
 
-	/*
-	 * public boolean capNhatGioTraPhong(String maHD) { Connection connect =
-	 * ConnectDB.getConnect(); PreparedStatement statement = null;
-	 * 
-	 * if (connect != null) { try { String query = "update ChiTietHoaDon\r\n" +
-	 * "set GioKT = ?\r\n" + "where MaHD LIKE ?"; statement =
-	 * connect.prepareStatement(query); statement.setTime(1,
-	 * Time.valueOf(LocalTime.now())); statement.setString(2, maHD); return
-	 * statement.executeUpdate() > 0; } catch (SQLException e) {
-	 * JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
-	 * e.printStackTrace(); } finally { ConnectDB.closeConnect(connect);
-	 * ConnectDB.closePreStatement(statement); } }
-	 * 
-	 * return false; }
-	 */
+	public boolean lapHoaDon(HoaDonEntity hoaDonEntity) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "update HoaDon\r\n" + "set GioLapHD = ?, TrangThai = N'Đã thanh toán'\r\n"
+						+ "where MaHD LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setTime(1, Time.valueOf(LocalTime.now()));
+				statement.setString(2, hoaDonEntity.getMaHoaDon());
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return false;
+	}
 }

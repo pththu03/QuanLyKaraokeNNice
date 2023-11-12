@@ -8,6 +8,8 @@ import javax.swing.border.BevelBorder;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.SystemColor;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
 
 import javax.swing.border.MatteBorder;
@@ -18,6 +20,11 @@ import javax.swing.JScrollPane;
 import com.toedter.calendar.JDateChooser;
 
 import controller.ThongKeController;
+import dao.ThongKeDAO;
+import entity.HoaDonEntity;
+import entity.KhachHangEntity;
+import entity.NhanVienEntity;
+
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -42,16 +49,13 @@ public class GD_ThongKe extends JPanel {
 	/**
 	 * Doanh thu
 	 */
-	public JRadioButton radTheoNgay;
-	public JRadioButton radTheoThang;
-	public JRadioButton radTheoNam;
-	private ButtonGroup grpDoanhThu;
 	private JPanel pnlThongKeDoanhThu;
 	private JPanel pnlThongKeDoanhThuCon;
 	private JPanel pnlThongTinDoanhThu;
 	private JPanel pnlChiTietDoanhThu;
 	private JPanel pnlDSDoanhThu;
 	private JPanel pnlTimKiemDoanhThu;
+
 	private JLabel lblTieuDeDoanhThu;
 	private JLabel lblTongDoanhThu;
 	private JLabel lblTienTongDoanhThu;
@@ -63,21 +67,30 @@ public class GD_ThongKe extends JPanel {
 	private JLabel lblTongDoanhThuPhong;
 	private JLabel lblTongDoanhThuDV;
 	private JLabel lblTienDoanhThuDV;
-	private JTable tblHoaDon;
-	private DefaultTableModel tblmodelHoaDon;
 	private JLabel lblchonNgayDoanhThu;
-	private JDateChooser chonNgay;
-	private JScrollPane scrHoaDon;
 	private JLabel lblchonThangDoanhThu;
-	private JComboBox<String> cmbThangDoanhThu;
-	private DefaultComboBoxModel<String> cmbmodelThangDoanhThu;
 	private JLabel lblchonNamDoanhThuThang;
 	private JLabel lblchonNamDoanhThuNam;
-	private JYearChooser cmbNamDoanhThuThang; // combobox chọn năm trong tìm kiếm doanh thu theo tháng
-	private JYearChooser cmbNamDoanhThuNam;
 	private JLabel lblDoanhThuTrungBinh;
 	private JLabel lblTienDoanhThuTrungBinh;
 	private JLabel lblChuThichDoanhThu;
+
+	private JYearChooser cmbNamDoanhThuThang; // combobox chọn năm trong tìm kiếm doanh thu theo tháng
+	private JYearChooser cmbNamDoanhThuNam;
+
+	private JTable tblHoaDon;
+	private DefaultTableModel tblmodelHoaDon;
+	private JDateChooser chonNgay;
+	private JScrollPane scrHoaDon;
+
+	private JComboBox<String> cmbThangDoanhThu;
+	private DefaultComboBoxModel<String> cmbmodelThangDoanhThu;
+
+	public JRadioButton radTheoNgay;
+	public JRadioButton radTheoThang;
+	public JRadioButton radTheoNam;
+	private ButtonGroup grpDoanhThu;
+
 	public JButton btnTimKiemDoanhThuNgay;
 	public JButton btnTimKiemDoanhThuThang; // button chọn tìm kiếm doanh thu thao tháng
 	public JButton btnTimKiemDoanhThuNam;
@@ -91,24 +104,27 @@ public class GD_ThongKe extends JPanel {
 	private JPanel pnlDSLuongNhanVien;
 	private JPanel pnlTimKiemLuong;
 	private JPanel pnlThongKeLuongNhanVien;
+
 	private JLabel lblTieuDeLuongNhanVien;
 	private JLabel lblTongTienLuong;
 	private JLabel lblTongTienLuongKetQua;
 	private JLabel lblTongSoNhanVien;
 	private JLabel lblTongSoNhanVienKetQua;
-	private JLabel lblchonThangLuong;
-	private JComboBox<String> cmbThangLuong;
-	private DefaultComboBoxModel<String> cmbmodelThangLuong; // model của combobox chọn tháng trong thống kê lương nhân
-																// viên
+	private JLabel lblchonThangLuong; // viên
 	private JLabel lblchonNamLuong;
-	private JTable tblNhanVien;
-	private DefaultTableModel model_tableDSNhanVien;
-	private JScrollPane scrDSNhanVien;
 	private JLabel lblTongGioLamViec;
 	private JLabel lblTongGioLamViecKetQua;
 	private JLabel lblTongCaVang;
 	private JLabel lblTongCaVangKetQua;
+
+	private JComboBox<String> cmbThangLuong;
+	private DefaultComboBoxModel<String> cmbmodelThangLuong; // model của combobox chọn tháng trong thống kê lương nhân
+
+	private JTable tblNhanVien;
+	private DefaultTableModel tblmodelNhanVien;
+	private JScrollPane scrDSNhanVien;
 	private JYearChooser chonNam;
+
 	public JButton btnTimKiemLuong;
 	public JButton btnXemChiTietChamCong;
 
@@ -120,23 +136,38 @@ public class GD_ThongKe extends JPanel {
 	private JPanel pnlThongKeKhachHangNho;
 	private JPanel pnlChiTietKhachHang;
 	private JPanel pnlTimKiemKhachHang;
-	private JLabel lblchonThangKhachHang;
-	private JComboBox<String> cmbChonThangKhachHang;
-	private DefaultComboBoxModel<String> cmbmodelThangKhachHang;
-	private JLabel lblChonNamKhachHang;
 	private JPanel pnlDSKhachHang;
+
+	private JLabel lblchonThangKhachHang;
+	private JLabel lblChonNamKhachHang;
 	private JLabel lblTongSoLanDatPhong;
 	private JLabel lblTongSoKhachHang;
 	private JLabel lblSoKhachHangDatPhongTren50;
 	private JLabel lblSoKhachHangDatPhongTren50KetQua;
 	private JLabel lblTongSoKhachHangKetQua;
 	private JLabel lblTongSoLanDatPhongKetQua;
+
+	private JComboBox<String> cmbChonThangKhachHang;
+	private DefaultComboBoxModel<String> cmbmodelThangKhachHang;
+
 	private JTable tblKhachHang;
 	private DefaultTableModel tblmodelKhachHang;
 	private JScrollPane scrDSKhachHang;
+
 	private JYearChooser chonNamKhachHang;
+
 	public JButton btnTimKiemKhachHang;
 	public JButton btnXemChiTietHoaDonKhachHang;
+
+	/**
+	 * 
+	 */
+
+	private List<HoaDonEntity> listHoaDon;
+	private List<NhanVienEntity> listNhanVien;
+	private List<KhachHangEntity> listKhachHang;
+
+	private ThongKeDAO thongKeDAO = new ThongKeDAO();
 
 	/**
 	 * 
@@ -370,7 +401,8 @@ public class GD_ThongKe extends JPanel {
 		pnlThongTinDoanhThu.add(pnlDSDoanhThu);
 		pnlDSDoanhThu.setLayout(null);
 
-		String[] cols_HoaDon = { "STT", "Mã hóa đơn", "Tên khách hàng", "Tên nhân viên", "Ngày lập", "Tổng tiền" };
+		String[] cols_HoaDon = { "STT", "Mã hóa đơn", "Tên khách hàng", "Tên nhân viên", "Ngày lập", "Giờ lập",
+				"Tổng tiền" };
 		tblmodelHoaDon = new DefaultTableModel(cols_HoaDon, 0);
 		tblHoaDon = new JTable(tblmodelHoaDon);
 		scrHoaDon = new JScrollPane(tblHoaDon);
@@ -378,7 +410,7 @@ public class GD_ThongKe extends JPanel {
 		pnlDSDoanhThu.add(scrHoaDon);
 
 		btnXemChiTietHoaDonDoanhThu = new JButton("Xem chi tiết hóa đơn");
-		btnXemChiTietHoaDonDoanhThu.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnXemChiTietHoaDonDoanhThu.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 		btnXemChiTietHoaDonDoanhThu.setForeground(new Color(0, 0, 0));
 		btnXemChiTietHoaDonDoanhThu.setBackground(new Color(144, 238, 144));
 		btnXemChiTietHoaDonDoanhThu.setFocusable(false);
@@ -512,8 +544,8 @@ public class GD_ThongKe extends JPanel {
 
 		String[] cols_NhanVien = { "STT", "Mã nhân viên", "Họ tên", "Số diện thoại", "Số giờ làm việc", "Số ca vắng",
 				"Tiền lương" };
-		model_tableDSNhanVien = new DefaultTableModel(cols_NhanVien, 0);
-		tblNhanVien = new JTable(model_tableDSNhanVien);
+		tblmodelNhanVien = new DefaultTableModel(cols_NhanVien, 0);
+		tblNhanVien = new JTable(tblmodelNhanVien);
 		scrDSNhanVien = new JScrollPane(tblNhanVien);
 		scrDSNhanVien.setBounds(10, 11, 674, 549);
 		pnlDSLuongNhanVien.add(scrDSNhanVien);
@@ -666,6 +698,8 @@ public class GD_ThongKe extends JPanel {
 		radTheoNgay.addActionListener(controller);
 		radTheoThang.addActionListener(controller);
 		radTheoNam.addActionListener(controller);
+
+		loadDataDoanhThu();
 	}
 
 	public void chonButtonTheoNgay() {
@@ -704,5 +738,27 @@ public class GD_ThongKe extends JPanel {
 		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNam);
 		this.pnlTimKiemDoanhThu.repaint();
 		this.pnlTimKiemDoanhThu.revalidate();
+	}
+
+	private void loadDataDoanhThu() {
+		listHoaDon = new ArrayList<>();
+		listHoaDon = thongKeDAO.duyetDanhSachHoaDon();
+		tblHoaDon.removeAll();
+		tblHoaDon.setRowSelectionAllowed(false);
+		tblmodelHoaDon.setRowCount(0);
+
+		int stt = 1;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), hoaDonEntity.getMaKhachHang(),
+					hoaDonEntity.getMaNhanVien(), hoaDonEntity.getNgayLap(), hoaDonEntity.getGioLap(), 0 });
+		}
+	}
+
+	private void loadDataLuongNhanVien() {
+
+	}
+
+	private void loadDataKhachHang() {
+
 	}
 }

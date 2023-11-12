@@ -217,7 +217,7 @@ public class QuanLyPhongDAO {
 		return list;
 	}
 
-	public List<PhongEntity> timKiemCuaKH(String loaiPhong, int sucChua) {
+	public List<PhongEntity> timKiemPhongCuaKhachHang(String loaiPhong, int sucChua) {
 		List<PhongEntity> list = new ArrayList<PhongEntity>();
 		Connection connect = ConnectDB.getConnect();
 		Statement statement = null;
@@ -270,6 +270,29 @@ public class QuanLyPhongDAO {
 				statement = connect.prepareStatement(query);
 				statement.setString(1, trangThai);
 				statement.setString(2, maPhong);
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+			}
+
+		}
+		return false;
+	}
+
+	public boolean capNhatTrangThaiPhongKhiLapHoaDon(String maHD) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "update Phong \r\n" + "set TrangThai = N'Trống'\r\n"
+						+ "from Phong p join ChiTietHoaDon cthd on p.MaPhong = cthd.MaPhong\r\n" + "where MaHD = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maHD);
 				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");

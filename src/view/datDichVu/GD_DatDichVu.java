@@ -592,7 +592,6 @@ public class GD_DatDichVu extends JPanel {
 				boolean ketQuaDat = true;
 				ChiTietHoaDonEntity chiTietHoaDonEntity = datDichVuDAO
 						.timChiTietHoaDonTheoMaPhong(phongEntity.getMaPhong());
-				System.out.println(phongEntity.getMaPhong());
 				if (chiTietHoaDonEntity != null) {
 					for (int i = 0; i < tblChiTietDatDichVu.getRowCount(); i++) {
 						String maDichVu = tblChiTietDatDichVu.getValueAt(i, 1).toString().trim();

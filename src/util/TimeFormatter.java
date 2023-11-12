@@ -11,14 +11,14 @@ public class TimeFormatter {
 		if (time.getHour() < 10) {
 			gioHienTai = "0" + gioHienTai;
 		}
-		
+
 		if (time.getMinute() < 10) {
 			phutHienTai = "0" + phutHienTai;
 		}
-		
+
 		return gioHienTai + ":" + phutHienTai;
 	}
-	
+
 	public static int tinhSoPhut(LocalTime gio1, LocalTime gio2) {
 		return (int) gio1.until(gio2, ChronoUnit.MINUTES);
 	}

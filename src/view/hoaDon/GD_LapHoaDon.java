@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -222,9 +224,10 @@ public class GD_LapHoaDon extends JPanel {
 		txtTienDichVu.setColumns(10);
 
 		txtTienTraKhach = new JTextField();
+		txtTienTraKhach.setDisabledTextColor(Color.BLACK);
+		txtTienTraKhach.setEnabled(false);
 		txtTienTraKhach.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTienTraKhach.setBorder(null);
-		txtTienTraKhach.setEditable(false);
 		txtTienTraKhach.setBounds(236, 429, 340, 25);
 		pnlChiTietLapHoaDon.add(txtTienTraKhach);
 		txtTienTraKhach.setColumns(10);
@@ -262,6 +265,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtTongTien.setColumns(10);
 
 		btnLapHoaDon = new JButton("Lập hóa đơn");
+		btnLapHoaDon.setMnemonic(KeyEvent.VK_ENTER);
 		btnLapHoaDon.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLapHoaDon.setBackground(new Color(144, 238, 144));
 		btnLapHoaDon.setFocusable(false);
@@ -331,6 +335,26 @@ public class GD_LapHoaDon extends JPanel {
 		btnTimKiem.addActionListener(controller);
 		btnXemChiTiet.addActionListener(controller);
 		tblHoaDon.addMouseListener(controller);
+		txtTienNhan.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				tinhTienTraKhach();
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		loadData();
 	}
 
@@ -360,14 +384,14 @@ public class GD_LapHoaDon extends JPanel {
 		KhachHangEntity khachHangEntity = null;
 		int row = tblHoaDon.getSelectedRow();
 		if (row >= 0) {
+			hoaDonEntity = quanLyHoaDonDAO.timTheoMa(listHoaDon.get(row).getMaHoaDon());
 			khachHangEntity = quanLyKhachHangDAO.timTheoMa(listHoaDon.get(row).getMaKhachHang());
 			txtTenKhachHang.setText(khachHangEntity.getHoTen());
 			txtSoDienThoai.setText(khachHangEntity.getSoDienThoai());
-			txtSoLuongPhong.setText(tblHoaDon.getValueAt(row, 3).toString());
+			txtSoLuongPhong.setText(tblHoaDon.getValueAt(row, 4).toString());
 			txtTienDichVu.setText(
 					MoneyFormatter.format(lapHoaDonDAO.tinhTongTienDichVu(tblHoaDon.getValueAt(row, 1).toString())));
 			txtTongTien.setText(tblHoaDon.getValueAt(row, 5).toString());
-
 		}
 	}
 
@@ -381,14 +405,36 @@ public class GD_LapHoaDon extends JPanel {
 		txtTimKiemTheoSDT.setText("");
 		txtTongTien.setText("");
 		loadData();
+		hoaDonEntity = null;
 	}
 
 	public void chonChucNangLapHoaDon() {
-
+		if (hoaDonEntity != null) {
+			if (lapHoaDonDAO.lapHoaDon(hoaDonEntity)) {
+				if (quanLyPhongDAO.capNhatTrangThaiPhongKhiLapHoaDon(hoaDonEntity.getMaHoaDon())) {
+					JOptionPane.showMessageDialog(this, "Lập hóa đơn thành công");
+					chonChucNangLamMoi();
+				} else {
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Lập hóa đơn thất bại");
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn");
+		}
 	}
 
 	public void chonChucNangXemCTHD() {
-		new GD_ChiTietHoaDon(hoaDonEntity).setVisible(true);
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			String maHD = tblHoaDon.getValueAt(row, 1).toString();
+			HoaDonEntity hoaDonEntity = quanLyHoaDonDAO.timTheoMa(maHD);
+			if (hoaDonEntity != null) {
+				new GD_ChiTietHoaDon(hoaDonEntity).setVisible(true);
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn");
+		}
 	}
 
 	public void chonChucNangTimKiem() {
@@ -435,7 +481,7 @@ public class GD_LapHoaDon extends JPanel {
 		listChiTietHoaDon = quanLyChiTietHoaDonDAO.duyetDanhSach(maHD);
 		for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
 			double gioHat = TimeFormatter.tinhSoPhut(chiTietHoaDonEntity.getGioNhanPhong(),
-					chiTietHoaDonEntity.getGioTraPhong());
+					chiTietHoaDonEntity.getGioTraPhong()) / 60.0;
 			phongEntity = quanLyPhongDAO.timTheoMa(chiTietHoaDonEntity.getMaPhong());
 
 			if (phongEntity.getLoaiPhong().equals("VIP")) {
@@ -452,6 +498,28 @@ public class GD_LapHoaDon extends JPanel {
 		double tongTien = 0;
 		tongTien = lapHoaDonDAO.tinhTongTienDichVu(maHD) + tinhTongTienHat(maHD);
 		return tongTien;
+	}
+
+	private void tinhTienTraKhach() {
+
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			txtTienTraKhach.setText("");
+			double tienNhan;
+
+			String tienTraKhach;
+			if (!txtTienNhan.getText().equals("")) {
+				tienNhan = Double.parseDouble(txtTienNhan.getText().trim());
+			} else {
+				tienNhan = 0;
+			}
+			double tongTien = tinhTongTien(tblHoaDon.getValueAt(row, 1).toString());
+			if (tienNhan >= tongTien) {
+				double ketQua = tienNhan - tongTien;
+				tienTraKhach = MoneyFormatter.format(ketQua);
+				txtTienTraKhach.setText(tienTraKhach);
+			}
+		}
 	}
 
 }

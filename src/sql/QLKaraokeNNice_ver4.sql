@@ -870,4 +870,4 @@ FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd
 WHERE p.SoPhong = '205' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
 GO
 
-SELECT * FROM ChiTietDichVu
+SELECT * FROM NhanVien

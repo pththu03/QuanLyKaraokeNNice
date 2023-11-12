@@ -75,6 +75,10 @@ public class GD_TimKiemPhong extends JFrame {
 	private TimKiemPhongController controller;
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
 	private List<PhongEntity> listPhong;
+	private JLabel lblChuThichPhongTrong_1;
+	private JLabel lblImgChuThichPhongTrong_1;
+	private JLabel lblImgChuThichPhongTrong_2;
+	private JLabel lblChuThichPhongTrong_2;
 
 	public GD_TimKiemPhong() {
 		setResizable(false);
@@ -166,7 +170,7 @@ public class GD_TimKiemPhong extends JFrame {
 		lblAnhTrangThai = new JLabel("");
 		lblAnhTrangThai.setBounds(48, 31, 120, 120);
 		pnlChiTietThongTin.add(lblAnhTrangThai);
-		lblAnhTrangThai.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongTrong1.png")));
+		lblAnhTrangThai.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhong2.png")));
 
 		lblSoPhong = new JLabel("Số phòng:");
 		lblSoPhong.setFont(new Font("Segoe UI", Font.PLAIN, 17));
@@ -203,12 +207,12 @@ public class GD_TimKiemPhong extends JFrame {
 		pnlChuThich.setLayout(null);
 
 		lblImgChuThichPhongTrong = new JLabel("");
-		lblImgChuThichPhongTrong.setBounds(276, 8, 40, 40);
+		lblImgChuThichPhongTrong.setBounds(39, 8, 40, 40);
 		pnlChuThich.add(lblImgChuThichPhongTrong);
 		lblImgChuThichPhongTrong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongTrong.png")));
 
 		lblChuThichPhongTrong = new JLabel("Phòng trống");
-		lblChuThichPhongTrong.setBounds(263, 44, 67, 18);
+		lblChuThichPhongTrong.setBounds(23, 44, 67, 18);
 		pnlChuThich.add(lblChuThichPhongTrong);
 		lblChuThichPhongTrong.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
@@ -221,6 +225,28 @@ public class GD_TimKiemPhong extends JFrame {
 		lblChuThichPhongVIP.setBounds(364, 44, 17, 18);
 		pnlChuThich.add(lblChuThichPhongVIP);
 		lblChuThichPhongVIP.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+		lblChuThichPhongTrong_1 = new JLabel("Phòng đặt trước");
+		lblChuThichPhongTrong_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblChuThichPhongTrong_1.setBounds(128, 44, 100, 18);
+		pnlChuThich.add(lblChuThichPhongTrong_1);
+
+		lblImgChuThichPhongTrong_1 = new JLabel("");
+		lblImgChuThichPhongTrong_1
+				.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongCho.png")));
+		lblImgChuThichPhongTrong_1.setBounds(147, 8, 40, 40);
+		pnlChuThich.add(lblImgChuThichPhongTrong_1);
+
+		lblImgChuThichPhongTrong_2 = new JLabel("");
+		lblImgChuThichPhongTrong_2
+				.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongDangSuDung.png")));
+		lblImgChuThichPhongTrong_2.setBounds(252, 8, 40, 40);
+		pnlChuThich.add(lblImgChuThichPhongTrong_2);
+
+		lblChuThichPhongTrong_2 = new JLabel("Phòng đang sử dụng");
+		lblChuThichPhongTrong_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblChuThichPhongTrong_2.setBounds(226, 44, 130, 18);
+		pnlChuThich.add(lblChuThichPhongTrong_2);
 
 		pnlBangThongTin = new JPanel();
 		pnlBangThongTin.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
@@ -289,6 +315,17 @@ public class GD_TimKiemPhong extends JFrame {
 		if (row >= 0) {
 			txtSoPhong.setText(tblmodelPhong.getValueAt(row, 1).toString());
 			txtSucChua.setText(tblmodelPhong.getValueAt(row, 3).toString());
+			String trangThai = tblPhong.getValueAt(row, 4).toString();
+			if (trangThai.equals("Trống")) {
+				lblAnhTrangThai
+						.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongTrong2.png")));
+			} else if (trangThai.equals("Đặt trước")) {
+				lblAnhTrangThai.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongCho2.png")));
+			} else {
+				lblAnhTrangThai
+						.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhongDangSuDung2.png")));
+			}
+
 			if (tblmodelPhong.getValueAt(row, 2).toString().equalsIgnoreCase("Thường")) {
 				lblVIP.setVisible(false);
 			} else {
@@ -305,7 +342,7 @@ public class GD_TimKiemPhong extends JFrame {
 		txtSucChua.setText("");
 		cmbLoaiPhong.setSelectedIndex(0);
 		cmbSucChua.setSelectedIndex(0);
-
+		lblAnhTrangThai.setIcon(new ImageIcon(GD_TimKiemPhong.class.getResource("/images/iconPhong2.png")));
 		loadData();
 	}
 
@@ -325,7 +362,7 @@ public class GD_TimKiemPhong extends JFrame {
 		tblPhong.removeAll();
 		tblPhong.setRowSelectionAllowed(false);
 		tblmodelPhong.setRowCount(0);
-		listPhong = quanLyPhongDAO.timKiemCuaKH(loaiPhong, sucChua);
+		listPhong = quanLyPhongDAO.timKiemPhongCuaKhachHang(loaiPhong, sucChua);
 		int stt = 1;
 		for (PhongEntity phongEntity : listPhong) {
 			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getSoPhong(), phongEntity.getLoaiPhong(),
