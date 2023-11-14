@@ -1,6 +1,5 @@
 package view.trangChu;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
@@ -316,15 +315,17 @@ public class GD_TrangChu extends JFrame {
 			btnNguoiDung.setEnabled(true);
 		} else if (nhanVienEntity.getChucVu().equals("Tiếp tân")) {
 			mniTrangChu.setEnabled(true);
+			//
+			mnQuanLyPhanCong.setEnabled(false);
 			mniPhong.setEnabled(true);
 			mniDichVu.setEnabled(true);
 			mniHoaDon.setEnabled(true);
-			//
 			mniNhanVien.setEnabled(false);
 			mniKhachHang.setEnabled(true);
 			//
 			mniPhanCong.setEnabled(false);
 			mniChamCong.setEnabled(false);
+			//
 			mniDatPhong.setEnabled(true);
 			mniDatDichVu.setEnabled(true);
 			mniLapHoaDon.setEnabled(true);
@@ -375,7 +376,7 @@ public class GD_TrangChu extends JFrame {
 	}
 
 	public void chonChucNangDanhMucDichVu() {
-		this.thayDoiPanelChinh(new GD_QuanLyDichVu(), mniDichVu);
+		this.thayDoiPanelChinh(new GD_QuanLyDichVu(nhanVienEntity), mniDichVu);
 	}
 
 	public void chonChucNangDanhMucHoaDon() {

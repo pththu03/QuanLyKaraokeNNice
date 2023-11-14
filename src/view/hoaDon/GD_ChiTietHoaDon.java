@@ -115,14 +115,14 @@ public class GD_ChiTietHoaDon extends JFrame {
 
 		JLabel lblSoPhong = new JLabel("Số phòng:");
 		lblSoPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblSoPhong.setBounds(20, 25, 70, 20);
+		lblSoPhong.setBounds(20, 22, 70, 20);
 		pnlChiTietDichVu.add(lblSoPhong);
 
 		txtSoPhong = new JTextField();
 		txtSoPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtSoPhong.setForeground(Color.BLACK);
 		txtSoPhong.setEditable(false);
-		txtSoPhong.setBounds(89, 23, 86, 25);
+		txtSoPhong.setBounds(89, 20, 86, 25);
 		pnlChiTietDichVu.add(txtSoPhong);
 		txtSoPhong.setColumns(10);
 

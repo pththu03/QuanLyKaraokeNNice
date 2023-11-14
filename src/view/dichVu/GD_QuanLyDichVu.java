@@ -13,16 +13,15 @@ import javax.swing.table.DefaultTableModel;
 import controller.QuanLyDichVuController;
 import dao.QuanLyDichVuDAO;
 import entity.DichVuEntity;
+import entity.NhanVienEntity;
 import util.MoneyFormatter;
 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
@@ -80,8 +79,10 @@ public class GD_QuanLyDichVu extends JPanel {
 	private QuanLyDichVuController controller;
 	private List<DichVuEntity> listDichVu;
 	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();
+	private NhanVienEntity nhanVienEntity;
 
-	public GD_QuanLyDichVu() {
+	public GD_QuanLyDichVu(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setBounds(0, 0, 1365, 694);
 		setLayout(null);
 
@@ -196,12 +197,12 @@ public class GD_QuanLyDichVu extends JPanel {
 		scrQLDV = new JScrollPane(tblDichVu);
 		scrQLDV.setBounds(10, 79, 674, 604);
 		pnlChucNang.add(scrQLDV);
-		
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		tblDichVu.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tblDichVu.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		
+
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 		tblDichVu.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
@@ -267,7 +268,12 @@ public class GD_QuanLyDichVu extends JPanel {
 		btnXoa.addActionListener(controller);
 		tblDichVu.addMouseListener(controller);
 
+		btnThem.setEnabled(false);
+		btnChinhSua.setEnabled(false);
+		btnXoa.setEnabled(false);
+
 		loadData();
+		kiemTraQuyen();
 	}
 
 	/**
@@ -285,6 +291,14 @@ public class GD_QuanLyDichVu extends JPanel {
 			tblmodelDichVu.addRow(new Object[] { stt++, dichVuEntity.getMaDichVu(), dichVuEntity.getTenDichVu(),
 					dichVuEntity.getLoaiDichVu(), MoneyFormatter.format(dichVuEntity.getGia()) });
 
+		}
+	}
+
+	private void kiemTraQuyen() {
+		if (nhanVienEntity.getChucVu().equalsIgnoreCase("Quản lí")) {
+			btnThem.setEnabled(true);
+			btnChinhSua.setEnabled(true);
+			btnXoa.setEnabled(true);
 		}
 	}
 

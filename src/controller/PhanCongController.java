@@ -23,6 +23,10 @@ public class PhanCongController implements ActionListener, MouseListener {
 			giaoDienPhanCong.chonChucNangLamMoi();
 		} else if (o.equals(giaoDienPhanCong.btnXoa)) {
 			giaoDienPhanCong.chonChucNangXoa();
+		} else if (o.equals(giaoDienPhanCong.cmbMaCaTruc)) {
+			giaoDienPhanCong.chonMaCaTruc();
+		} else if (o.equals(giaoDienPhanCong.cmbMaNV)) {
+			giaoDienPhanCong.chonMaNhanVien();
 		}
 	}
 

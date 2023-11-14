@@ -9,9 +9,7 @@ import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
 import java.awt.Font;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JTextField;
@@ -30,7 +28,6 @@ import entity.DichVuEntity;
 import entity.KhachHangEntity;
 import entity.PhongEntity;
 import util.MoneyFormatter;
-import view.datPhong.GD_DatPhong;
 
 //import controller.ManHinhDatDichVuController;
 
@@ -102,7 +99,6 @@ public class GD_DatDichVu extends JPanel {
 
 	private List<DichVuEntity> listDichVu;
 	private List<PhongEntity> listPhong;
-	private List<ChiTietDichVuEntity> listChiTietDichVu;
 
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
 	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();

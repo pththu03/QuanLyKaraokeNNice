@@ -59,9 +59,9 @@ public class GD_PhanCong extends JPanel {
 	private JLabel lblCaTruc;
 	private JLabel lblDsPhanCong;
 	// JcomboBox
-	private JComboBox<String> cmbMaNV;
+	public JComboBox<String> cmbMaNV;
 	private DefaultComboBoxModel<String> cmbmodelMaNV;
-	private JComboBox<String> cmbMaCaTruc;
+	public JComboBox<String> cmbMaCaTruc;
 	private DefaultComboBoxModel<String> cmbmodelCaTruc;
 	// Jtable
 	private JTable tblPhanCong;
@@ -228,13 +228,13 @@ public class GD_PhanCong extends JPanel {
 		scrPhanCong = new JScrollPane(tblPhanCong);
 		scrPhanCong.setBounds(10, 77, 674, 606);
 		pnlBangPhanCong.add(scrPhanCong);
-		
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		tblPhanCong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tblPhanCong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		tblPhanCong.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		
+
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 		tblPhanCong.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
@@ -251,8 +251,9 @@ public class GD_PhanCong extends JPanel {
 		btnLamMoi.addActionListener(controller);
 		btnThem.addActionListener(controller);
 		btnXoa.addActionListener(controller);
-
 		tblPhanCong.addMouseListener(controller);
+		cmbMaCaTruc.addActionListener(controller);
+		cmbMaNV.addActionListener(controller);
 		loadData();
 
 	}
@@ -283,10 +284,12 @@ public class GD_PhanCong extends JPanel {
 	 * loadcmbMaNV
 	 */
 	private void loadcmbMaNV() {
-		cmbMaNV.removeAll();
+//		cmbMaNV.removeAll();
+		cmbmodelMaNV.removeAllElements();
+		cmbmodelMaNV.addElement("");
 		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
 		for (NhanVienEntity nhanVienEntity : listNhanVien) {
-			cmbMaNV.addItem(nhanVienEntity.getMaNhanVien());
+			cmbmodelMaNV.addElement(nhanVienEntity.getMaNhanVien());
 		}
 	}
 
@@ -294,7 +297,9 @@ public class GD_PhanCong extends JPanel {
 	 * loadcmbMaCT
 	 */
 	private void loadcmbMaCT() {
-		cmbMaCaTruc.removeAll();
+//		cmbMaCaTruc.removeAll();
+		cmbmodelCaTruc.removeAllElements();
+		cmbmodelCaTruc.addElement("");
 		listCaTruc = quanLyCaTrucDAO.duyetDanhSach();
 		for (CaTrucEntity caTrucEntity : listCaTruc) {
 			cmbMaCaTruc.addItem(caTrucEntity.getMaCaTruc());
@@ -342,7 +347,11 @@ public class GD_PhanCong extends JPanel {
 	public void chonChucNangThem() {
 		if (kiemTraDuLieuThem()) {
 			String maNV = cmbMaNV.getSelectedItem().toString();
+//			String tenNV = quanLyNhanVienDAO.timTheoMa(maNV).getHoTen();
+//			txtTenNV.setText(tenNV);
 			String maCT = cmbMaCaTruc.getSelectedItem().toString();
+//			String tenCT = quanLyCaTrucDAO.timTheoMa(maCT).getTenCaTruc();
+//			txtCaTruc.setText(tenCT);
 			java.sql.Date sqlDate = new java.sql.Date(dchNgay.getDate().getTime());
 			PhieuPhanCongEntity phieuPhanCongEntity = new PhieuPhanCongEntity(maNV, maCT, sqlDate);
 
@@ -352,6 +361,22 @@ public class GD_PhanCong extends JPanel {
 				loadData();
 			}
 
+		}
+	}
+
+	public void chonMaCaTruc() {
+		if (cmbMaCaTruc.getSelectedIndex() != 0) {
+			String maCT = cmbMaCaTruc.getSelectedItem().toString();
+			String tenCT = quanLyCaTrucDAO.timTheoMa(maCT).getTenCaTruc();
+			txtCaTruc.setText(tenCT);
+		}
+	}
+
+	public void chonMaNhanVien() {
+		if (cmbMaNV.getSelectedIndex() != 0) {
+			String maNV = cmbMaNV.getSelectedItem().toString();
+			String tenNV = quanLyNhanVienDAO.timTheoMa(maNV).getHoTen();
+			txtTenNV.setText(tenNV);
 		}
 	}
 
@@ -408,7 +433,6 @@ public class GD_PhanCong extends JPanel {
 			cmbMaCaTruc.requestFocus();
 			return false;
 		}
-
 		return true;
 	}
 

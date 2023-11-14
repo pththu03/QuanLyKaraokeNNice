@@ -63,7 +63,7 @@ public class ThongKeDAO {
 
 		if (connect != null) {
 			try {
-				String query = "SELECT * FROM NhanVien WHERE TrangThai LIKE N'Đang làm việc";
+				String query = "SELECT * FROM NhanVien WHERE TrangThai LIKE N'Đang làm việc'";
 				statement = connect.createStatement();
 				result = statement.executeQuery(query);
 				while (result.next()) {
@@ -77,13 +77,99 @@ public class ThongKeDAO {
 					double mucLuong = result.getDouble(8);
 					String chucVu = result.getString(9);
 					boolean trangThai = true;
+					NhanVienEntity nhanVienEntity = new NhanVienEntity(maNhanVien, hoTen, soDienThoai, email, CCCD,
+							password, namSinh, mucLuong, chucVu, trangThai);
+					listNhanVien.add(nhanVienEntity);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
 			}
 		}
 
 		return listNhanVien;
 	}
+
+	public int demTongSoLanDatPhong() {
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT SUM(SLDatPhong) FROM KhachHang";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while (result.next()) {
+					return result.getInt(1);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+
+		}
+		return 0;
+	}
+
+	public int demTongSoKhachHang() {
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT COUNT(*) FROM KhachHang";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while (result.next()) {
+					return result.getInt(1);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+
+		}
+		return 0;
+	}
+
+	public int demTongSoKhachHangDatPhongTren50Lan() {
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT COUNT(*) FROM KhachHang\r\n" + "WHERE SLDatPhong >= 50";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while (result.next()) {
+					return result.getInt(1);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+
+		}
+		return 0;
+	}
+
 }

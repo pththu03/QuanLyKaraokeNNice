@@ -43,6 +43,8 @@ public class DatPhongController implements ActionListener, MouseListener {
 			giaoDienDatPhong.chonChucNangChonPhong();
 		} else if (action.equals("Hủy đặt trước")) {
 			giaoDienDatPhong.chonChucNangHuyPhongDatTruoc();
+		} else if(action.equals("Nhận phòng")) {
+			giaoDienDatPhong.chonChucNangNhanPhong();
 		}
 	}
 

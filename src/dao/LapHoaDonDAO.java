@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,50 @@ public class LapHoaDonDAO {
 
 	public LapHoaDonDAO() {
 
+	}
+
+	public List<HoaDonEntity> duyetDanhSach() {
+		List<HoaDonEntity> listHoaDon = new ArrayList<>();
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT hd.MaHD, MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai\r\n"
+						+ "FROM HoaDon hd  \r\n"
+						+ "WHERE TrangThai = N'Chưa thanh toán' \r\n"
+						+ "	AND EXISTS (SELECT * FROM ChiTietHoaDon cthd \r\n"
+						+ "		WHERE cthd.MaHD = hd.MaHD \r\n"
+						+ "			AND CAST(GioKT AS datetime) < GETDATE())";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while(result.next()) {
+					String maHD = result.getString(1);
+					String maKH = result.getString(2);
+					String maNV = result.getString(3);
+					LocalDate ngayLapHD = result.getDate(4).toLocalDate();
+					boolean trangThai = false;
+					
+					if (result.getTime(5) != null) {
+						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, result.getTime(5).toLocalTime(),
+								trangThai);
+					} else {
+						hoaDonEntity = new HoaDonEntity(maHD, maNV, maKH, ngayLapHD, trangThai);
+					}
+					listHoaDon.add(hoaDonEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+
+		return listHoaDon;
 	}
 
 	public List<HoaDonEntity> timKiemHoaDon(KhachHangEntity khachHangEntity) {
@@ -117,8 +163,8 @@ public class LapHoaDonDAO {
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "update HoaDon\r\n" + "set GioLapHD = ?, TrangThai = N'Đã thanh toán'\r\n"
-						+ "where MaHD LIKE ?";
+				String query = "UPDATE HoaDon\r\n" + "SET GioLapHD = ?, TrangThai = N'Đã thanh toán'\r\n"
+						+ "WHERE MaHD LIKE ?";
 				statement = connect.prepareStatement(query);
 				statement.setTime(1, Time.valueOf(LocalTime.now()));
 				statement.setString(2, hoaDonEntity.getMaHoaDon());

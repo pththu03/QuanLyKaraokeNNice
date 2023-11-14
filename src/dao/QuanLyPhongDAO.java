@@ -55,6 +55,8 @@ public class QuanLyPhongDAO {
 		}
 		return list;
 	}
+	
+	
 
 	public PhongEntity timTheoMa(String maPhong) {
 		PhongEntity phongKq = new PhongEntity();

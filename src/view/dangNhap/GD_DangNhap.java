@@ -155,6 +155,7 @@ public class GD_DangNhap extends JFrame {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean kiemTraDuLieuNhap() {
 		if (!(txtSoDienThoai.getText().trim().length() > 0 && pwd.getText().trim().length() > 0)) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ dữ liệu");

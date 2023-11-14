@@ -1,12 +1,10 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +183,6 @@ public class QuanLyHoaDonDAO {
 		return listHoaDon;
 	}
 
-	@SuppressWarnings("deprecation")
 	public HoaDonEntity them(HoaDonEntity hoaDonEntity) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement preStatement = null;
@@ -222,8 +219,29 @@ public class QuanLyHoaDonDAO {
 				ConnectDB.closeResultSet(result);
 			}
 		}
-
 		return hoaDonEntity;
+	}
+
+	public boolean xoa(String maHD) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "DELETE FROM HoaDon WHERE MaHD = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maHD);
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+
+		return false;
 	}
 
 }

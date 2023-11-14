@@ -326,7 +326,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 			String sdt = txtSDT.getText();
 			String email = txtEmail.getText();
 			int namSinh = Integer.parseInt(txtNamSinh.getText());
-			int slDatPhong = Integer.parseInt(txtSLDatPhong.getText());
+			int slDatPhong = 0;
 			KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, slDatPhong);
 			khachHangEntity = quanLyKhachHangDAO.them(khachHangEntity);
 			loadData();
@@ -470,31 +470,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 			}
 		}
 
-		/**
-		 * sl dat phong > 0
-		 */
-		if (slDatPhong.length() > 0) {
-			try {
-				int gia = Integer.parseInt(slDatPhong);
-				if (!(gia >= 0)) {
-					JOptionPane.showMessageDialog(this, "SL Đặt phòng phải từ 0", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtSLDatPhong.requestFocus();
-					return false;
-				}
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "SL Đặt phòng nhập vào là số", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSLDatPhong.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "SL Đặt phòng không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtSLDatPhong.requestFocus();
-			return false;
-		}
-
 		return true;
 
 	}
@@ -540,26 +515,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 			return false;
 		}
 
-		// sdt không được trùng
-		if (sdt.length() > 0) {
-			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtSDT.requestFocus();
-			return false;
-		}
+	
 
 		// email được phép để null nhưng nếu đã nhập thì phải đúng định dạng yêu cầu
 		if (email.length() > 0) {

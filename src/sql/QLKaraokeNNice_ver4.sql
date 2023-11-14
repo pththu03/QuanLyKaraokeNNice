@@ -7,7 +7,7 @@ GO
 CREATE DATABASE QuanLyKaraokeNNice
 GO
 
-USE QuanLyKaraokeNNice
+USE QuanLyKaraokeNNice 
 GO
 
 -- tao ma tu tang bang nhan vien
@@ -296,6 +296,9 @@ CREATE TABLE ChiTietDichVu(
 )
 GO
 
+------------------------------------------
+------------------------------------------
+
 ALTER TABLE PhieuPhanCong
 ADD
 FOREIGN KEY(MaNV) REFERENCES NhanVien(MaNV),
@@ -324,299 +327,733 @@ FOREIGN KEY(MaCTHD) REFERENCES ChiTietHoaDon(MaCTHD),
 FOREIGN KEY(MaDV) REFERENCES DichVu(MaDV)
 GO
 
+-- Them hoa don
+GO
+CREATE TRIGGER addHoaDon
+ON [dbo].[HoaDon]
+AFTER INSERT
+AS
+	DECLARE @MaKH varchar(7)
+	SELECT @MaKH = INSERTED.MaKH FROM INSERTED
+	IF NOT EXISTS (SELECT * FROM KhachHang WHERE KhachHang.MaKH = @MaKH)
+		ROLLBACK
+	
+	UPDATE KhachHang
+	SET SLDatPhong = SLDatPhong + 1
+	WHERE MaKH = @MaKH
+GO
+
+-- xoa hoa don
+CREATE TRIGGER deleteHoaDon
+ON [dbo].[HoaDon]
+AFTER DELETE 
+AS
+	DECLARE @MaKhachHang varchar(7)
+	SELECT @MaKhachHang = DELETED.MaKH FROM DELETED
+	IF NOT EXISTS (SELECT * FROM KhachHang WHERE KhachHang.MaKH = @MaKhachHang)
+		ROLLBACK
+
+	UPDATE KhachHang
+	SET SLDatPhong = SLDatPhong - 1
+	WHERE MaKH = @MaKhachHang
+GO
+
+
+-- xoa chi tiet hoa don
+CREATE TRIGGER deleteChiTietHoaDon
+ON [dbo].[ChiTietHoaDon]
+AFTER DELETE 
+AS
+	DECLARE @MaPhong varchar(7)
+	SELECT @MaPhong = DELETED.MaPhong FROM DELETED
+	IF NOT EXISTS (SELECT * FROM Phong WHERE Phong.MaPhong = @MaPhong)
+		ROLLBACK
+
+	UPDATE Phong
+	SET TrangThai = N'Trống'
+	WHERE MaPhong = @MaPhong
+GO
+
+--------------------------------------------------------------------
+-------------------------------------------------------------------
 -- KHÁCH HÀNG
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Tống Anh Quân', '0388973214', 'nguyenanhquan@gmail.com', 1999, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Tống Anh Quân', '0388973214', 'nguyenanhquan@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Trần Đức Vũ', '0385732141', 'tranducvu@gmail.com', 1979, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Trần Đức Vũ', '0385732141', 'tranducvu@gmail.com', 1979, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thành Nghiêm', '0384532564', 'thanhnghiem@gmail.com', 2000, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Thành Nghiêm', '0384532564', 'thanhnghiem@gmail.com', 2000, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Vòng Vĩnh Lợi', '038458653', 'vvloi@gmail.com', 1985, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Vòng Vĩnh Lợi', '0384589653', 'vvloi@gmail.com', 1985, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Tiến Hoàng', '0384892314', 'nthoang@gmail.com', 1994, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Tiến Hoàng', '0384892314', 'nthoang@gmail.com', 1994, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Bá Hậu', '0384598371', 'lebahau@gmail.com', 1992, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Lê Bá Hậu', '0384598371', 'lebahau@gmail.com', 1992, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thanh Hiền', '0381242314', 'thanhhien@gmail.com', 2000, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Thanh Hiền', '0381242314', 'thanhhien@gmail.com', 2000, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Hữu Duy', '0373127573', 'lehuuduy@gmail.com', 1991, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Lê Hữu Duy', '0373127573', 'lehuuduy@gmail.com', 1991, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thanh Tuyền', '0309650214', 'nguyenthanhtien@gmail.com', 1995, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Thanh Tuyền', '0309650214', 'nguyenthanhtien@gmail.com', 1995, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Trần Huỳnh Bắc', '0984643251', 'huynhbac05@gmail.com', 2005, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Trần Huỳnh Bắc', '0984643251', 'huynhbac05@gmail.com', 2005, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Phan Huỳnh Tuấn', '0976643251', 'phtuan01@gmail.com', 2001, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Phan Huỳnh Tuấn', '0976643251', 'phtuan01@gmail.com', 2001, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Trương Trần Quốc Quân', '0970973251', 'ttquocquan@gmail.com', 2003, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Trương Trần Quốc Quân', '0970973251', 'ttquocquan@gmail.com', 2003, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Minh Đại', '0982535251', 'leminhdai003@gmail.com', 2003, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Lê Minh Đại', '0982535251', 'leminhdai003@gmail.com', 2003, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Đặng Trần Đan Vũ', '0809633251', 'vuxinhdep@gmail.com', 2000, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Đặng Trần Đan Vũ', '0809633251', 'vuxinhdep@gmail.com', 2000, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thị Thanh Ngân', '0954363251', 'thanhngan99@gmail.com', 1999, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong]) VALUES (N'Nguyễn Thị Thanh Ngân', '0954363251', 'thanhngan99@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Thị Phương Xa', '090782212', 'lethiphuongxa@gmail.com', 1993, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Lê Thị Phương Xa', '0908782212', 'lethiphuongxa@gmail.com', 1993, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Ngọc Hạ', '0809638764', 'nguyenngocha0402@gmail.com', 2002, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Ngọc Hạ', '0809638764', 'nguyenngocha0402@gmail.com', 2002, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Triệu Gia Bảo', '0996538754', 'trieugiabao0903@gmail.com', 2003, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Triệu Gia Bảo', '0996538754', 'trieugiabao0903@gmail.com', 2003, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Hàng Tuyết My', '0977238753', 'mymy0899@gmail.com', 1999, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Hàng Tuyết My', '0977238753', 'mymy0899@gmail.com', 1999, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Đinh Trần Anh Quân', '0977238876', 'daicaquan02@gmail.com', 2002, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Đinh Trần Anh Quân', '0977238876', 'daicaquan02@gmail.com', 2002, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Đình Đan Phi', '0883389234', 'nguyendinhdanfi@gmail.com', 1990, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Đình Đan Phi', '0883389234', 'nguyendinhdanfi@gmail.com', 1990, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Thị Trúc Uyên', '0988238594', 'uyenuyencongchua@gmail.com', 1989, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Thị Trúc Uyên', '0988238594', 'uyenuyencongchua@gmail.com', 1989, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Phùng Thị Kim Trúc', '0992138284', 'ptktruc97@gmail.com', 1997, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Phùng Thị Kim Trúc', '0992138284', 'ptktruc97@gmail.com', 1997, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Phan Như Uyên', '0903058232', 'phannhuuyen95@gmail.com', 1995, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Phan Như Uyên', '0903058232', 'phannhuuyen95@gmail.com', 1995, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Nhật Khánh', '0965338221', 'nguyennhatkhanh@gmail.com', 1998, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Nhật Khánh', '0965338221', 'nguyennhatkhanh@gmail.com', 1998, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Bá Nha', '0969938253', 'banha010394@gmail.com', 1993, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Bá Nha', '0969938253', 'banha010394@gmail.com', 1993, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Trần Thanh Sang', '0847898234', 'tranthanhsang93@gmail.com', 1993, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Trần Thanh Sang', '0847898234', 'tranthanhsang93@gmail.com', 1993, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Lê Văn Rôn', '088298254', 'levanron02@gmail.com', 1992, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Lê Văn Rôn', '0882498254', 'levanron02@gmail.com', 1992, 0)
 GO
 
-INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])
-	VALUES (N'Nguyễn Lưu Anh Thư', '0987898874', 'nguyenluuanhthu@gmail.com', 2001, 0)
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Nguyễn Lưu Anh Thư', '0987898874', 'nguyenluuanhthu@gmail.com', 2001, 0)
 GO
 
-select * from KhachHang
+INSERT [dbo].[KhachHang] ([HoTen], [SDT], [Email], [NamSinh], [SLDatPhong])	VALUES (N'Phan Huy Phong', '0993898874', 'huyphong@gmail.com', 2001, 0)
+GO
 
 -- NHÂN VIÊN
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gamil.com', '226505948824', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1993, 35000, N'Quản lí', N'Đang làm việc')
+-- quan li
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Phan Thị Huỳnh Thư', '0333411964', 'phanthihthu@gmail.com', '226505948824', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1993, 35000, N'Quản lí', N'Đang làm việc')
 GO
 
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 30000, N'Quản lí', N'Đang làm việc')
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Trần Thị Huyền Trân', '0907293510', 'tranthihuyentran@gmail.com', '222828115276', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 30000, N'Quản lí', N'Đang làm việc')
 GO
 
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Nguyễn Minh Hải', '0389660754', 'nguyenhai2009@gmail.com', '217958221685', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1989, 28000, N'Tiếp tân', N'Đang làm việc')
+-- nhan vien
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Minh Hải', '0389660754', 'nguyenhai2009@gmail.com', '217958221685', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1989, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Nguyễn Tiến Dũng', '0782566343', 'nguyentdung1110@gmail.com', '211019927954', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đang làm việc')
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Tiến Dũng', '0782566343', 'nguyentdung1110@gmail.com', '211019927954', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Phan Thanh Nam', '0936279762', 'thanhnam1210@gmail.com', '219422793198', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đã nghỉ')
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Phan Thanh Nam', '0936279762', 'thanhnam1210@gmail.com', '219422793198', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 28000, N'Tiếp tân', N'Đã nghỉ')
 GO
 
-INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai])
-	VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Vân', '0984164251', 'nguyenvan@gmail.com', '227794341138', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
 GO
 
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Bùi Tuấn Phú', '0982464251', 'fubui03@gmail.com', '229894341138', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1999, 28000, N'Tiếp tân', N'Đang làm việc')
+GO
+
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Thị Nên Hoài', '0982876251', 'nenhoai@gmail.com', '229894344538', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2000, 29000, N'Tiếp tân', N'Đang làm việc')
+GO
+
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Trần Thị Lệ Giang', '0970876251', 'legiang0301@gmail.com', '229894994538', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2001, 30000, N'Tiếp tân', N'Đang làm việc')
+GO
+
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Văn Công Thành Đạt', '0367306158', 'vancongthanhdata10@gmail.com', '229004994538', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 2003, 27000, N'Tiếp tân', N'Đang làm việc')
+GO
+
+INSERT INTO [dbo].[NhanVien] ([HoTen], [SDT], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Tấn Thái Dương', '0356309561', 'duongnguyen1323@gmail.com', '229004994538', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1998, 31000, N'Tiếp tân', N'Đang làm việc')
+GO
+
+select * from NhanVien
 
 -- PHÒNG
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (101, N'Thường', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (101, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (102, N'Thường', N'Trống', 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (102, N'Thường', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (103, N'Thường', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (103, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (104, N'Thường', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (104, N'Thường', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (105, N'Thường', N'Trống', 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (105, N'Thường', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (201, 'VIP', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (201, 'VIP', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (202, 'VIP', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (202, 'VIP', N'Trống', 10)
+GO
+ 
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (203, 'VIP', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (203, 'VIP', N'Trống', 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (204, 'VIP', N'Trống', 10)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (204, 'VIP', N'Trống', 10)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (205, 'VIP', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (205, 'VIP', N'Trống', 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (206, 'VIP', N'Trống', 20)
 GO
 
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (206, 'VIP', N'Trống', 20)
+INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua]) VALUES (207, 'VIP', N'Trống', 20)
 GO
-
-INSERT INTO [dbo].[Phong] ([SoPhong], [LoaiPhong], [TrangThai], [SucChua])
-	VALUES (207, 'VIP', N'Trống', 20)
-GO
-
 
 -- CA TRỰC
-INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 1', '08:00:00', '13:00:00')
+INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT]) VALUES (N'Ca 1', '08:00:00', '13:00:00')
 GO
 
-INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 2', '13:00:00', '18:00:00')
+INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT]) VALUES (N'Ca 2', '13:00:00', '18:00:00')
 GO
 
-INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT])
-	VALUES (N'Ca 3', '18:00:00', '00:00:00')
+INSERT INTO [dbo].[CaTruc] ([TenCT], [GioBD], [GioKT]) VALUES (N'Ca 3', '18:00:00', '00:00:00')
 GO
 
 -- DỊCH VỤ
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Nước khoáng', N'Đồ uống', 20000)
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Nước ép trái cây', N'Đồ uống', 35000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Coca-Cola', N'Đồ uống', 25000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Nước khoáng', N'Đồ uống', 20000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Pepsi', N'Đồ uống', 25000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Coca-Cola', N'Đồ uống', 25000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Sữa tươi', N'Đồ uống', 30000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Pepsi', N'Đồ uống', 25000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Bia Tiger', N'Đồ uống', 50000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Sữa tươi', N'Đồ uống', 30000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Bia Heineken', N'Đồ uống', 25000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bia Tiger', N'Đồ uống', 50000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Rượu vang đỏ', N'Đồ uống', 25000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bia Heineken', N'Đồ uống', 25000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Rượu vang trắng', N'Đồ uống', 100000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Rượu vang đỏ', N'Đồ uống', 25000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Cocktail Mojito', N'Đồ uống', 70000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Rượu vang trắng', N'Đồ uống', 100000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Cocktail Margarita', N'Đồ uống', 70000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Cocktail Mojito', N'Đồ uống', 70000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Mực chiên giòn', N'Món ăn', 100000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Cocktail Margarita', N'Đồ uống', 70000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Tôm rim mặn ngọt', N'Món ăn', 120000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Trà đá', N'Đồ uống', 20000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Bánh tráng trộn', N'Món ăn', 50000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bánh kem', N'Món ăn', 100000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Gà rang muối', N'Món ăn', 150000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Chè thập cẩm', N'Món ăn', 40000)
 GO
 
-INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia])
-	VALUES (N'Bánh tráng nướng', N'Món ăn', 50000)
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Mực chiên giòn', N'Món ăn', 100000)
 GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Trái cây theo mùa', N'Món ăn', 80000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Cơm chiên hải sản', N'Món ăn', 120000)
+GO
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Lẩu thái', N'Món ăn', 250000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Gà nước BBQ', N'Món ăn', 150000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Cá hồi áp chảo', N'Món ăn', 180000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bò xào lá lốt', N'Món ăn', 180000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tôm sốt me', N'Món ăn', 160000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tôm rim mặn ngọt', N'Món ăn', 120000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bánh tráng trộn', N'Món ăn', 50000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Gà rang muối', N'Món ăn', 150000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Bánh tráng nướng', N'Món ăn', 50000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Gỏi cuốn', N'Món ăn', 50000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Nem rán', N'Món ăn', 55000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Chả giò', N'Món ăn', 55000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Khoai tây chiên', N'Món ăn', 45000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Salad rau cả', N'Món ăn', 40000)
+GO
+
+INSERT INTO [dbo].[DichVu] ([TenDV], [LoaiDV], [Gia]) VALUES (N'Soup cua', N'Món ăn', 60000)
+GO
+
+INSERT INTO [dbo].DichVu  ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tiệc sinh nhật', N'Tiệc', 2000000)
+GO
+
+INSERT INTO [dbo].DichVu  ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tiệc họp mặt gia đình, bạn bè', N'Tiệc', 2000000)
+GO
+
+INSERT INTO [dbo].DichVu  ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tiệc công ty', N'Tiệc', 3000000)
+GO
+
+INSERT INTO [dbo].DichVu  ([TenDV], [LoaiDV], [Gia]) VALUES (N'Tiệc cầu hôn', N'Tiệc', 3000000)
+GO
+
+select * from NhanVien
 
 -- PHÂN CÔNG
+--- quan li
+
+-- 2023-10-15
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT001', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT002', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT003', '2023-10-15')
+GO
+
+-- 2023-10-16
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT001', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT002', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT003', '2023-10-16')
+GO
+
+-- 2023-10-17
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT001', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT002', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT003', '2023-10-17')
+GO
+
+-- 2023-10-18
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT001', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT002', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT003', '2023-10-18')
+GO
+
+-- 2023-10-19
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT001', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT002', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT003', '2023-10-19')
+GO
+
+-- 2023-10-20
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT001', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT002', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT003', '2023-10-20')
+GO
+
+-- 2023-10-21
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT001', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV002', 'CT002', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])	VALUES ('NV001', 'CT003', '2023-10-21')
+GO
+
+-- 2023-10-22
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
-	VALUES ('NV001', 'CT001', '2023-09-22')
+	VALUES ('NV002', 'CT001', '2023-10-22')
 GO
 
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
-	VALUES ('NV001', 'CT002', '2023-09-22')
+	VALUES ('NV001', 'CT002', '2023-10-22')
 GO
 
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
-	VALUES ('NV001', 'CT003', '2023-09-22')
+	VALUES ('NV002', 'CT003', '2023-10-22')
+GO
+
+-- 2023-10-23
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-10-23')
 GO
 
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
-	VALUES ('NV002', 'CT003', '2023-09-22')
+	VALUES ('NV002', 'CT002', '2023-10-23')
 GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-10-23')
+GO
+
+-- 2023-10-24
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-10-24')
+GO
+
+-- 2023-10-25
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-10-25')
+GO
+
+-- 2023-10-26
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-10-26')
+GO
+
+-- 2023-10-27
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-10-27')
+GO
+
+-- 2023-10-28
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-10-28')
+GO
+
+-- 2023-10-29
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-10-29')
+GO
+
+-- 2023-10-30
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-10-30')
+GO
+
+-- 2023-10-31
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-10-31')
+GO
+
+-- 2023-11-01
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-01')
+GO
+
+-- 2023-11-02
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-02')
+GO
+
+-- 2023-11-03
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-03')
+GO
+
+-- 2023-11-04
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-04')
+GO
+
+-- 2023-11-05
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-05')
+GO
+
+-- 2023-11-06
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-06')
+GO
+
+-- 2023-11-07
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-07')
+GO
+
+-- 2023-11-08
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-08')
+GO
+
+-- 2023-11-09
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-09')
+GO
+
+-- 2023-11-10
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-10')
+GO
+
+-- 2023-11-11
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-11')
+GO
+
+-- 2023-11-12
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-12')
+GO
+
+-- 2023-11-13
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT001', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT002', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT003', '2023-11-13')
+GO
+
+-- 2023-11-14
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT001', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV002', 'CT002', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV001', 'CT003', '2023-11-14')
+GO
+
 
 INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
 	VALUES ('NV003', 'CT001', '2023-09-22')
@@ -642,232 +1079,1219 @@ INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
 	VALUES ('NV005', 'CT003', '2023-09-22')
 GO
 
+---------tiep tan--------
+
+-- 2023-10-15
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT003', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV07', 'CT003', '2023-10-15')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-15')
+GO
+
+-- 2023-10-16
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-16')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-16')
+GO
+
+-- 2023-10-17
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT002', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT003', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-17')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-17')
+GO
+
+-- 2023-10-18
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT002', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-18')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-18')
+GO
+
+-- 2023-10-19
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT003', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-19')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-19')
+GO
+
+
+-- 2023-10-20
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-20')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-20')
+GO
+
+
+-- 2023-10-21
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-21')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-21')
+GO
+
+
+-- 2023-10-22
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT002', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-22')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-22')
+GO
+
+-- 2023-10-23
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT001', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-23')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-10-23')
+GO
+
+-- 2023-10-24
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT001', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-10-24')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-24')
+GO
+
+-- 2023-10-25
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT003', '2023-10-25')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-25')
+GO
+
+-- 2023-10-26
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT003', '2023-10-26')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-26')
+GO
+
+-- 2023-10-27
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-27')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-27')
+GO
+
+-- 2023-10-28
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT003', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-28')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-28')
+GO
+
+
+-- 2023-10-29
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT003', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT003', '2023-10-29')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-29')
+GO
+
+-- 2023-10-30
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT003', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-30')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-30')
+GO
+
+-- 2023-10-31
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT001', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT002', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT003', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-10-31')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-10-31')
+GO
+
+-- 2023-11-01
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-11-01')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-01')
+GO
+
+
+-- 2023-11-02
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-11-02')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-02')
+GO
+
+-- 2023-11-03
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT003', '2023-11-03')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-03')
+GO
+
+
+-- 2023-11-04
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-04')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-04')
+GO
+
+-- 2023-11-05
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT002', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-05')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-05')
+GO
+
+
+-- 2023-11-06
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-06')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-06')
+GO
+
+-- 2023-11-07
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT001', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT002', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-07')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-07')
+GO
+
+-- 2023-11-08
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT002', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-08')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-08')
+GO
+
+-- 2023-11-09
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT001', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT002', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-09')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-09')
+GO
+
+
+-- 2023-11-10
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT003', '2023-11-10')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-10')
+GO
+
+-- 2023-11-11
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT002', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-11')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-11')
+GO
+
+-- 2023-11-12
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT001', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV008', 'CT002', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-12')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-12')
+GO
+
+-- 2023-11-13
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT001', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV007', 'CT002', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT003', '2023-11-13')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-13')
+GO
+
+
+-- 2023-11-14
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV011', 'CT001', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV009', 'CT001', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT001', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT002', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV005', 'CT002', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV010', 'CT002', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV004', 'CT003', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV006', 'CT003', '2023-11-14')
+GO
+
+INSERT INTO [dbo].[PhieuPhanCong] ([MaNV], [MaCT], [Ngay])
+	VALUES ('NV003', 'CT003', '2023-11-14')
+GO
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
 -- CHẤM CÔNG
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC001', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC002', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC003', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC004', '2023-09-22', N'Vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC005', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC006', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC007', '2023-09-22', N'Vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC008', '2023-09-22', N'Không vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC009', '2023-09-22', N'Vắng')
-GO
-
-INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Ngay], [TrangThai])
-	VALUES ('PC010', '2023-09-22', N'Không vắng')
-GO
-
-GO
-CREATE TRIGGER addHoaDon
-ON [dbo].[HoaDon]
-AFTER INSERT
-AS
-	DECLARE @MaKH varchar(7)
-	SELECT @MaKH = INSERTED.MaKH FROM INSERTED
-	IF NOT EXISTS (SELECT * FROM KhachHang WHERE KhachHang.MaKH = @MaKH)
-		ROLLBACK
-	
-	UPDATE KhachHang
-	SET SLDatPhong = SLDatPhong + 1
-	WHERE MaKH = @MaKH
-GO
-
-
-CREATE TRIGGER deleteChiTietHoaDon
-ON [dbo].[ChiTietHoaDon]
-AFTER DELETE 
-AS
-	DECLARE @MaPhong varchar(7)
-	SELECT @MaPhong = DELETED.MaPhong FROM DELETED
-	IF NOT EXISTS (SELECT * FROM Phong WHERE Phong.MaPhong = @MaPhong)
-		ROLLBACK
-
-	UPDATE Phong
-	SET TrangThai = N'Trống'
-	WHERE MaPhong = @MaPhong
-GO
-
-
---SELECT *FROM KhachHang
-
---SELECT *FROM NhanVien
---SELECT *FROM Phong
---SELECT *FROM KhachHang
---SELECT *FROM DichVu
---WHERE LoaiDV LIKE N'Đồ uống' and Gia >= 20000 and Gia <= 50000
-
-
-delete from ChiTietDichVu
-delete from ChiTietHoaDon
-delete from HoaDon
-delete from Phong
-
-
-
-INSERT INTO HoaDon
-	(MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai)
-VALUES
-	('KH001', 'NV001', '2023-09-08', '13:00:00', N'Đã thanh toán')
-GO
-
-INSERT INTO HoaDon
-	(MaKH, MaNV, NgayLapHD, TrangThai)
-VALUES
-	('KH002', 'NV001', '2023-09-08', N'Chưa thanh toán')
-GO
-
-
-
-INSERT INTO ChiTietHoaDon
-	(MaHD, MaPhong, GioBD, GioKT)
-VALUES 
-	('HD001', 'P002', '13:00:00', '15:00:00')
-GO
-
-INSERT INTO ChiTietHoaDon
-	(MaHD, MaPhong, GioBD, GioKT)
-VALUES 
-	('HD001', 'P003', '13:00:00', '15:00:00')
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD001', 'DV001', 5)
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD001', 'DV005', 5)
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD001', 'DV007', 3)
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD002', 'DV008', 3)
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD002', 'DV015', 7)
-GO
-
-INSERT INTO ChiTietDichVu
-	(MaCTHD, MaDV, SoLuong)
-VALUES
-	('CTHD002', 'DV011', 6)
-GO
-
---SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
---FROM HoaDon h JOIN KhachHang k 
---	ON h.MaKH = k.MaKH JOIN NhanVien nv
---	ON h.MaNV = nv.MaNV
---WHERE k.HoTen LIKE N'%Thư%' AND nv.HoTen LIKE N'%Thư%' AND (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-07')
+--INSERT INTO [dbo].[PhieuChamCong] ([MaPPC], [Luong], [TrangThai])
+--	VALUES ('PC001', '2023-09-22', N'Không vắng')
 --GO
 
---SELECT MaHD, h.MaKH, h.MaNV, NgayLapHD, GioLapHD, h.TrangThai 
---FROM HoaDon h JOIN KhachHang k 
---	ON h.MaKH = k.MaKH JOIN NhanVien nv
---	ON h.MaNV = nv.MaNV
---WHERE (NgayLapHD BETWEEN '2023-08-07' AND '2023-09-08')
---GO
 
---select * from KhachHang
-
---SELECT TOP 1 MaHD FROM HoaDon ORDER BY MaHD DESC
-
-
-
---SELECT *FROM HoaDon
---SELECT *FROM ChiTietHoaDon
---SELECT *FROM Phong
-
---SELECT *FROM ChiTietDichVu
---UPDATE Phong
---SET TrangThai = N'Trống'
---WHERE MaPhong = 'P002'
---GO
-
---UPDATE ChiTietHoaDon 
---SET MaPhong = 'P005'
---FROM ChiTietHoaDon c join Phong p 
---	ON c.MaPhong = p.MaPhong JOIN HoaDon hd
---	ON c.MaHD = hd.MaHD
---WHERE p.MaPhong = 'P001'
-
---SELECT MaCTHD, CTHD.MaHD, P.MaPhong, GioBD FROM ChiTietHoaDon CTHD JOIN HoaDon HD
---	ON CTHD.MaHD = HD.MaHD JOIN Phong P
---	ON CTHD.MaPhong = P.MaPhong
---WHERE P.MaPhong = 'P002' AND NgayLapHD = '2023-11-03' AND P.TrangThai = N'Đặt trước'
-
---DELETE FROM ChiTietHoaDon
---WHERE MaCTHD = 'CTHD002'
-
---SELECT * FROM DichVu 
---WHERE LoaiDV LIKE N'%Uống%' AND Gia >= '20000' AND Gia <= '60000'
-
-SELECT p.MaPhong, SoPhong, LoaiPhong, p.TrangThai, SucChua
-FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
-	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
-	ON cthd.MaPhong = p.MaPhong
-WHERE (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
-ORDER BY p.SoPhong ASC
-GO
+-- HOA DON
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH004', 'NV003', '2023-10-20', '16:33:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH007', 'NV003', '2023-10-20', '18:55:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH007', 'NV004', '2023-10-21', '18:55:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH008', 'NV007', '2023-10-22', '18:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH007', 'NV006', '2023-10-22', '18:55:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH004', 'NV004', '2023-10-23', '19:33:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH008', 'NV009', '2023-10-28', '18:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH008', 'NV010', '2023-10-30', '09:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH004', 'NV010', '2023-10-31', '13:40:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH008', 'NV007', '2023-11-01', '09:34:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH002', 'NV004', '2023-11-01', '10:25:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH011', 'NV009', '2023-11-01', '15:03:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH015', 'NV009', '2023-11-01', '16:05:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH003', 'NV009', '2023-11-01', '18:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH002', 'NV009', '2023-11-01', '18:30:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH005', 'NV009', '2023-11-01', '20:05:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH004', 'NV010', '2023-11-01', '22:10:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH002', 'NV005', '2023-11-06', '19:33:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH008', 'NV004', '2023-11-06', '22:47:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH007', 'NV003', '2023-11-08', '19:23:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH019', 'NV006', '2023-11-08', '19:58:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH015', 'NV004', '2023-11-08', '21:33:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH007', 'NV011', '2023-11-08', '23:25:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH004', 'NV006', '2023-11-09', '18:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH003', 'NV003', '2023-11-11', '19:33:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH022', 'NV005', '2023-11-12', '18:55:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH005', 'NV004', '2023-11-13', '18:15:00', N'Đã thanh toán')
+INSERT INTO HoaDon (MaKH, MaNV, NgayLapHD, GioLapHD, TrangThai) VALUES ('KH006', 'NV007', '2023-11-13', '19:33:00', N'Đã thanh toán')
 
 
-Select * from Phong
-select * from HoaDon
-select * from ChiTietHoaDon
-select * from ChiTietDichVu
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD001', 'P001', '22:30', '23:30')
 
-SELECT ctdv.MaCTDV, ctdv.MaCTHD, ctdv.MaDV, ctdv.SoLuong
-FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
-	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
-	ON cthd.MaPhong = p.MaPhong JOIN ChiTietDichVu ctdv
-	ON ctdv.MaCTHD = cthd.MaCTHD
-WHERE p.MaPhong = 'P010' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
-GO
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD002', 'P007', '22:00', '23:45')
 
-SELECT kh.HoTen
-FROM HoaDon hd INNER JOIN ChiTietHoaDon cthd 
-	ON hd.MaHD = cthd.MaHD INNER JOIN Phong p 
-	ON cthd.MaPhong = p.MaPhong JOIN KhachHang kh
-	ON hd.MaKH = kh.MaKH
-WHERE p.SoPhong = '205' AND (p.TrangThai LIKE N'Đang sử dụng' OR p.TrangThai LIKE N'Đặt trước') AND hd.TrangThai LIKE N'Chưa thanh toán'
-GO
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD002', 'P008', '21:30', '23:00')
 
-SELECT * FROM NhanVien
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD003', 'P002', '21:30', '23:30')
+
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD003', 'P004', '22:00', '23:45')
+
+insert ChiTietHoaDon (MaHD, MaPhong, GioBD, GioKT) 
+values ('HD003', 'P005', '20:30', '22:00')
+
